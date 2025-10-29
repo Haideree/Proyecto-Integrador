@@ -24,17 +24,16 @@ public class ControladorLogin implements ActionListener {
 
         // Escuchadores de botones
         this.vista.getButtonIngresar().addActionListener(this);
-        this.vista.getButtonRegistrar().addActionListener(this);
+       
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == vista.getButtonIngresar()) {
             iniciarSesion();
-        } else if (e.getSource() == vista.getButtonRegistrar()) {
-            abrirRegistro();
+        } 
         }
-    }
+    
 
     private void iniciarSesion() {
         String correo = vista.getTxtUsuario().getText().trim();
@@ -83,7 +82,6 @@ public class ControladorLogin implements ActionListener {
         Registro vistaRegistro = new Registro();
         ControladorRegistro controladorRegistro = new ControladorRegistro(vistaRegistro);
         vistaRegistro.setVisible(true);
-        vistaRegistro.setLocationRelativeTo(null);
         vista.dispose();
     }
 }

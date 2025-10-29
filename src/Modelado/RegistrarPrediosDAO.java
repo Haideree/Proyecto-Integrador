@@ -70,6 +70,54 @@ public class RegistrarPrediosDAO {
         return propietarios;
     }
 
+    
+    //OBTENER DEPARTAMENTOS
+    
+    public List<String> obtenerDepartamentos() {
+        List<String> departamentos = new ArrayList<>();
+        String sql = "SELECT IDDEPART, DEPARTAMENTO FROM DEPARTAMENTOS";
+
+        try (PreparedStatement ps = conexion.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                String item = rs.getString("DEPARTAMENTO");
+                departamentos.add(item);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error al cargar departamentos.");
+        }
+
+        return departamentos;
+    }
+    
+    // OBTENER MUNICIPIOS POR DEPARTAMENTO
+    public List<String> obtenerMunicipios(String nombreDepartamento) {
+    List<String> municipios = new ArrayList<>();
+    String sql = "SELECT M.MUNICIPIO " +
+                 "FROM MUNICIPIOS M " +
+                 "JOIN DEPARTAMENTOS D ON M.DEPARTAMENTO = D.IDDEPART " +
+                 "WHERE D.DEPARTAMENTO = ?";
+
+    try (PreparedStatement ps = conexion.prepareStatement(sql)) {
+        ps.setString(1, nombreDepartamento);
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            municipios.add(rs.getString("MUNICIPIO"));
+        }
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(null, "Error al cargar municipios del departamento " + nombreDepartamento);
+    }
+
+    return municipios;
+}
+
+       
     // ==============================================================
     // 3️⃣ Obtener lugares de producción
     // ==============================================================

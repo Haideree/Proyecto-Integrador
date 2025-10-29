@@ -1,23 +1,20 @@
 package Controlador;
 
-/**
- *
- * @author Haider
- */
-import Modelado.ProductorDAO;
 import Vista.Registroprod;
-import Vista.Registro;
+import Modelado.ProductorDAO;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ControladorRegistroProductor implements ActionListener {
 
     private Registroprod vista;
-    private ProductorDAO modelo;
+    private ProductorDAO dao;
 
     public ControladorRegistroProductor(Registroprod vista) {
         this.vista = vista;
-        this.modelo = new ProductorDAO();
+        this.dao = new ProductorDAO();
 
         // Escuchar botones
         this.vista.getBtnSiguiente().addActionListener(this);
@@ -29,69 +26,90 @@ public class ControladorRegistroProductor implements ActionListener {
         if (e.getSource() == vista.getBtnSiguiente()) {
             registrarProductor();
         } else if (e.getSource() == vista.getBtnVolver()) {
-            volverARegistro();
+            vista.dispose(); // O abrir otra ventana si aplica
         }
     }
 
-    // =========================================================
-    // 🔹 Método para registrar un productor
-    // =========================================================
     private void registrarProductor() {
         try {
-            String docStr = vista.getTxtDocumento().getText().trim();
+            // Capturar datos desde la vista
+            String docText = vista.getTxtDocumento().getText().trim();
             String nombre = vista.getTxtNombre().getText().trim();
-            String telStr = vista.getTxtTelefono().getText().trim();
+            String telefono = vista.getTxtTelefono().getText().trim();
             String correo = vista.getTxtCorreo().getText().trim();
             String contrasena = vista.getTxtContrasena().getText().trim();
 
-            if (docStr.isEmpty() || nombre.isEmpty() || telStr.isEmpty() || correo.isEmpty() || contrasena.isEmpty()) {
-                vista.mostrarMensaje("⚠ Todos los campos son obligatorios.");
+            // 🔹 Validaciones generales
+            if (docText.isEmpty() || nombre.isEmpty() || telefono.isEmpty() || correo.isEmpty() || contrasena.isEmpty()) {
+                vista.mostrarMensaje("⚠️ Todos los campos son obligatorios.");
                 return;
             }
 
-            int documento = Integer.parseInt(docStr);
-
-            if (!telStr.matches("\\d+")) {
-                vista.mostrarMensaje("⚠ El teléfono debe contener solo dígitos.");
+            // 🔹 Validar documento numérico
+            int documento;
+            try {
+                documento = Integer.parseInt(docText);
+            } catch (NumberFormatException ex) {
+                vista.mostrarMensaje("❌ El número de documento debe contener solo números.");
                 return;
             }
 
-            if (!correo.contains("@") || !correo.contains(".")) {
-                vista.mostrarMensaje("⚠ Ingresa un correo válido.");
+            // 🔹 Validar correo electrónico
+            if (!correo.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
+                vista.mostrarMensaje("📧 Correo inválido. Ejemplo válido: usuario@dominio.com");
                 return;
             }
 
-            modelo.registrarProductor(documento, nombre, telStr, correo, contrasena);
-            vista.mostrarMensaje("✅ Productor registrado con éxito.");
+            // 🔹 Validar teléfono
+            if (!telefono.matches("^\\d{7,10}$")) {
+                vista.mostrarMensaje("📱 El teléfono debe tener entre 7 y 10 dígitos numéricos.");
+                return;
+            }
 
-            // Limpiar campos
-            vista.getTxtDocumento().setText("");
-            vista.getTxtNombre().setText("");
-            vista.getTxtTelefono().setText("");
-            vista.getTxtCorreo().setText("");
-            vista.getTxtContrasena().setText("");
+            // 🔹 Validar contraseña
+            String mensajeContrasena = validarContrasena(contrasena);
+            if (mensajeContrasena != null) {
+                vista.mostrarMensaje("🔒 " + mensajeContrasena);
+                return;
+            }
 
-            // Volver al login
-            Vista.vistas login = new Vista.vistas();
-            new ControladorLogin(login);
-            login.setVisible(true);
-            vista.dispose();
+            // 🔹 Si todo está bien, registrar
+            dao.registrarProductor(documento, nombre, telefono, correo, contrasena);
+            vista.mostrarMensaje("✅ Productor registrado exitosamente.");
+            limpiarCampos();
 
-        } catch (NumberFormatException ex) {
-            vista.mostrarMensaje("⚠ El documento debe ser un número válido.");
         } catch (Exception ex) {
-            ex.printStackTrace();
             vista.mostrarMensaje("❌ Error al registrar el productor: " + ex.getMessage());
+            ex.printStackTrace();
         }
     }
 
-    // =========================================================
-    // 🔹 Método para volver a la ventana anterior
-    // =========================================================
-    private void volverARegistro() {
-        Registro ventanaRegistro = new Registro();
-        new ControladorRegistro(ventanaRegistro);
-        ventanaRegistro.setVisible(true);
-        vista.dispose();
+    /**
+     * Verifica que la contraseña cumpla con:
+     * - mínimo 8 caracteres
+     * - al menos una mayúscula
+     * - al menos una minúscula
+     * - al menos un número
+     * - al menos un carácter especial
+     */
+    private String validarContrasena(String contrasena) {
+        if (contrasena.length() < 8) {
+            return "La contraseña debe tener al menos 8 caracteres.";
+        }
+        Pattern patron = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*._-]).+$");
+        Matcher matcher = patron.matcher(contrasena);
+        if (!matcher.matches()) {
+            return "La contraseña debe incluir mayúsculas, minúsculas, números y un símbolo (!@#$%^&*._-).";
+        }
+        return null; // ✅ Contraseña válida
+    }
+
+    private void limpiarCampos() {
+        vista.getTxtDocumento().setText("");
+        vista.getTxtNombre().setText("");
+        vista.getTxtTelefono().setText("");
+        vista.getTxtCorreo().setText("");
+        vista.getTxtContrasena().setText("");
     }
 }
+

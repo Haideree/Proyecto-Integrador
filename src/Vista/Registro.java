@@ -1,7 +1,7 @@
 package Vista;
 /**
  *
- * @author Haider
+ * @author Usuario
  */
 import Controlador.ControladorRegistro;
 import Modelado.CConexion;   
@@ -11,7 +11,8 @@ import javax.swing.JOptionPane;
 import Vista.Registrotec;
 import Vista.Registroprop;
 
-public class Registro extends javax.swing.JFrame {
+
+public class Registro extends javax.swing.JPanel {
     public Registro() {
         initComponents();
         javax.swing.ButtonGroup grupoUsuarios = new javax.swing.ButtonGroup();
@@ -24,120 +25,126 @@ public class Registro extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        Label_registro = new javax.swing.JLabel();
-        Button_Siguiente = new javax.swing.JButton();
+        fondo = new javax.swing.JPanel();
+        Icono1 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        Icon = new javax.swing.JLabel();
+        Titulo = new javax.swing.JLabel();
+        Texto = new javax.swing.JLabel();
+        Button_Tecnico = new javax.swing.JRadioButton();
         Button_Productor = new javax.swing.JRadioButton();
         Button_Dueno = new javax.swing.JRadioButton();
-        Label_registro1 = new javax.swing.JLabel();
-        Button_Tecnico = new javax.swing.JRadioButton();
+        Button_Siguiente = new javax.swing.JButton();
         BtnVolver = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        fondo.setBackground(new java.awt.Color(255, 255, 255));
+        fondo.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        Label_registro.setFont(new java.awt.Font("Berlin Sans FB", 0, 36)); // NOI18N
-        Label_registro.setText("Selecciona el usuario a registrar:");
+        Icono1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        Icono1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Vista/icono.png"))); // NOI18N
+        fondo.add(Icono1, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 290, 160, 140));
 
-        Button_Siguiente.setBackground(new java.awt.Color(0, 204, 204));
-        Button_Siguiente.setFont(new java.awt.Font("Berlin Sans FB", 0, 24)); // NOI18N
-        Button_Siguiente.setText("Siguiente");
-        Button_Siguiente.addActionListener(new java.awt.event.ActionListener() {
+        jPanel1.setBackground(new java.awt.Color(0, 99, 17));
+        jPanel1.setForeground(new java.awt.Color(0, 99, 17));
+
+        Icon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Vista/Logo109.png"))); // NOI18N
+
+        Titulo.setFont(new java.awt.Font("Roboto", 1, 48)); // NOI18N
+        Titulo.setForeground(new java.awt.Color(255, 255, 255));
+        Titulo.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        Titulo.setText("Registro de personal");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(42, 42, 42)
+                .addComponent(Titulo, javax.swing.GroupLayout.PREFERRED_SIZE, 484, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 95, Short.MAX_VALUE)
+                .addComponent(Icon))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(Icon, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(40, 40, 40))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(Titulo, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        fondo.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 730, 110));
+
+        Texto.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
+        Texto.setText("- Seleccione el tipo de usuario a crear:");
+        fondo.add(Texto, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 150, 420, 40));
+
+        Button_Tecnico.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
+        Button_Tecnico.setSelected(true);
+        Button_Tecnico.setText("Asistente tecnico");
+        Button_Tecnico.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                Button_SiguienteActionPerformed(evt);
+                Button_TecnicoActionPerformed(evt);
             }
         });
+        fondo.add(Button_Tecnico, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 200, 200, 30));
 
-        Button_Productor.setBackground(new java.awt.Color(204, 255, 255));
-        Button_Productor.setFont(new java.awt.Font("Berlin Sans FB", 0, 36)); // NOI18N
+        Button_Productor.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
         Button_Productor.setText("Productor");
         Button_Productor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 Button_ProductorActionPerformed(evt);
             }
         });
+        fondo.add(Button_Productor, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 260, 140, 30));
 
-        Button_Dueno.setBackground(new java.awt.Color(255, 204, 204));
-        Button_Dueno.setFont(new java.awt.Font("Berlin Sans FB", 0, 36)); // NOI18N
-        Button_Dueno.setText("Dueño de predio");
+        Button_Dueno.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
+        Button_Dueno.setText("Dueño de Predio");
         Button_Dueno.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 Button_DuenoActionPerformed(evt);
             }
         });
+        fondo.add(Button_Dueno, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 320, 180, 30));
 
-        Label_registro1.setFont(new java.awt.Font("Serif", 1, 48)); // NOI18N
-        Label_registro1.setText("Registrar un usuario");
-
-        Button_Tecnico.setBackground(new java.awt.Color(204, 255, 204));
-        Button_Tecnico.setFont(new java.awt.Font("Berlin Sans FB", 0, 36)); // NOI18N
-        Button_Tecnico.setText("Técnico");
-        Button_Tecnico.addActionListener(new java.awt.event.ActionListener() {
+        Button_Siguiente.setFont(new java.awt.Font("Roboto", 1, 14)); // NOI18N
+        Button_Siguiente.setForeground(new java.awt.Color(0, 99, 17));
+        Button_Siguiente.setText("Siguiente");
+        Button_Siguiente.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(55, 165, 87), 1, true));
+        Button_Siguiente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                Button_TecnicoActionPerformed(evt);
+                Button_SiguienteActionPerformed(evt);
             }
         });
+        fondo.add(Button_Siguiente, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 350, 130, 30));
 
-        BtnVolver.setBackground(new java.awt.Color(0, 204, 204));
-        BtnVolver.setFont(new java.awt.Font("Berlin Sans FB", 0, 24)); // NOI18N
-        BtnVolver.setText("<-- Volver");
+        BtnVolver.setBackground(new java.awt.Color(55, 165, 87));
+        BtnVolver.setForeground(new java.awt.Color(255, 255, 255));
+        BtnVolver.setText("⮜ REGRESAR");
+        BtnVolver.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
         BtnVolver.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BtnVolverActionPerformed(evt);
             }
         });
+        fondo.add(BtnVolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, 80, 20));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(111, 111, 111)
-                .addComponent(Button_Productor)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 143, Short.MAX_VALUE)
-                .addComponent(Button_Tecnico, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(64, 64, 64)
-                .addComponent(Button_Dueno)
-                .addGap(132, 132, 132))
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                            .addGap(30, 30, 30)
-                            .addComponent(BtnVolver)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(Label_registro1))
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                            .addGap(262, 262, 262)
-                            .addComponent(Label_registro)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(444, 444, 444)
-                        .addComponent(Button_Siguiente)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(fondo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(8, 8, 8)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(BtnVolver)
-                    .addComponent(Label_registro1, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(50, 50, 50)
-                .addComponent(Label_registro, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(63, 63, 63)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Button_Productor)
-                    .addComponent(Button_Dueno, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(Button_Tecnico))
-                .addGap(90, 90, 90)
-                .addComponent(Button_Siguiente)
-                .addGap(232, 232, 232))
+            .addComponent(fondo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
-
-        pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void Button_SiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Button_SiguienteActionPerformed
-
-    }//GEN-LAST:event_Button_SiguienteActionPerformed
+    private void Button_TecnicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Button_TecnicoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Button_TecnicoActionPerformed
 
     private void Button_ProductorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Button_ProductorActionPerformed
         // TODO add your handling code here:
@@ -147,16 +154,15 @@ public class Registro extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_Button_DuenoActionPerformed
 
-    private void Button_TecnicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Button_TecnicoActionPerformed
+    private void Button_SiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Button_SiguienteActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_Button_TecnicoActionPerformed
+    }//GEN-LAST:event_Button_SiguienteActionPerformed
 
     private void BtnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnVolverActionPerformed
- 
+        // TODO add your handling code here:
     }//GEN-LAST:event_BtnVolverActionPerformed
 
-    
-    // Getters para que el controlador acceda a los botones
+// Getters para que el controlador acceda a los botones
     public javax.swing.JButton getButtonSiguiente() {
         return Button_Siguiente;
     }
@@ -186,7 +192,6 @@ public class Registro extends javax.swing.JFrame {
         vista.setVisible(true);
     });
 }  
-       
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnVolver;
@@ -194,8 +199,11 @@ public class Registro extends javax.swing.JFrame {
     private javax.swing.JRadioButton Button_Productor;
     private javax.swing.JButton Button_Siguiente;
     private javax.swing.JRadioButton Button_Tecnico;
-    private javax.swing.JLabel Label_registro;
-    private javax.swing.JLabel Label_registro1;
+    private javax.swing.JLabel Icon;
+    private javax.swing.JLabel Icono1;
+    private javax.swing.JLabel Texto;
+    private javax.swing.JLabel Titulo;
+    private javax.swing.JPanel fondo;
+    private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
-
 }

@@ -10,6 +10,8 @@ import Vista.RegistroPredio;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
+import java.util.List;
+import java.util.ArrayList;
 
 public class ControladorRegistroPredio implements ActionListener {
 
@@ -26,6 +28,7 @@ public class ControladorRegistroPredio implements ActionListener {
         // Escuchar botones
         this.vista.getBtnRegistrar().addActionListener(this);
         this.vista.getBtnVolver().addActionListener(this);
+        
     }
 
     @Override
@@ -44,6 +47,8 @@ public class ControladorRegistroPredio implements ActionListener {
         vista.getCmbProductor().removeAllItems();
         vista.getCmbPropietario().removeAllItems();
         vista.getCmbLugarProdu().removeAllItems();
+        vista.getCmbDepartamento().removeAllItems();
+        vista.getCmbMunicipio().removeAllItems();
 
         // Productores
         for (String productor : modelo.obtenerProductores()) {
@@ -54,6 +59,26 @@ public class ControladorRegistroPredio implements ActionListener {
         for (String propietario : modelo.obtenerPropietarios()) {
             vista.getCmbPropietario().addItem(propietario);
         }
+        
+        //Departamentos
+        for(String departamento : modelo.obtenerDepartamentos()){
+            vista.getCmbDepartamento().addItem(departamento);
+        }
+        
+        // Agregar listener para cargar municipios dinámicamente
+vista.getCmbDepartamento().addActionListener(e -> {
+    vista.getCmbMunicipio().removeAllItems();
+
+    String departamentoSeleccionado = (String) vista.getCmbDepartamento().getSelectedItem();
+
+    if (departamentoSeleccionado != null) {
+        List<String> municipios = modelo.obtenerMunicipios(departamentoSeleccionado);
+
+        for (String municipio : municipios) {
+            vista.getCmbMunicipio().addItem(municipio);
+        }
+    }
+});
 
         // Lugares de producción (NUM_REGISTRO_ICA - NOMBRE)
         for (String lugar : modelo.obtenerLugaresProduccion()) {
@@ -67,8 +92,8 @@ public class ControladorRegistroPredio implements ActionListener {
     private void registrarPredio() {
         try {
             String nombre = vista.getTxtNombre().getText().trim();
-            String departamento = vista.getTxtDepartamento().getText().trim();
-            String municipio = vista.getTxtMunicipio().getText().trim();
+            String departamento = vista.getCmbDepartamento().getSelectedItem().toString().trim();
+            String municipio = vista.getCmbMunicipio().getSelectedItem().toString().trim();
             String vereda = vista.getTxtVereda().getText().trim();
 
             String productorSeleccionado = (String) vista.getCmbProductor().getSelectedItem();
@@ -115,8 +140,8 @@ public class ControladorRegistroPredio implements ActionListener {
     // ==============================================================
     private void limpiarCampos() {
         vista.getTxtNombre().setText("");
-        vista.getTxtDepartamento().setText("");
-        vista.getTxtMunicipio().setText("");
+        vista.getCmbDepartamento().setSelectedIndex(-1);
+        vista.getCmbMunicipio().setSelectedIndex(-1);
         vista.getTxtVereda().setText("");
         vista.getCmbProductor().setSelectedIndex(-1);
         vista.getCmbPropietario().setSelectedIndex(-1);

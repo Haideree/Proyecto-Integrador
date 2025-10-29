@@ -2,116 +2,141 @@ package Vista;
 
 /**
  *
- * @author Haider
+ * @author Usuario
  */
 public class RegistroLugarProdu extends javax.swing.JFrame {
-
-   
+    
     public RegistroLugarProdu() {
         initComponents();
     }
 
-   
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        Text_nombreLugar = new javax.swing.JTextField();
-        Text_empresaResp = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        fondo = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
+        Icon = new javax.swing.JLabel();
+        Titulo = new javax.swing.JLabel();
         Button_siguiente = new javax.swing.JButton();
         BtnVolver = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        Text_nombreLugar = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        Text_empresaResp = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setFont(new java.awt.Font("Serif", 0, 48)); // NOI18N
-        jLabel1.setText("Registro de lugar de producción");
+        fondo.setBackground(new java.awt.Color(255, 255, 255));
+        fondo.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        Text_nombreLugar.setBackground(new java.awt.Color(204, 255, 255));
-        Text_nombreLugar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                Text_nombreLugarActionPerformed(evt);
-            }
-        });
+        jPanel1.setBackground(new java.awt.Color(0, 99, 17));
+        jPanel1.setForeground(new java.awt.Color(0, 99, 17));
 
-        Text_empresaResp.setBackground(new java.awt.Color(204, 255, 255));
-        Text_empresaResp.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                Text_empresaRespActionPerformed(evt);
-            }
-        });
+        Icon.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        Icon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Vista/Ica_logo_2-removebg-preview (2) (1).png"))); // NOI18N
 
-        jLabel2.setFont(new java.awt.Font("Berlin Sans FB", 0, 18)); // NOI18N
-        jLabel2.setText("•Empresa responsable(*): ");
+        Titulo.setFont(new java.awt.Font("Roboto", 1, 36)); // NOI18N
+        Titulo.setForeground(new java.awt.Color(255, 255, 255));
+        Titulo.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        Titulo.setText("Registro de Lugar de Producción");
 
-        jLabel3.setFont(new java.awt.Font("Berlin Sans FB", 0, 18)); // NOI18N
-        jLabel3.setText("•Nombre del lugar(*): ");
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(36, 36, 36)
+                .addComponent(Titulo, javax.swing.GroupLayout.DEFAULT_SIZE, 583, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(Icon, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(Titulo, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
+            .addComponent(Icon, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+        );
 
-        Button_siguiente.setBackground(new java.awt.Color(0, 204, 204));
-        Button_siguiente.setFont(new java.awt.Font("Berlin Sans FB", 0, 24)); // NOI18N
+        fondo.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 750, 100));
+
+        Button_siguiente.setFont(new java.awt.Font("Roboto", 1, 14)); // NOI18N
+        Button_siguiente.setForeground(new java.awt.Color(0, 99, 17));
         Button_siguiente.setText("Siguiente");
+        Button_siguiente.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(55, 165, 87), 1, true));
         Button_siguiente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 Button_siguienteActionPerformed(evt);
             }
         });
+        fondo.add(Button_siguiente, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 350, 130, 30));
 
-        BtnVolver.setBackground(new java.awt.Color(0, 204, 204));
-        BtnVolver.setFont(new java.awt.Font("Berlin Sans FB", 0, 24)); // NOI18N
-        BtnVolver.setText("<-- Volver");
+        BtnVolver.setBackground(new java.awt.Color(55, 165, 87));
+        BtnVolver.setForeground(new java.awt.Color(255, 255, 255));
+        BtnVolver.setText("⮜ REGRESAR");
+        BtnVolver.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
         BtnVolver.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BtnVolverActionPerformed(evt);
             }
         });
+        fondo.add(BtnVolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 110, 80, 20));
+
+        jLabel1.setFont(new java.awt.Font("Roboto", 0, 13)); // NOI18N
+        jLabel1.setText("- Nombre del Lugar de producción (*):");
+        fondo.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 170, 230, -1));
+
+        Text_nombreLugar.setBackground(new java.awt.Color(225, 237, 227));
+        Text_nombreLugar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(187, 213, 191)));
+        Text_nombreLugar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Text_nombreLugarActionPerformed(evt);
+            }
+        });
+        fondo.add(Text_nombreLugar, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 190, 310, 20));
+
+        jLabel4.setFont(new java.awt.Font("Roboto", 0, 13)); // NOI18N
+        jLabel4.setText("- Nombre de la Empresa Responsable (*): ");
+        fondo.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 270, 360, -1));
+
+        Text_empresaResp.setBackground(new java.awt.Color(225, 237, 227));
+        Text_empresaResp.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(187, 213, 191)));
+        Text_empresaResp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Text_empresaRespActionPerformed(evt);
+            }
+        });
+        fondo.add(Text_empresaResp, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 290, 310, 20));
+
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Vista/IcaCompleto.png"))); // NOI18N
+        jLabel2.setText("jLabel2");
+        fondo.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 320, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(290, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(245, 245, 245))
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(96, 96, 96)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(Text_empresaResp, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(Text_nombreLugar, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(BtnVolver)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(490, 490, 490)
-                        .addComponent(Button_siguiente)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(fondo, javax.swing.GroupLayout.PREFERRED_SIZE, 750, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(BtnVolver))
-                .addGap(67, 67, 67)
-                .addComponent(jLabel3)
-                .addGap(27, 27, 27)
-                .addComponent(Text_nombreLugar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(61, 61, 61)
-                .addComponent(jLabel2)
-                .addGap(18, 18, 18)
-                .addComponent(Text_empresaResp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
-                .addComponent(Button_siguiente)
-                .addGap(185, 185, 185))
+                .addComponent(fondo, javax.swing.GroupLayout.PREFERRED_SIZE, 472, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void Button_siguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Button_siguienteActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Button_siguienteActionPerformed
+
+    private void BtnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnVolverActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_BtnVolverActionPerformed
 
     private void Text_nombreLugarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Text_nombreLugarActionPerformed
         // TODO add your handling code here:
@@ -120,16 +145,6 @@ public class RegistroLugarProdu extends javax.swing.JFrame {
     private void Text_empresaRespActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Text_empresaRespActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_Text_empresaRespActionPerformed
-
-    private void Button_siguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Button_siguienteActionPerformed
-
-    }//GEN-LAST:event_Button_siguienteActionPerformed
-
-    private void BtnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnVolverActionPerformed
-
-    }//GEN-LAST:event_BtnVolverActionPerformed
-
- 
 //  Getters para que el controlador acceda a los campos
     public javax.swing.JButton getButtonSiguiente() {
     return Button_siguiente;
@@ -178,14 +193,17 @@ public javax.swing.JTextField getTextEmpresaResp() {
             }
         });
     }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnVolver;
     private javax.swing.JButton Button_siguiente;
+    private javax.swing.JLabel Icon;
     private javax.swing.JTextField Text_empresaResp;
     private javax.swing.JTextField Text_nombreLugar;
+    private javax.swing.JLabel Titulo;
+    private javax.swing.JPanel fondo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 }
