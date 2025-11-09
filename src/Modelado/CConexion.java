@@ -6,44 +6,91 @@ import java.sql.SQLException;
 
 public class CConexion {
 
-    private static final String usuario = "proyecto";       // tu usuario en Oracle
-    private static final String contrasenia = "proyecto";   // tu contraseña
-    private static final String host = "localhost";
-    private static final String puerto = "1521";
-    private static final String servicio = "xe";            // puede ser SID o SERVICE_NAME
+    // ==============================================
+    // 🔧 CONFIGURACIÓN GENERAL DE LA BASE DE DATOS
+    // ==============================================
+    private static final String HOST = "localhost";
+    private static final String PUERTO = "1521";
+    private static final String SERVICIO = "xe"; // puede ser SID o SERVICE_NAME
 
-    // Método principal para obtener conexión
+    // ==============================================
+    // 🔹 1️⃣ Conexión base (por defecto)
+    //      -> se conecta como ADMINISTRADOR
+    // ==============================================
     public static Connection getConnection() {
-        Connection conectar = null;
+        // Esta conexión solo debe usarse para tareas generales o pruebas
+        return getConnectionPorUsuario("ADMINISTRADOR", "ADMINISTRADOR");
+    }
+
+    // ==============================================
+    // 🔹 2️⃣ Conexión según ROL
+    //      -> se conecta automáticamente con el usuario correcto
+    // ==============================================
+    public static Connection getConnectionPorRol(String rol) {
+        String usuario;
+        String contrasena;
+
+        switch (rol.toLowerCase()) {
+            case "productor":
+                usuario = "PRODUCTOR";
+                contrasena = "PRODUCTOR";
+                break;
+            case "tecnico":
+                usuario = "TECNICO";
+                contrasena = "TECNICO";
+                break;
+            case "administrador":
+                usuario = "ADMINISTRADOR";
+                contrasena = "ADMINISTRADOR";
+                break;
+            default: // propietario
+                usuario = "PROPIETARIO";
+                contrasena = "PROPIETARIO";
+                break;
+        }
+
+        return getConnectionPorUsuario(usuario, contrasena);
+    }
+
+    // ==============================================
+    // 🔹 3️⃣ Conexión directa por usuario y contraseña
+    //      -> se usa internamente o en el LoginDAO
+    // ==============================================
+    public static Connection getConnectionPorUsuario(String usuario, String contrasena) {
+        Connection conexion = null;
+
         try {
             Class.forName("oracle.jdbc.driver.OracleDriver");
 
-            // ✅ Opción 1: con SID
-            String url = "jdbc:oracle:thin:@" + host + ":" + puerto + ":" + servicio;
+            // 💡 Usa esta URL si trabajas con SID (por ejemplo "xe")
+            String url = "jdbc:oracle:thin:@" + HOST + ":" + PUERTO + ":" + SERVICIO;
 
-            // ✅ Opción 2: si arriba falla, cambia a esta:
-            // String url = "jdbc:oracle:thin:@//" + host + ":" + puerto + "/" + servicio;
+            // 💡 O esta si trabajas con SERVICE_NAME:
+            // String url = "jdbc:oracle:thin:@//" + HOST + ":" + PUERTO + "/" + SERVICIO;
 
-            conectar = DriverManager.getConnection(url, usuario, contrasenia);
-            System.out.println("🔥 Conexión exitosa a Oracle como usuario: " + usuario);
+            conexion = DriverManager.getConnection(url, usuario, contrasena);
+            System.out.println("🔥 Conectado a Oracle como: " + usuario);
+
         } catch (ClassNotFoundException e) {
             System.out.println("💥 Error: No se encontró el driver JDBC de Oracle.");
         } catch (SQLException e) {
-            System.out.println("💥 Error de conexión a la BD: " + e.getMessage());
+            System.out.println("💥 Error de conexión con " + usuario + ": " + e.getMessage());
         }
-        return conectar;
+
+        return conexion;
     }
 
-    // Método para cerrar conexión
+    // ==============================================
+    // 🔹 4️⃣ Cerrar conexión
+    // ==============================================
     public static void cerrarConexion(Connection conn) {
         if (conn != null) {
             try {
                 conn.close();
-                System.out.println("🔒 Conexión cerrada.");
+                System.out.println("🔒 Conexión cerrada correctamente.");
             } catch (SQLException e) {
                 System.out.println("💥 Error al cerrar conexión: " + e.getMessage());
             }
         }
     }
 }
-

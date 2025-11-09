@@ -4,10 +4,9 @@ package Controlador;
  *
  * @author Haider
  */
-
+import Vista.AdminMenu;
 import Vista.vistas;
 import Vista.Registroprop;
-import Vista.Registro;
 import Modelado.PropietarioDAO;
 import javax.swing.JOptionPane;
 import java.util.regex.Pattern;
@@ -80,10 +79,7 @@ public class ControladorRegistroPropietario {
             limpiarCampos();
 
             // 9️⃣ Ir a la vista de login
-            vistas ventanaLogin = new vistas();
-            new ControladorLogin(ventanaLogin);
-            ventanaLogin.setVisible(true);
-            vista.dispose();
+            volverARegistro();
 
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(vista, "⚠ Documento y teléfono deben ser numéricos.");
@@ -111,10 +107,18 @@ public class ControladorRegistroPropietario {
         vista.getTXTContrasena().setText("");
     }
 
-    private void volverARegistro() {
-        Registro ventanaRegistro = new Registro();
-        new ControladorRegistro(ventanaRegistro);
-        ventanaRegistro.setVisible(true);
+ private void volverALogin() {
+        vistas login = new vistas();
+        new ControladorLogin(login);
+        login.setVisible(true);
         vista.dispose();
+    }
+ 
+  private void volverARegistro() {
+       AdminMenu menu = new AdminMenu();
+            new ControladorMenuAdministrador(menu);
+            menu.setVisible(true);
+            menu.setLocationRelativeTo(null);
+            vista.dispose();
     }
 }

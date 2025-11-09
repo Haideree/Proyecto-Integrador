@@ -4,64 +4,93 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+/**
+ * Clase DAO para validar los datos de inicio de sesión
+ * y devolver el rol correcto del usuario.
+ */
 public class LoginDAO {
 
-    /**
-     * Valida el usuario y devuelve:
-     * - Para propietario: su número de documento (NUMERODOCUMENTO)
-     * - Para técnico: "tecnico"
-     * - Para productor: "productor"
-     * - Null si no existe
-     */
+    private Connection conexionRol; // guarda la conexión activa del usuario logueado
+
+    public Connection getConexionRol() {
+        return conexionRol;
+    }
+
     public String validarUsuario(String correo, String contrasena) {
-        try (Connection conn = CConexion.getConnection()) {
+        String rol = null;
 
-            // 1️⃣ Validar propietario y traer NUMERODOCUMENTO
-            String sqlProp = "SELECT NUMERODOCUMENTO FROM Propietario WHERE correo = ? AND contrasena = ?";
-            try (PreparedStatement psProp = conn.prepareStatement(sqlProp)) {
-                psProp.setString(1, correo);
-                psProp.setString(2, contrasena);
-                try (ResultSet rsProp = psProp.executeQuery()) {
-                    if (rsProp.next()) {
-                        // Devuelve el número de documento real del propietario
-                        return rsProp.getString("NUMERODOCUMENTO");
+        // ✅ Paso 1: Usamos ADMINISTRADOR solo para verificar las credenciales
+        try (Connection conn = CConexion.getConnectionPorUsuario("ADMINISTRADOR", "ADMINISTRADOR")) {
+
+            // 🔹 1️⃣ Propietario
+            String sqlProp = "SELECT NUMERODOCUMENTO FROM PROPIETARIO WHERE correo = ? AND contrasena = ?";
+            try (PreparedStatement ps = conn.prepareStatement(sqlProp)) {
+                ps.setString(1, correo);
+                ps.setString(2, contrasena);
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        rol = "propietario";
                     }
                 }
             }
 
-            // 2️⃣ Validar técnico
-            String sqlTec = "SELECT t.identificacion FROM Tecnico t " +
-                            "JOIN correo c ON t.idCorreo = c.id_correo " +
-                            "WHERE c.correo = ? AND t.contrasena = ?";
-            try (PreparedStatement psTec = conn.prepareStatement(sqlTec)) {
-                psTec.setString(1, correo);
-                psTec.setString(2, contrasena);
-                try (ResultSet rsTec = psTec.executeQuery()) {
-                    if (rsTec.next()) {
-                        return "tecnico";
+            // 🔹 2️⃣ Técnico
+            if (rol == null) {
+                String sqlTec = "SELECT t.identificacion FROM TECNICO t " +
+                                "JOIN CORREO c ON t.idCorreo = c.id_correo " +
+                                "WHERE c.correo = ? AND t.contrasena = ?";
+                try (PreparedStatement ps = conn.prepareStatement(sqlTec)) {
+                    ps.setString(1, correo);
+                    ps.setString(2, contrasena);
+                    try (ResultSet rs = ps.executeQuery()) {
+                        if (rs.next()) {
+                            rol = "tecnico";
+                        }
                     }
                 }
             }
 
-            // 3️⃣ Validar productor
-            String sqlProdu = "SELECT p.numerodocumento FROM Productor p " +
-                              "JOIN correo c ON p.idCorreo = c.id_correo " +
-                              "WHERE c.correo = ? AND p.contrasena = ?";
-            try (PreparedStatement psProdu = conn.prepareStatement(sqlProdu)) {
-                psProdu.setString(1, correo);
-                psProdu.setString(2, contrasena);
-                try (ResultSet rsProdu = psProdu.executeQuery()) {
-                    if (rsProdu.next()) {
-                        return "productor";
+            // 🔹 3️⃣ Productor
+            if (rol == null) {
+                String sqlProd = "SELECT p.numerodocumento FROM PRODUCTOR p " +
+                                 "JOIN CORREO c ON p.idCorreo = c.id_correo " +
+                                 "WHERE c.correo = ? AND p.contrasena = ?";
+                try (PreparedStatement ps = conn.prepareStatement(sqlProd)) {
+                    ps.setString(1, correo);
+                    ps.setString(2, contrasena);
+                    try (ResultSet rs = ps.executeQuery()) {
+                        if (rs.next()) {
+                            rol = "productor";
+                        }
                     }
                 }
+            }
+
+            // 🔹 4️⃣ Administrador
+            if (rol == null) {
+                String sqlAdm = "SELECT a.cedula FROM ADMINISTRADOR a " +
+                                "WHERE a.correo = ? AND a.contrasena = ?";
+                try (PreparedStatement ps = conn.prepareStatement(sqlAdm)) {
+                    ps.setString(1, correo);
+                    ps.setString(2, contrasena);
+                    try (ResultSet rs = ps.executeQuery()) {
+                        if (rs.next()) {
+                            rol = "administrador";
+                        }
+                    }
+                }
+            }
+
+            // ✅ Paso 2: si se encontró el rol, abrir la conexión con ese usuario Oracle
+            if (rol != null) {
+                conexionRol = CConexion.getConnectionPorRol(rol);
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        // Usuario no encontrado
-        return null;
+        return rol;
     }
 }
+

@@ -5,7 +5,6 @@ package Vista;
  * @author Usuario
  */
 
-import Controlador.ControladorRegistro;
 import javax.swing.JOptionPane; 
 import Modelado.RegistrotecDAO;
 

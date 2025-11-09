@@ -8,8 +8,11 @@ package Vista;
  *
  * @author Usuario
  */
+import java.sql.Connection;
+import Modelado.CConexion;
 import Controlador.ControladorRegistroPredio;
-public class RegistroPredio extends javax.swing.JFrame {
+public class RegistroPredio extends javax.swing.JFrame{
+    private Connection conexionActiva;
     
     public RegistroPredio() {
         initComponents();
@@ -24,6 +27,10 @@ public class RegistroPredio extends javax.swing.JFrame {
         
         cmbMunicipio.removeAllItems();
         cmbMunicipio.addItem("Seleccione un municipio");
+    }
+    public RegistroPredio(Connection conexionActiva) {
+        this(); // llama al constructor por defecto para inicializar los componentes
+        this.conexionActiva = conexionActiva;
     }
 
     /**
@@ -219,8 +226,6 @@ public class RegistroPredio extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
- 
-    /* Set the Nimbus look and feel */
     try {
         for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
             if ("Nimbus".equals(info.getName())) {
@@ -232,15 +237,18 @@ public class RegistroPredio extends javax.swing.JFrame {
         java.util.logging.Logger.getLogger(RegistroPredio.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
     }
 
-    // ✅ Crea la vista y conecta el controlador
-    java.awt.EventQueue.invokeLater(new Runnable() {
-        public void run() {
-            RegistroPredio vista = new RegistroPredio();
-            ControladorRegistroPredio controlador = new ControladorRegistroPredio(vista);
-            vista.setVisible(true);
-        }
+    java.awt.EventQueue.invokeLater(() -> {
+        // ✅ Conexión usando tu clase CConexion
+        Connection conexionActiva = Modelado.CConexion.getConnectionPorRol("administrador");
+
+        // Crear vista y controlador con la conexión activa
+        RegistroPredio vista = new RegistroPredio();
+        ControladorRegistroPredio controlador = new ControladorRegistroPredio(vista, conexionActiva);
+        vista.setVisible(true);
     });
 }
+
+
 
 
 // --- Getters públicos para acceder desde el controlador ---

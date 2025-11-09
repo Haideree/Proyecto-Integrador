@@ -7,7 +7,7 @@ package Controlador;
 
 import Vista.Registrotec;
 import Modelado.RegistrotecDAO;
-import Vista.Registro;
+import Vista.AdminMenu;
 import javax.swing.JOptionPane;
 import Vista.vistas;
 import java.util.regex.Pattern;
@@ -113,7 +113,7 @@ public class ControladorRegistroTecnico {
 
             JOptionPane.showMessageDialog(vista, "✅ Técnico registrado correctamente (" + (esICA ? "ICA" : "Particular") + ").");
             limpiarCampos();
-            volverALogin();
+            volverARegistro();
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(vista, "❌ Error al registrar: " + e.getMessage());
@@ -163,10 +163,11 @@ public class ControladorRegistroTecnico {
     }
 
     private void volverARegistro() {
-        Registro ventanaRegistro = new Registro();
-        new ControladorRegistro(ventanaRegistro);
-        ventanaRegistro.setVisible(true);
-        vista.dispose();
+       AdminMenu menu = new AdminMenu();
+            new ControladorMenuAdministrador(menu);
+            menu.setVisible(true);
+            menu.setLocationRelativeTo(null);
+            vista.dispose();
     }
 
     private void volverALogin() {

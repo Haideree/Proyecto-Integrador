@@ -1,24 +1,24 @@
 package Controlador;
 
-/**
- *
- * @author Haider
- */
 import Modelado.LugarProduccionDAO;
 import Vista.RegistroLugarProdu;
 import Vista.Predios;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
 import javax.swing.JOptionPane;
 
 public class ControladorRegistroLugarProdu implements ActionListener {
 
-    private RegistroLugarProdu vista;
-    private LugarProduccionDAO dao;
+    private final RegistroLugarProdu vista;
+    private final LugarProduccionDAO dao;
+    private final Connection conexionActiva; // 🔹 conexión del usuario logueado
 
-    public ControladorRegistroLugarProdu(RegistroLugarProdu vista) {
+    // ✅ Recibe la conexión activa (del rol logueado)
+    public ControladorRegistroLugarProdu(RegistroLugarProdu vista, Connection conexionRol) {
         this.vista = vista;
-        this.dao = new LugarProduccionDAO(); // ← Se instancia aquí dentro
+        this.conexionActiva = conexionRol;
+        this.dao = new LugarProduccionDAO(conexionRol); // 💥 conexión inyectada
 
         // Escuchar botones
         this.vista.getButtonSiguiente().addActionListener(this);
@@ -28,14 +28,10 @@ public class ControladorRegistroLugarProdu implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
 
-        // ========================================
-        // 🔹 BOTÓN SIGUIENTE
-        // ========================================
         if (e.getSource() == vista.getButtonSiguiente()) {
             String nombreLugar = vista.getTextNombreLugar().getText().trim();
             String empresa = vista.getTextEmpresaResp().getText().trim();
 
-            // Validación de campos vacíos
             if (nombreLugar.isEmpty() || empresa.isEmpty()) {
                 JOptionPane.showMessageDialog(vista,
                         "⚠️ Todos los campos son obligatorios.",
@@ -52,14 +48,12 @@ public class ControladorRegistroLugarProdu implements ActionListener {
                         "Éxito",
                         JOptionPane.INFORMATION_MESSAGE);
 
-                // Limpiar campos
                 vista.getTextNombreLugar().setText("");
                 vista.getTextEmpresaResp().setText("");
 
-                // Regresar a la vista Predios
                 vista.dispose();
-                Predios ventanaPredios = new Predios();
-                new ControladorMostrarPredios(ventanaPredios);
+                Predios ventanaPredios = new Predios(conexionActiva);
+                new ControladorMostrarPredios(ventanaPredios, conexionActiva);
                 ventanaPredios.setVisible(true);
 
             } catch (Exception ex) {
@@ -71,14 +65,12 @@ public class ControladorRegistroLugarProdu implements ActionListener {
             }
         }
 
-        // ========================================
-        // 🔹 BOTÓN VOLVER
-        // ========================================
         if (e.getSource() == vista.getBtnVolver()) {
             vista.dispose();
-            Predios ventanaPredios = new Predios();
-            new ControladorMostrarPredios(ventanaPredios);
+            Predios ventanaPredios = new Predios(conexionActiva);
+            new ControladorMostrarPredios(ventanaPredios, conexionActiva);
             ventanaPredios.setVisible(true);
         }
     }
 }
+

@@ -1,5 +1,6 @@
 package Controlador;
 
+import Vista.AdminMenu;
 import Vista.Registroprod;
 import Modelado.ProductorDAO;
 import java.awt.event.ActionEvent;
@@ -26,6 +27,9 @@ public class ControladorRegistroProductor implements ActionListener {
         if (e.getSource() == vista.getBtnSiguiente()) {
             registrarProductor();
         } else if (e.getSource() == vista.getBtnVolver()) {
+            AdminMenu reg = new AdminMenu();
+            new ControladorMenuAdministrador(reg);
+            reg.setVisible(true);
             vista.dispose(); // O abrir otra ventana si aplica
         }
     }
@@ -77,6 +81,7 @@ public class ControladorRegistroProductor implements ActionListener {
             dao.registrarProductor(documento, nombre, telefono, correo, contrasena);
             vista.mostrarMensaje("✅ Productor registrado exitosamente.");
             limpiarCampos();
+            volverARegistro();
 
         } catch (Exception ex) {
             vista.mostrarMensaje("❌ Error al registrar el productor: " + ex.getMessage());
@@ -110,6 +115,12 @@ public class ControladorRegistroProductor implements ActionListener {
         vista.getTxtTelefono().setText("");
         vista.getTxtCorreo().setText("");
         vista.getTxtContrasena().setText("");
+    }
+      private void volverARegistro() {
+        AdminMenu ventanaRegistro = new AdminMenu();
+        new ControladorMenuAdministrador(ventanaRegistro);
+        ventanaRegistro.setVisible(true);
+        vista.dispose();
     }
 }
 

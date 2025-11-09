@@ -4,13 +4,15 @@ package Controlador;
  *
  * @author Haider
  */
-
+import Controlador.ControladorMostrarPredios;
 import Modelado.LoginDAO;
+import Modelado.CConexion;
+import Vista.AdminMenu;
 import Vista.Predios;
-import Vista.Registro;
 import Vista.vistas;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
 import javax.swing.JOptionPane;
 
 public class ControladorLogin implements ActionListener {
@@ -18,22 +20,23 @@ public class ControladorLogin implements ActionListener {
     private final vistas vista;
     private final LoginDAO modelo;
 
+    // 🔹 Nueva variable: conexión activa del usuario logueado
+    private Connection conexionActiva;
+
     public ControladorLogin(vistas vista) {
         this.vista = vista;
         this.modelo = new LoginDAO();
 
-        // Escuchadores de botones
+        // Escuchador del botón "Ingresar"
         this.vista.getButtonIngresar().addActionListener(this);
-       
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == vista.getButtonIngresar()) {
             iniciarSesion();
-        } 
         }
-    
+    }
 
     private void iniciarSesion() {
         String correo = vista.getTxtUsuario().getText().trim();
@@ -44,7 +47,7 @@ public class ControladorLogin implements ActionListener {
             return;
         }
 
-        // 🔹 Ahora devuelve NUMERODOCUMENTO para propietarios, "tecnico" o "productor" para otros
+        // 🔹 El DAO valida el usuario y determina su rol
         String resultado = modelo.validarUsuario(correo, contrasena);
 
         if (resultado == null) {
@@ -52,37 +55,68 @@ public class ControladorLogin implements ActionListener {
             return;
         }
 
+        // 🔹 Obtenemos la conexión activa según el rol
+        conexionActiva = modelo.getConexionRol();
+
         try {
             if (resultado.matches("\\d+")) {
-                // 🔹 Propietario: resultado es NUMERODOCUMENTO
+                // 🔹 Propietario
                 JOptionPane.showMessageDialog(vista, "Bienvenido al sistema Propietario 👷‍♂️");
-        
-                // Cerrar login
+
+                // Ejemplo: puedes pasar la conexión a su controlador
+                // PropietarioDAO dao = new PropietarioDAO(conexionActiva);
+                //new ControladorPropietario(dao);
+
                 vista.dispose();
 
-            } else if ("tecnico".equals(resultado)) {
+            } else if ("tecnico".equalsIgnoreCase(resultado)) {
                 JOptionPane.showMessageDialog(vista, "Bienvenido al sistema Técnico 🔧");
+
+                // Ejemplo: TécnicoDAO daoTec = new TécnicoDAO(conexionActiva);
+                // new ControladorTecnico(daoTec);
+
                 vista.dispose();
 
-            } else if ("productor".equals(resultado)) {
-                JOptionPane.showMessageDialog(vista, "Bienvenido al sistema Productor 🌱");
-                Predios menu = new Predios();
+            } else if ("productor".equalsIgnoreCase(resultado)) {
+    JOptionPane.showMessageDialog(vista, "Bienvenido al sistema Productor 🌱");
+
+    // ✅ 1️⃣ Obtenemos la conexión del usuario logueado
+    Connection conexionActiva = modelo.getConexionRol();
+
+    // ✅ 2️⃣ Creamos la vista
+    Predios menu = new Predios(conexionActiva);
+
+    // ✅ 3️⃣ Creamos el controlador pasándole la conexión activa
+    new ControladorMostrarPredios(menu, conexionActiva);
+
+    // ✅ 4️⃣ Mostramos la vista
+    menu.setVisible(true);
+    menu.setLocationRelativeTo(null);
+
+    // ✅ 5️⃣ Cerramos el login
+    vista.dispose();
+}
+ else if ("administrador".equalsIgnoreCase(resultado)) {
+                JOptionPane.showMessageDialog(vista, "Bienvenido al sistema Admin 👑");
+
+                AdminMenu menu = new AdminMenu();
+                // ✅ Aquí también puedes pasar la conexión si lo necesitas
+                new ControladorMenuAdministrador(menu /*, conexionActiva */);
+
                 menu.setVisible(true);
-                menu.setLocationRelativeTo(null);
                 vista.dispose();
             }
 
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(vista, "Error al abrir ventana: " + ex.getMessage());
+            JOptionPane.showMessageDialog(vista, "💥 Error al abrir ventana: " + ex.getMessage());
             ex.printStackTrace();
         }
     }
 
-    private void abrirRegistro() {
-        Registro vistaRegistro = new Registro();
-        ControladorRegistro controladorRegistro = new ControladorRegistro(vistaRegistro);
-        vistaRegistro.setVisible(true);
-        vista.dispose();
+    // 🔹 Si quieres cerrar la conexión al salir
+    public void cerrarConexion() {
+        CConexion.cerrarConexion(conexionActiva);
     }
 }
+
 

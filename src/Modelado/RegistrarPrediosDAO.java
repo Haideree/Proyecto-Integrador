@@ -1,8 +1,5 @@
 package Modelado;
-/**
- *
- * @author Haider
- */
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,18 +7,11 @@ import javax.swing.JOptionPane;
 
 public class RegistrarPrediosDAO {
 
-    private Connection conexion;
+    private final Connection conexion; // ✅ Conexión inyectada desde el controlador
 
-    public RegistrarPrediosDAO() {
-        try {
-            conexion = CConexion.getConnection(); // Guarda la conexión en el atributo
-            if (conexion == null) {
-                JOptionPane.showMessageDialog(null, "No se pudo establecer conexión con la base de datos ⚠️");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Error de conexión a la base de datos ⚠️");
-        }
+    // Constructor que recibe la conexión activa
+    public RegistrarPrediosDAO(Connection conexion) {
+        this.conexion = conexion;
     }
 
     // ==============================================================
@@ -40,8 +30,9 @@ public class RegistrarPrediosDAO {
             }
 
         } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al cargar productores: " + e.getMessage(),
+                    "Error SQL", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Error al cargar productores.");
         }
 
         return productores;
@@ -63,63 +54,67 @@ public class RegistrarPrediosDAO {
             }
 
         } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al cargar propietarios: " + e.getMessage(),
+                    "Error SQL", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Error al cargar propietarios.");
         }
 
         return propietarios;
     }
 
-    
-    //OBTENER DEPARTAMENTOS
-    
+    // ==============================================================
+    // 3️⃣ Obtener departamentos
+    // ==============================================================
     public List<String> obtenerDepartamentos() {
         List<String> departamentos = new ArrayList<>();
-        String sql = "SELECT IDDEPART, DEPARTAMENTO FROM DEPARTAMENTOS";
+        String sql = "SELECT DEPARTAMENTO FROM DEPARTAMENTOS";
 
         try (PreparedStatement ps = conexion.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
-                String item = rs.getString("DEPARTAMENTO");
-                departamentos.add(item);
+                departamentos.add(rs.getString("DEPARTAMENTO"));
             }
 
         } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al cargar departamentos: " + e.getMessage(),
+                    "Error SQL", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Error al cargar departamentos.");
         }
 
         return departamentos;
     }
-    
-    // OBTENER MUNICIPIOS POR DEPARTAMENTO
+
+    // ==============================================================
+    // 4️⃣ Obtener municipios por departamento
+    // ==============================================================
     public List<String> obtenerMunicipios(String nombreDepartamento) {
-    List<String> municipios = new ArrayList<>();
-    String sql = "SELECT M.MUNICIPIO " +
-                 "FROM MUNICIPIOS M " +
-                 "JOIN DEPARTAMENTOS D ON M.DEPARTAMENTO = D.IDDEPART " +
-                 "WHERE D.DEPARTAMENTO = ?";
+        List<String> municipios = new ArrayList<>();
+        String sql = """
+            SELECT M.MUNICIPIO 
+            FROM MUNICIPIOS M 
+            JOIN DEPARTAMENTOS D ON M.DEPARTAMENTO = D.IDDEPART 
+            WHERE D.DEPARTAMENTO = ?
+        """;
 
-    try (PreparedStatement ps = conexion.prepareStatement(sql)) {
-        ps.setString(1, nombreDepartamento);
-        ResultSet rs = ps.executeQuery();
-
-        while (rs.next()) {
-            municipios.add(rs.getString("MUNICIPIO"));
+        try (PreparedStatement ps = conexion.prepareStatement(sql)) {
+            ps.setString(1, nombreDepartamento);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    municipios.add(rs.getString("MUNICIPIO"));
+                }
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al cargar municipios del departamento " + nombreDepartamento + ": " + e.getMessage(),
+                    "Error SQL", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
 
-    } catch (SQLException e) {
-        e.printStackTrace();
-        JOptionPane.showMessageDialog(null, "Error al cargar municipios del departamento " + nombreDepartamento);
+        return municipios;
     }
 
-    return municipios;
-}
-
-       
     // ==============================================================
-    // 3️⃣ Obtener lugares de producción
+    // 5️⃣ Obtener lugares de producción
     // ==============================================================
     public List<String> obtenerLugaresProduccion() {
         List<String> lugares = new ArrayList<>();
@@ -135,22 +130,25 @@ public class RegistrarPrediosDAO {
             }
 
         } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al cargar lugares de producción: " + e.getMessage(),
+                    "Error SQL", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Error al cargar lugares de producción.");
         }
 
         return lugares;
     }
 
     // ==============================================================
-    // 4️⃣ Registrar predio con FK NUM_REGISTRO_ICA
+    // 6️⃣ Registrar predio
     // ==============================================================
     public boolean registrarPredio(String nombre, String departamento, String municipio, String vereda,
                                    int idProductor, int idPropietario, int numRegistroIca) {
 
-        String sql = "INSERT INTO PREDIO (NUM_REGISTRO_ICA, NOMBRE, DEPARTAMENTO, MUNICIPIO, VEREDA, "
-           + "NUMERO_DOC_PRODUCTOR, NUMERODOCPROP, NUMERO_REG_ICA) "
-           + "VALUES (SEQ_PREDIO.NEXTVAL, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = """
+            INSERT INTO PREDIO (NUM_REGISTRO_ICA, NOMBRE, DEPARTAMENTO, MUNICIPIO, VEREDA, 
+            NUMERO_DOC_PRODUCTOR, NUMERODOCPROP, NUMERO_REG_ICA)
+            VALUES (SEQ_PREDIO.NEXTVAL, ?, ?, ?, ?, ?, ?, ?)
+        """;
 
         try (PreparedStatement ps = conexion.prepareStatement(sql)) {
             ps.setString(1, nombre);
@@ -161,14 +159,15 @@ public class RegistrarPrediosDAO {
             ps.setInt(6, idPropietario);
             ps.setInt(7, numRegistroIca);
 
-            int filas = ps.executeUpdate();
-            return filas > 0;
+            return ps.executeUpdate() > 0;
 
         } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al registrar el predio: " + e.getMessage(),
+                    "Error SQL", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Error al registrar el predio 😓");
             return false;
         }
     }
 }
+
 

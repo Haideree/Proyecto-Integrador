@@ -1,9 +1,5 @@
 package Controlador;
 
-/**
- *
- * @author Haider
- */
 import Modelado.RegistrarPrediosDAO;
 import Vista.Predios;
 import Vista.RegistroPredio;
@@ -11,16 +7,19 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
 import java.util.List;
-import java.util.ArrayList;
+import java.sql.Connection;
 
 public class ControladorRegistroPredio implements ActionListener {
 
-    private RegistroPredio vista;
-    private RegistrarPrediosDAO modelo;
+    private final RegistroPredio vista;
+    private final RegistrarPrediosDAO modelo;
+    private final Connection conexionActiva;
 
-    public ControladorRegistroPredio(RegistroPredio vista) {
+    // 🔹 Constructor actualizado: recibe la conexión del usuario
+    public ControladorRegistroPredio(RegistroPredio vista, Connection conexionActiva) {
         this.vista = vista;
-        this.modelo = new RegistrarPrediosDAO();
+        this.conexionActiva = conexionActiva;
+        this.modelo = new RegistrarPrediosDAO(conexionActiva);
 
         // Cargar combos al iniciar la vista
         cargarCombos();
@@ -28,7 +27,6 @@ public class ControladorRegistroPredio implements ActionListener {
         // Escuchar botones
         this.vista.getBtnRegistrar().addActionListener(this);
         this.vista.getBtnVolver().addActionListener(this);
-        
     }
 
     @Override
@@ -59,28 +57,27 @@ public class ControladorRegistroPredio implements ActionListener {
         for (String propietario : modelo.obtenerPropietarios()) {
             vista.getCmbPropietario().addItem(propietario);
         }
-        
-        //Departamentos
-        for(String departamento : modelo.obtenerDepartamentos()){
+
+        // Departamentos
+        for (String departamento : modelo.obtenerDepartamentos()) {
             vista.getCmbDepartamento().addItem(departamento);
         }
-        
-        // Agregar listener para cargar municipios dinámicamente
-vista.getCmbDepartamento().addActionListener(e -> {
-    vista.getCmbMunicipio().removeAllItems();
 
-    String departamentoSeleccionado = (String) vista.getCmbDepartamento().getSelectedItem();
+        // Listener para cargar municipios dinámicamente
+        vista.getCmbDepartamento().addActionListener(e -> {
+            vista.getCmbMunicipio().removeAllItems();
 
-    if (departamentoSeleccionado != null) {
-        List<String> municipios = modelo.obtenerMunicipios(departamentoSeleccionado);
+            String departamentoSeleccionado = (String) vista.getCmbDepartamento().getSelectedItem();
 
-        for (String municipio : municipios) {
-            vista.getCmbMunicipio().addItem(municipio);
-        }
-    }
-});
+            if (departamentoSeleccionado != null) {
+                List<String> municipios = modelo.obtenerMunicipios(departamentoSeleccionado);
+                for (String municipio : municipios) {
+                    vista.getCmbMunicipio().addItem(municipio);
+                }
+            }
+        });
 
-        // Lugares de producción (NUM_REGISTRO_ICA - NOMBRE)
+        // Lugares de producción
         for (String lugar : modelo.obtenerLugaresProduccion()) {
             vista.getCmbLugarProdu().addItem(lugar);
         }
@@ -111,7 +108,7 @@ vista.getCmbDepartamento().addActionListener(e -> {
                 return;
             }
 
-            // Extraer los IDs o números de cada combo (usando formato "NOMBRE - ID")
+            // Extraer los IDs
             int idProductor = Integer.parseInt(productorSeleccionado.split(" - ")[1]);
             int idPropietario = Integer.parseInt(propietarioSeleccionado.split(" - ")[1]);
             int numRegistroIca = Integer.parseInt(lugarSeleccionado.split(" - ")[0]); // NUM_REGISTRO_ICA
@@ -153,9 +150,10 @@ vista.getCmbDepartamento().addActionListener(e -> {
     // ==============================================================
     private void volverAPredios() {
         vista.dispose();
-        Predios ventanaPredios = new Predios();
-        new ControladorMostrarPredios(ventanaPredios);
+        Predios ventanaPredios = new Predios(conexionActiva);
+        new ControladorMostrarPredios(ventanaPredios, conexionActiva);
         ventanaPredios.setVisible(true);
     }
 }
+
 

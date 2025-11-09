@@ -4,11 +4,27 @@ package Vista;
  *
  * @author Usuario
  */
+import java.sql.Connection;
 public class RegistroLugarProdu extends javax.swing.JFrame {
     
+    private Connection conexionActiva; // 🔹 conexión del usuario logueado
+
+    // ✅ Constructor vacío (para pruebas o diseñador)
     public RegistroLugarProdu() {
         initComponents();
     }
+
+    // ✅ Constructor con conexión activa
+    public RegistroLugarProdu(Connection conexionActiva) {
+        initComponents();
+        this.conexionActiva = conexionActiva;
+    }
+
+    // Getter opcional (si el controlador o vista lo necesita)
+    public Connection getConexionActiva() {
+        return conexionActiva;
+    }
+
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents

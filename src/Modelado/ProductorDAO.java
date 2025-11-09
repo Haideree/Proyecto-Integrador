@@ -3,11 +3,31 @@ package Modelado;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.List;
+import java.util.ArrayList;
 
 public class ProductorDAO {
 
+    // =========================================================
+    // 🔹 Atributo de conexión (puede ser de cualquier rol)
+    // =========================================================
+    private Connection conexion;
+
+    // 🔹 Constructor que recibe una conexión (por ejemplo, del login)
+    public ProductorDAO(Connection conexion) {
+        this.conexion = conexion;
+    }
+
+    // 🔹 Constructor por defecto (usa ADMINISTRADOR si no se pasa nada)
+    public ProductorDAO() {
+        this.conexion = CConexion.getConnection();
+    }
+
+    // =========================================================
+    // 🔹 Registrar Productor
+    // =========================================================
     public boolean registrarProductor(int documento, String nombre, String telefono, String correo, String contrasena) {
-        try (Connection conn = CConexion.getConnection()) {
+        try (Connection conn = this.conexion) {
 
             // 0️⃣ Verificar si el documento ya está registrado
             String sqlCheckDoc = "SELECT NUMERODOCUMENTO FROM PRODUCTOR WHERE NUMERODOCUMENTO = ?";
@@ -20,11 +40,15 @@ public class ProductorDAO {
                 }
             }
 
+            // 1️⃣ Obtener o insertar ID de teléfono y correo
             int idTelef = obtenerIdOTelefonoNuevo(conn, telefono);
             int idCorreo = obtenerIdOCorreoNuevo(conn, correo);
 
-            // 3️⃣ Insertar productor (contraseña sin encriptar)
-            String sqlProd = "INSERT INTO PRODUCTOR (NUMERODOCUMENTO, NOMBRE, IDTELEFONO, IDCORREO, CONTRASENA) VALUES (?, ?, ?, ?, ?)";
+            // 2️⃣ Insertar productor
+            String sqlProd = """
+                INSERT INTO PRODUCTOR (NUMERODOCUMENTO, NOMBRE, IDTELEFONO, IDCORREO, CONTRASENA)
+                VALUES (?, ?, ?, ?, ?)
+            """;
             try (PreparedStatement psProd = conn.prepareStatement(sqlProd)) {
                 psProd.setInt(1, documento);
                 psProd.setString(2, nombre);
@@ -44,6 +68,41 @@ public class ProductorDAO {
     }
 
     // =========================================================
+    // 🔹 Obtener todos los productores
+    // =========================================================
+    public List<Productor> obtenerProductores() {
+        List<Productor> lista = new ArrayList<>();
+
+        String sql = """
+            SELECT p.NUMERODOCUMENTO, p.NOMBRE, t.TELEFONO, c.CORREO, p.CONTRASENA
+            FROM PRODUCTOR p
+            JOIN TELEFONO t ON p.IDTELEFONO = t.ID_TELEFONO
+            JOIN CORREO c ON p.IDCORREO = c.ID_CORREO
+        """;
+
+        try (Connection conn = this.conexion;
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                Productor p = new Productor(
+                    rs.getInt("NUMERODOCUMENTO"),
+                    rs.getString("NOMBRE"),
+                    rs.getString("TELEFONO"),
+                    rs.getString("CORREO"),
+                    rs.getString("CONTRASENA")
+                );
+                lista.add(p);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return lista;
+    }
+
+    // =========================================================
     // 🔹 Métodos auxiliares
     // =========================================================
     private int obtenerIdOTelefonoNuevo(Connection conn, String telefono) throws Exception {
@@ -55,7 +114,8 @@ public class ProductorDAO {
             if (rsTel.next()) {
                 idTelef = rsTel.getInt(1);
             } else {
-                try (PreparedStatement psTel = conn.prepareStatement("INSERT INTO telefono (id_telefono, telefono) VALUES (seq_telefono.NEXTVAL, ?)")) {
+                try (PreparedStatement psTel = conn.prepareStatement(
+                        "INSERT INTO telefono (id_telefono, telefono) VALUES (seq_telefono.NEXTVAL, ?)")) {
                     psTel.setString(1, telefono);
                     psTel.executeUpdate();
                 }
@@ -80,7 +140,8 @@ public class ProductorDAO {
             if (rsCorreo.next()) {
                 idCorreo = rsCorreo.getInt(1);
             } else {
-                try (PreparedStatement psCorreo = conn.prepareStatement("INSERT INTO correo (id_correo, correo) VALUES (seq_correo.NEXTVAL, ?)")) {
+                try (PreparedStatement psCorreo = conn.prepareStatement(
+                        "INSERT INTO correo (id_correo, correo) VALUES (seq_correo.NEXTVAL, ?)")) {
                     psCorreo.setString(1, correo);
                     psCorreo.executeUpdate();
                 }
@@ -96,4 +157,5 @@ public class ProductorDAO {
         return idCorreo;
     }
 }
+
 
