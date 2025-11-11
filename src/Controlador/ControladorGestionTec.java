@@ -4,12 +4,16 @@
  */
 package Controlador;
 
+import Modelado.RegistrotecDAO;
+import Modelado.Tecnico;
 import Vista.Registrotec;
 import Vista.AdminMenu;
 import Vista.GestionTecnicos;
 import Vista.Registroprod;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -30,7 +34,37 @@ public class ControladorGestionTec implements ActionListener {
         this.vista.getBtnEliminar().addActionListener(this);
         this.vista.getBtnActualizar().addActionListener(this);
     }
-
+        
+    private void mostrarTecnicos(){
+        try {
+            RegistrotecDAO dao = new RegistrotecDAO();
+            List<Tecnico> lista = dao.obtenerTecnicos();
+            
+            DefaultTableModel modelo = new DefaultTableModel();
+            modelo.addColumn("Documento");
+            modelo.addColumn("Tarjeta Profesional");
+            modelo.addColumn("Nombre");
+            modelo.addColumn("Correo");
+            modelo.addColumn("Telefono");
+            modelo.addColumn("Contraseña");
+            modelo.addColumn("Tipo tecnico");
+            
+            for (Tecnico t : lista) {
+                modelo.addRow(new Object[]{
+                t.getIdentificacion(),
+                t.getTarjetapro(),
+                t.getNombre(),
+                t.getCorreo(),
+                t.getTelefono(),
+                t.getContrasena(),
+                t.getTipoTecnico()       
+            });
+            }
+            vista.getTablaTecnicos().setModel(modelo);
+        } catch (Exception e) {
+            System.out.println("❌ Error al mostrar productores: " + e.getMessage());
+        }
+    }
     @Override
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
@@ -66,7 +100,8 @@ public class ControladorGestionTec implements ActionListener {
 
         // 🔃 BOTÓN ACTUALIZAR
         else if (source == vista.getBtnActualizar()) {
-            System.out.println("Función actualizar aún no implementada");
+            mostrarTecnicos();
+            System.out.println("✅ Tabla actualizada correctamente");
         }
     }
 }

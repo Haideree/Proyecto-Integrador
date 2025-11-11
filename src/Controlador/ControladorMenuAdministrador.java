@@ -1,6 +1,8 @@
 package Controlador;
 
 
+import Vista.GestionPropietario;
+import Vista.GestionTecnicos;
 import Vista.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

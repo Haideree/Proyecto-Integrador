@@ -41,8 +41,6 @@ public class ControladorGestionProductores implements ActionListener {
         this.vista.getBtnEliminar().addActionListener(this);
         this.vista.getBtnActualizar().addActionListener(this);
 
-        // 👇 Al abrir la ventana, muestra los productores automáticamente
-        mostrarProductores();
     }
     
         private void mostrarProductores() {

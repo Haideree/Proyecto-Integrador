@@ -2,8 +2,22 @@ package Modelado;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PropietarioDAO {
+    
+    private Connection conexion;
+    
+    public PropietarioDAO(Connection conexion){
+        this.conexion = conexion;
+    }
+    
+    public PropietarioDAO(){
+        this.conexion = CConexion.getConnection();
+    }
+    
     public void registrarPropietario(int documento, String nombre, long telefono, String correo, String contrasena) {
         try (Connection conn = CConexion.getConnection()) {
 
@@ -30,6 +44,37 @@ public class PropietarioDAO {
             e.printStackTrace();
         }
     }  
+    
+    public List<Propietario> obtenerPropietarios(){
+        List<Propietario> lista = new ArrayList<>();
+        
+        String sql = """
+        SELECT 
+            p.NUMERODOCUMENTO,
+            p.NOMBRE,
+            p.TELEFONO,
+            p.CORREO,
+            p.CONTRASENA
+        FROM PROPIETARIO p
+        """;
+        
+        try (Connection conn = this.conexion;
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()){
+                Propietario pro = new Propietario(
+                rs.getInt("NUMERODOCUMENTO"),
+                rs.getString("NOMBRE"),
+                rs.getString("TELEFONO"),
+                rs.getString("CORREO"),
+                rs.getString("CONTRASENA")
+                );
+                lista.add(pro);
+            }
+        }catch (Exception e) {
+            e.printStackTrace();   
+    }
+    return lista;
+    }
 }
-
 

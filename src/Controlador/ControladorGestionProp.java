@@ -4,12 +4,16 @@
  */
 package Controlador;
 
+import Modelado.Propietario;
+import Modelado.PropietarioDAO;
 import Vista.Registroprop;
 import Vista.AdminMenu;
 import Vista.GestionPropietario;
 import Vista.Registroprod;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -29,6 +33,34 @@ public class ControladorGestionProp implements ActionListener {
         this.vista.getBtnEditar().addActionListener(this);
         this.vista.getBtnEliminar().addActionListener(this);
         this.vista.getBtnActualizar().addActionListener(this);
+    }
+    
+    private void mostrarPropietarios(){
+        try {
+            PropietarioDAO dao = new PropietarioDAO();
+            List<Propietario> lista = dao.obtenerPropietarios();
+            
+            DefaultTableModel modelo = new DefaultTableModel();
+            modelo.addColumn("Numero Documento");
+            modelo.addColumn("Nombre");
+            modelo.addColumn("Telefono");
+            modelo.addColumn("Correo");
+            modelo.addColumn("Contraseña");
+            
+            for (Propietario p : lista) {
+                modelo.addRow(new Object[]{
+                    p.getDocumento(),
+                    p.getNombre(),
+                    p.getTelefono(),
+                    p.getCorreo(),
+                    p.getContrasena()
+                });
+            }
+            vista.getTablaPropietarios().setModel(modelo);
+            
+        }catch (Exception e) {
+            System.out.println("❌ Error al mostrar productores: " + e.getMessage());
+        }
     }
 
     @Override
@@ -66,7 +98,8 @@ public class ControladorGestionProp implements ActionListener {
 
         // 🔃 BOTÓN ACTUALIZAR
         else if (source == vista.getBtnActualizar()) {
-            System.out.println("Función actualizar aún no implementada");
+            mostrarPropietarios();
+            System.out.println("✅ Tabla actualizada correctamente");
         }
     }
 }

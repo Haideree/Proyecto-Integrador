@@ -7,9 +7,25 @@ package Modelado;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RegistrotecDAO {
+    
+    private Connection conexion;
+    
+    public RegistrotecDAO(Connection conexion){
+        this.conexion = conexion;
+    }
+    
+    public RegistrotecDAO() {
+        this.conexion = CConexion.getConnection();
 
+    }
+
+    // =========================================================
+    // 🔹 Registrar Técnico
+    // =========================================================
     public void registrarTecnico(Integer documento, Long tarjeta, String nombre, String telefono, String correo, String contrasena, String tipo) {
         try (Connection conn = CConexion.getConnection()) {
             conn.setAutoCommit(false); // ⬅ importante
@@ -64,8 +80,11 @@ public class RegistrotecDAO {
             }
 
             // 3️⃣ Insertar técnico
-            String sqlTec = "INSERT INTO tecnico (identificacion, tarjetaPro, nombre, idTelef, idCorreo, contrasena, tipo_tecnico) "
-                          + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+            String sqlTec = """
+                INSERT INTO tecnico 
+                (identificacion, tarjetapro, nombre, idtelef, idcorreo, contrasena, tipo_tecnico)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+            """;
             try (PreparedStatement psTec = conn.prepareStatement(sqlTec)) {
                 psTec.setInt(1, documento);
                 if (tarjeta != null) {
@@ -81,11 +100,48 @@ public class RegistrotecDAO {
                 psTec.executeUpdate();
             }
 
-            conn.commit(); // ⬅ aquí guardamos todo de golpe
+            conn.commit(); // ⬅ aquí guardamos todo
             System.out.println("✅ Técnico registrado exitosamente.");
 
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    // =========================================================
+    // 🔹 Obtener todos los técnicos
+    // =========================================================
+    public List<Tecnico> obtenerTecnicos() {
+        List<Tecnico> lista = new ArrayList<>();
+
+        String sql = """
+            SELECT t.IDENTIFICACION, t.NOMBRE, te.TELEFONO, c.CORREO, t.CONTRASENA, t.TIPO_TECNICO, t.TARJETAPRO
+            FROM TECNICO t
+            JOIN TELEFONO te ON t.IDTELEF = te.ID_TELEFONO
+            JOIN CORREO c ON t.IDCORREO = c.ID_CORREO
+        """;
+
+        try (Connection conn = this.conexion;
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                Tecnico tec = new Tecnico(
+                rs.getInt("IDENTIFICACION"),
+                rs.getLong("TARJETAPRO"),
+                rs.getString("NOMBRE"),
+                rs.getString("TELEFONO"),
+                rs.getString("CORREO"),
+                rs.getString("CONTRASENA"),
+                rs.getString("TIPO_TECNICO")
+                );
+                lista.add(tec);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return lista;
     }
 }
