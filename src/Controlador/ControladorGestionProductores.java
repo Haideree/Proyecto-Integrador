@@ -1,31 +1,15 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Controlador;
 
-/**
- *
- * @author Haider
- */
-
-import Controlador.ControladorRegistroProductor;
-import Modelado.Productor;
 import Modelado.ProductorDAO;
-import Vista.AdminMenu;
+import Modelado.Productor;
+import Modelado.EliminarDAO;
 import Vista.GestionProductores;
 import Vista.Registroprod;
+import Vista.AdminMenu;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
-import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
-import Modelado.Productor;
-import Modelado.ProductorDAO;
-import java.util.List;
-import java.util.ArrayList;
-import javax.swing.table.DefaultTableModel;
-
 
 public class ControladorGestionProductores implements ActionListener {
 
@@ -34,19 +18,20 @@ public class ControladorGestionProductores implements ActionListener {
     public ControladorGestionProductores(GestionProductores vista) {
         this.vista = vista;
 
-        // Asignar escuchas a los botones
         this.vista.getBtnAgregar().addActionListener(this);
         this.vista.getBtnVolver().addActionListener(this);
         this.vista.getBtnEditar().addActionListener(this);
         this.vista.getBtnEliminar().addActionListener(this);
         this.vista.getBtnActualizar().addActionListener(this);
 
+        mostrarProductores();
     }
-    
-        private void mostrarProductores() {
+
+    private void mostrarProductores() {
         try {
             ProductorDAO dao = new ProductorDAO();
             List<Productor> lista = dao.obtenerProductores();
+
 
             DefaultTableModel modelo = new DefaultTableModel();
             modelo.addColumn("Documento");
@@ -55,17 +40,32 @@ public class ControladorGestionProductores implements ActionListener {
             modelo.addColumn("Correo");
             modelo.addColumn("Contraseña");
 
+            // IDs ocultos
+            modelo.addColumn("ID_CORREO");
+            modelo.addColumn("ID_TELEFONO");
+
             for (Productor p : lista) {
                 modelo.addRow(new Object[]{
                     p.getDocumento(),
                     p.getNombre(),
                     p.getTelefono(),
                     p.getCorreo(),
-                    p.getContrasena()
+                    p.getContrasena(),
+                    p.getIdCorreo(),
+                    p.getIdTelefono()
                 });
             }
 
             vista.getTablaProd().setModel(modelo);
+
+            // ➤ Ocultar columnas
+            vista.getTablaProd().getColumnModel().getColumn(5).setMinWidth(0);
+            vista.getTablaProd().getColumnModel().getColumn(5).setMaxWidth(0);
+            vista.getTablaProd().getColumnModel().getColumn(5).setWidth(0);
+
+            vista.getTablaProd().getColumnModel().getColumn(6).setMinWidth(0);
+            vista.getTablaProd().getColumnModel().getColumn(6).setMaxWidth(0);
+            vista.getTablaProd().getColumnModel().getColumn(6).setWidth(0);
 
         } catch (Exception e) {
             System.out.println("❌ Error al mostrar productores: " + e.getMessage());
@@ -76,16 +76,16 @@ public class ControladorGestionProductores implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
 
-        // ➕ BOTÓN AGREGAR: abrir la ventana de registro
+        // ➕ Agregar productor
         if (source == vista.getBtnAgregar()) {
-            Registroprod regProd = new Registroprod();
-            new ControladorRegistroProductor(regProd);
-            regProd.setVisible(true);
-            regProd.setLocationRelativeTo(null); // Centra la nueva ventana
-            vista.dispose(); // Cierra la ventana actual (opcional)
+            Registroprod reg = new Registroprod();
+            new ControladorRegistroProductor(reg);
+            reg.setVisible(true);
+            reg.setLocationRelativeTo(null);
+            vista.dispose();
         }
 
-        // ⮜ BOTÓN VOLVER
+        // ⮜ Volver
         else if (source == vista.getBtnVolver()) {
             AdminMenu menu = new AdminMenu();
             new ControladorMenuAdministrador(menu);
@@ -94,20 +94,54 @@ public class ControladorGestionProductores implements ActionListener {
             vista.dispose();
         }
 
-        // 📝 BOTÓN EDITAR
+        // 📝 Editar — (no implementado aún)
         else if (source == vista.getBtnEditar()) {
             System.out.println("Función editar aún no implementada");
         }
 
-        // ➖ BOTÓN ELIMINAR
+        // ❌ Eliminar productor
         else if (source == vista.getBtnEliminar()) {
-            System.out.println("Función eliminar aún no implementada");
+
+            int fila = vista.getTablaProd().getSelectedRow();
+
+            if (fila == -1) {
+                javax.swing.JOptionPane.showMessageDialog(null, "Seleccione un productor para eliminar.");
+                return;
+            }
+
+            int documento = Integer.parseInt(vista.getTablaProd().getValueAt(fila, 0).toString());
+            int idCorreo = Integer.parseInt(vista.getTablaProd().getValueAt(fila, 5).toString());
+            int idTelefono = Integer.parseInt(vista.getTablaProd().getValueAt(fila, 6).toString());
+
+            int confirm = javax.swing.JOptionPane.showConfirmDialog(
+                    null,
+                    "¿Está seguro de eliminar al productor con documento " + documento + "?",
+                    "Confirmar eliminación",
+                    javax.swing.JOptionPane.YES_NO_OPTION
+            );
+
+            if (confirm == javax.swing.JOptionPane.YES_OPTION) {
+                try {
+                    EliminarDAO dao = new EliminarDAO();
+                    boolean eliminado = dao.eliminarProductor(documento, idCorreo, idTelefono);
+
+                    if (eliminado) {
+                        javax.swing.JOptionPane.showMessageDialog(null, "Productor eliminado correctamente.");
+                        mostrarProductores();
+                    } else {
+                        javax.swing.JOptionPane.showMessageDialog(null, "No se pudo eliminar el productor.");
+                    }
+
+                } catch (Exception ex) {
+                    javax.swing.JOptionPane.showMessageDialog(null, "Error al eliminar: " + ex.getMessage());
+                }
+            }
         }
 
-        // 🔃 BOTÓN ACTUALIZAR
+        // 🔄 Actualizar tabla
         else if (source == vista.getBtnActualizar()) {
             mostrarProductores();
-            System.out.println("✅ Tabla actualizada correctamente");
         }
     }
 }
+

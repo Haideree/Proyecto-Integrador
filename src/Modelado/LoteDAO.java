@@ -12,32 +12,31 @@ public class LoteDAO {
         this.conexion = conexion;
     }
 
-    // 🔹 Registrar lote (el número se genera automáticamente)
+    // 🔹 Registrar lote con IDs correctos
     public boolean registrarLote(double area, String nombreCultivo, String nombreLugar, String nombreLote) {
         boolean resultado = false;
 
         try {
-            // Obtener IDs según los nombres seleccionados
-            int idCultivo = obtenerIdCultivo(nombreCultivo);
-            int idLugar = obtenerIdLugar(nombreLugar);
+            // Obtener IDs reales
+            int idCultivo = obtenerIdCultivo(nombreCultivo);  // <-- CULTIVO.ID
+            int idLugar = obtenerIdLugar(nombreLugar);        // <-- LUGAR.NUM_REGISTRO_ICA
 
             if (idCultivo == -1 || idLugar == -1) {
                 JOptionPane.showMessageDialog(null, "⚠️ No se encontró el cultivo o el lugar seleccionado.");
                 return false;
             }
 
-            // 🔹 IMPORTANTE: Corrige el nombre de columna y la cantidad de valores
-            String sql = "INSERT INTO PROYECTO.LOTE (NUM_LOTE, NOMBRE_LOTE, AREA, IDCULTIVO, ID_LUGARPROD, ESTADO) "
-           + "VALUES (PROYECTO.SEQ_NUM_LOTE.NEXTVAL, ?, ?, ?, ?, 'ACTIVO')";
+            String sql = "INSERT INTO LOTE (NUM_LOTE, NOMBRE_LOTE, AREA, IDCULTIVO, ID_LUGARPROD, ESTADO) "
+                       + "VALUES (PROYECTO.SEQ_NUM_LOTE.NEXTVAL, ?, ?, ?, ?, 'ACTIVO')";
 
-PreparedStatement ps = conexion.prepareStatement(sql);
-ps.setString(1, nombreLote);
-ps.setDouble(2, area);
-ps.setInt(3, idCultivo);
-ps.setInt(4, idLugar);
+            PreparedStatement ps = conexion.prepareStatement(sql);
+            ps.setString(1, nombreLote);
+            ps.setDouble(2, area);
+            ps.setInt(3, idCultivo);
+            ps.setInt(4, idLugar);
 
-ps.executeUpdate();
-ps.close();
+            ps.executeUpdate();
+            ps.close();
             resultado = true;
 
         } catch (SQLException e) {
@@ -52,12 +51,28 @@ ps.close();
         return resultado;
     }
 
-    // 🔹 Obtener lista de cultivos
+    // 🔹 Editar lote
+    public boolean editarLote(int numLote, double area, String nombre, int idCultivo, int idLugar) throws SQLException {
+        String sql = "UPDATE LOTE SET NOMBRE_LOTE=?, AREA=?, IDCULTIVO=?, ID_LUGARPROD=? WHERE NUM_LOTE=?";
+
+        PreparedStatement ps = conexion.prepareStatement(sql);
+        ps.setString(1, nombre);
+        ps.setDouble(2, area);
+        ps.setInt(3, idCultivo);
+        ps.setInt(4, idLugar);
+        ps.setInt(5, numLote);
+
+        return ps.executeUpdate() > 0;
+    }
+
+    // 🔹 Listar cultivos
     public List<String> obtenerCultivos() {
         List<String> lista = new ArrayList<>();
         String sql = "SELECT NOMBRE_ESPECIE FROM CULTIVO ORDER BY NOMBRE_ESPECIE";
+
         try (Statement st = conexion.createStatement();
              ResultSet rs = st.executeQuery(sql)) {
+
             while (rs.next()) {
                 lista.add(rs.getString("NOMBRE_ESPECIE"));
             }
@@ -67,12 +82,14 @@ ps.close();
         return lista;
     }
 
-    // 🔹 Obtener lista de lugares
+    // 🔹 Listar lugares
     public List<String> obtenerLugares() {
         List<String> lista = new ArrayList<>();
         String sql = "SELECT NOMBRE FROM LUGAR_PRODUCCION ORDER BY NOMBRE";
+
         try (Statement st = conexion.createStatement();
              ResultSet rs = st.executeQuery(sql)) {
+
             while (rs.next()) {
                 lista.add(rs.getString("NOMBRE"));
             }
@@ -82,28 +99,66 @@ ps.close();
         return lista;
     }
 
-    // 🔹 Métodos privados: obtener IDs
-    private int obtenerIdCultivo(String nombre) throws SQLException {
-    String sql = "SELECT ID FROM CULTIVO WHERE NOMBRE_ESPECIE = ?";
-    try (PreparedStatement ps = conexion.prepareStatement(sql)) {
-        ps.setString(1, nombre);
-        try (ResultSet rs = ps.executeQuery()) {
-            if (rs.next()) return rs.getInt("ID");
+    // 🔹 Obtener ID real de CULTIVO
+    public int obtenerIdCultivo(String nombre) throws SQLException {
+        String sql = "SELECT ID FROM CULTIVO WHERE NOMBRE_ESPECIE = ?";
+
+        try (PreparedStatement ps = conexion.prepareStatement(sql)) {
+            ps.setString(1, nombre);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) return rs.getInt("ID");
+            }
         }
+        return -1;
     }
-    return -1;
+
+    // 🔹 Obtener ID real de LUGAR_PRODUCCION
+    public int obtenerIdLugar(String nombre) throws SQLException {
+        String sql = "SELECT NUM_REGISTRO_ICA FROM LUGAR_PRODUCCION WHERE NOMBRE = ?";
+
+        try (PreparedStatement ps = conexion.prepareStatement(sql)) {
+            ps.setString(1, nombre);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) return rs.getInt("NUM_REGISTRO_ICA");
+            }
+        }
+        return -1;
+    }
+    
+    public static class DatosLote {
+    public String nombre;
+    public double area;
+    public String nombreCultivo;
+    public String nombreLugar;
 }
 
+public DatosLote obtenerDatosLote(int numLote) throws SQLException {
+    String sql = """
+        SELECT L.NOMBRE_LOTE, L.AREA,
+               C.NOMBRE_ESPECIE,
+               LP.NOMBRE
+        FROM LOTE L
+        JOIN CULTIVO C ON C.ID = L.IDCULTIVO
+        JOIN LUGAR_PRODUCCION LP ON LP.NUM_REGISTRO_ICA = L.ID_LUGARPROD
+        WHERE L.NUM_LOTE = ?
+    """;
 
-    private int obtenerIdLugar(String nombre) throws SQLException {
-    String sql = "SELECT NUM_REGISTRO_ICA FROM LUGAR_PRODUCCION WHERE NOMBRE = ?";
     try (PreparedStatement ps = conexion.prepareStatement(sql)) {
-        ps.setString(1, nombre);
+        ps.setInt(1, numLote);
         try (ResultSet rs = ps.executeQuery()) {
-            if (rs.next()) return rs.getInt("NUM_REGISTRO_ICA");
+            if (rs.next()) {
+                DatosLote d = new DatosLote();
+                d.nombre = rs.getString(1);
+                d.area = rs.getDouble(2);
+                d.nombreCultivo = rs.getString(3);
+                d.nombreLugar = rs.getString(4);
+                return d;
+            }
         }
     }
-    return -1;
+    return null;
 }
 
 }

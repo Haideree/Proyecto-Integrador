@@ -1,14 +1,11 @@
 package Controlador;
 
-/**
- *
- * @author Haider
- */
-import Controlador.ControladorMostrarPredios;
+import Vista.MenuPropietario;
+import Modelado.PredioDAO;
+import Vista.AdministrarPredios;
 import Modelado.LoginDAO;
 import Modelado.CConexion;
 import Vista.AdminMenu;
-import Vista.Predios;
 import Vista.vistas;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -20,14 +17,13 @@ public class ControladorLogin implements ActionListener {
     private final vistas vista;
     private final LoginDAO modelo;
 
-    // 🔹 Nueva variable: conexión activa del usuario logueado
+    // 🔹 Conexión activa del usuario logueado
     private Connection conexionActiva;
 
     public ControladorLogin(vistas vista) {
         this.vista = vista;
         this.modelo = new LoginDAO();
 
-        // Escuchador del botón "Ingresar"
         this.vista.getButtonIngresar().addActionListener(this);
     }
 
@@ -47,64 +43,66 @@ public class ControladorLogin implements ActionListener {
             return;
         }
 
-        // 🔹 El DAO valida el usuario y determina su rol
-        String resultado = modelo.validarUsuario(correo, contrasena);
+        // 🔹 Validamos y obtenemos el rol
+        String rol = modelo.validarUsuario(correo, contrasena);
 
-        if (resultado == null) {
+        if (rol == null) {
             JOptionPane.showMessageDialog(vista, "❌ Usuario o contraseña incorrectos.");
             return;
         }
 
-        // 🔹 Obtenemos la conexión activa según el rol
+        // 🔹 Obtenemos conexión del usuario
         conexionActiva = modelo.getConexionRol();
 
         try {
-            if (resultado.matches("\\d+")) {
-                // 🔹 Propietario
-                JOptionPane.showMessageDialog(vista, "Bienvenido al sistema Propietario 👷‍♂️");
+            switch (rol.toLowerCase()) {
 
-                // Ejemplo: puedes pasar la conexión a su controlador
-                // PropietarioDAO dao = new PropietarioDAO(conexionActiva);
-                //new ControladorPropietario(dao);
+                case "propietario": {
+    JOptionPane.showMessageDialog(vista, "Bienvenido al sistema Propietario 👷‍♂️");
 
-                vista.dispose();
+    int idPropietario = modelo.getIdUsuario();   // ⭐ Aquí obtienes el numerodocprop
 
-            } else if ("tecnico".equalsIgnoreCase(resultado)) {
-                JOptionPane.showMessageDialog(vista, "Bienvenido al sistema Técnico 🔧");
+    // ⭐⭐ GUARDAR ID EN EL DAO ⭐⭐
+    PredioDAO.setIdPropietarioLogueado(idPropietario);
 
-                // Ejemplo: TécnicoDAO daoTec = new TécnicoDAO(conexionActiva);
-                // new ControladorTecnico(daoTec);
+    MenuPropietario menu = new MenuPropietario(conexionActiva, idPropietario);
 
-                vista.dispose();
-
-            } else if ("productor".equalsIgnoreCase(resultado)) {
-    JOptionPane.showMessageDialog(vista, "Bienvenido al sistema Productor 🌱");
-
-    // ✅ 1️⃣ Obtenemos la conexión del usuario logueado
-    Connection conexionActiva = modelo.getConexionRol();
-
-    // ✅ 2️⃣ Creamos la vista
-    Predios menu = new Predios(conexionActiva);
-
-    // ✅ 3️⃣ Creamos el controlador pasándole la conexión activa
-    new ControladorMostrarPredios(menu, conexionActiva);
-
-    // ✅ 4️⃣ Mostramos la vista
     menu.setVisible(true);
     menu.setLocationRelativeTo(null);
-
-    // ✅ 5️⃣ Cerramos el login
     vista.dispose();
+    break;
 }
- else if ("administrador".equalsIgnoreCase(resultado)) {
-                JOptionPane.showMessageDialog(vista, "Bienvenido al sistema Admin 👑");
 
-                AdminMenu menu = new AdminMenu();
-                // ✅ Aquí también puedes pasar la conexión si lo necesitas
-                new ControladorMenuAdministrador(menu /*, conexionActiva */);
 
-                menu.setVisible(true);
-                vista.dispose();
+                case "productor": {
+    JOptionPane.showMessageDialog(vista, "Bienvenido al sistema Productor 🌱");
+
+    Vista.Predios menu = new Vista.Predios(conexionActiva);
+
+    menu.setVisible(true);
+    menu.setLocationRelativeTo(null);
+    vista.dispose();
+    break;
+}
+
+
+
+                case "tecnico": {
+                    JOptionPane.showMessageDialog(vista, "Bienvenido al sistema Técnico 🔧");
+                    vista.dispose();
+                    break;
+                }
+
+                case "administrador": {
+                    JOptionPane.showMessageDialog(vista, "Bienvenido al sistema Admin 👑");
+
+                    AdminMenu menu = new AdminMenu();
+                    new ControladorMenuAdministrador(menu);
+
+                    menu.setVisible(true);
+                    vista.dispose();
+                    break;
+                }
             }
 
         } catch (Exception ex) {
@@ -113,10 +111,7 @@ public class ControladorLogin implements ActionListener {
         }
     }
 
-    // 🔹 Si quieres cerrar la conexión al salir
     public void cerrarConexion() {
         CConexion.cerrarConexion(conexionActiva);
     }
 }
-
-

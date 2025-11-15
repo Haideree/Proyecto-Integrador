@@ -1,9 +1,6 @@
 package Vista;
 
-import Controlador.ControladorMostrarPredios;
-import Vista.AdministrarLotes;
 import java.sql.Connection;
-import Modelado.CConexion;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
@@ -12,31 +9,25 @@ import javax.swing.JTextField;
  *
  * @author Usuario
  */
-
-import Controlador.ControladorRegistroLote;
-
-public class RegistroLote extends javax.swing.JFrame {
-     private int idPropietario;
-    private Connection conexionActiva;
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(RegistroLote.class.getName());
+public class EditarLote extends javax.swing.JFrame {
+    
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(EditarLote.class.getName());
 
     /**
-     * Creates new form RegistroLote
+     * Creates new form EditarLote
      */
-    
-    public RegistroLote() {
+    private Connection conexion;
+
+public EditarLote(Connection conexion) {
     initComponents();
+    this.conexion = conexion;
+    setLocationRelativeTo(null);
 }
 
-    public RegistroLote(Connection conexionActiva) {
-    initComponents();
-    this.conexionActiva = conexionActiva;
-    this.idPropietario = idPropietario;
-}
 
-  
-
-
+   /* public EditarLote() {
+        initComponents();
+    }*/
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -55,11 +46,11 @@ public class RegistroLote extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         btnRegresar = new javax.swing.JButton();
-        btnRegistrar = new javax.swing.JButton();
-        TxtNombre = new javax.swing.JTextField();
-        TxtArea = new javax.swing.JTextField();
-        comboCultivo = new javax.swing.JComboBox<>();
-        comboLugar = new javax.swing.JComboBox<>();
+        btnGuardar = new javax.swing.JButton();
+        TxtEditarNombre = new javax.swing.JTextField();
+        TxtEditarArea = new javax.swing.JTextField();
+        comboEditarCultivo = new javax.swing.JComboBox<>();
+        comboEditarLugar = new javax.swing.JComboBox<>();
         jLabel6 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -85,7 +76,7 @@ public class RegistroLote extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Roboto", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 99, 17));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Registro de Lote");
+        jLabel1.setText("Editar Lote");
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 30, 290, -1));
 
         jLabel2.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
@@ -121,34 +112,34 @@ public class RegistroLote extends javax.swing.JFrame {
         });
         jPanel1.add(btnRegresar, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 280, 80, 30));
 
-        btnRegistrar.setBackground(new java.awt.Color(55, 165, 87));
-        btnRegistrar.setForeground(new java.awt.Color(255, 255, 255));
-        btnRegistrar.setText("Registrar");
-        btnRegistrar.addActionListener(new java.awt.event.ActionListener() {
+        btnGuardar.setBackground(new java.awt.Color(55, 165, 87));
+        btnGuardar.setForeground(new java.awt.Color(255, 255, 255));
+        btnGuardar.setText("Guardar Cambios");
+        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRegistrarActionPerformed(evt);
+                btnGuardarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnRegistrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 280, 130, 30));
+        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 280, 130, 30));
 
-        TxtNombre.addActionListener(new java.awt.event.ActionListener() {
+        TxtEditarNombre.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                TxtNombreActionPerformed(evt);
+                TxtEditarNombreActionPerformed(evt);
             }
         });
-        jPanel1.add(TxtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 80, 160, -1));
-        jPanel1.add(TxtArea, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 120, 140, -1));
+        jPanel1.add(TxtEditarNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 80, 160, -1));
+        jPanel1.add(TxtEditarArea, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 120, 140, -1));
 
-        comboCultivo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jPanel1.add(comboCultivo, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 170, 210, -1));
+        comboEditarCultivo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jPanel1.add(comboEditarCultivo, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 170, 210, -1));
 
-        comboLugar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        comboLugar.addActionListener(new java.awt.event.ActionListener() {
+        comboEditarLugar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        comboEditarLugar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                comboLugarActionPerformed(evt);
+                comboEditarLugarActionPerformed(evt);
             }
         });
-        jPanel1.add(comboLugar, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 220, 130, -1));
+        jPanel1.add(comboEditarLugar, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 220, 130, -1));
 
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Vista/icono80x63.png"))); // NOI18N
         jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 0, -1, -1));
@@ -157,92 +148,52 @@ public class RegistroLote extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 339, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 345, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 354, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
-    Vista.AdministrarLotes menu = new Vista.AdministrarLotes(conexionActiva,idPropietario);
-
-    // Crear controlador UNA sola vez
-    Controlador.ControladorAdministrarLotes controlador =
-            new Controlador.ControladorAdministrarLotes(menu, conexionActiva);
-
-    menu.setVisible(true);
-    this.dispose();
+     
     }//GEN-LAST:event_btnRegresarActionPerformed
 
-    private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnRegistrarActionPerformed
+    }//GEN-LAST:event_btnGuardarActionPerformed
 
-    private void TxtNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TxtNombreActionPerformed
+    private void TxtEditarNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TxtEditarNombreActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_TxtNombreActionPerformed
+    }//GEN-LAST:event_TxtEditarNombreActionPerformed
 
-    private void comboLugarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboLugarActionPerformed
+    private void comboEditarLugarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboEditarLugarActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_comboLugarActionPerformed
+    }//GEN-LAST:event_comboEditarLugarActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    
-    public JButton getbtnRegistrar() { return btnRegistrar;}
-    public JButton getbtnRegresar() { return btnRegresar;}
-    public JTextField getTxtNombre() { return TxtNombre;}
-    public JTextField getTxtArea() { return TxtArea;}
-    public JComboBox getcomboCultivo() { return comboCultivo;}
-    public JComboBox getcomboLugar() { return comboLugar;}
-    
-    // Métodos de utilidad
-public void mostrarMensaje(String mensaje) {
-    javax.swing.JOptionPane.showMessageDialog(this, mensaje, "Información", javax.swing.JOptionPane.INFORMATION_MESSAGE);
-}
-
-public void mostrarError(String mensaje) {
-    javax.swing.JOptionPane.showMessageDialog(this, mensaje, "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
-}
-
-public void limpiarCampos() {
-    TxtNombre.setText("");
-    TxtArea.setText("");
-    comboCultivo.setSelectedIndex(-1);
-    comboLugar.setSelectedIndex(-1);
-}
-
+    public JButton getbtnGuardar() { return btnGuardar; }
+    public JButton getbtnRegresar() { return btnRegresar; }
+    public JTextField getTxtEditarNombre() { return TxtEditarNombre; }
+    public JTextField getTxtEditarArea() { return TxtEditarArea; }
+    public JComboBox getcomboEditarCultivo() { return comboEditarCultivo; }
+    public JComboBox getcomboEditarLugar() { return comboEditarLugar; }
     
     public static void main(String args[]) {
-    java.awt.EventQueue.invokeLater(() -> {
-        // Crear conexión a la base de datos
-        CConexion conexion = new CConexion();
-        String rol = "productor";
-        Connection conexionActiva = CConexion.getConnectionPorRol(rol);
-
-        // ✅ Creamos la vista con conexión
-        RegistroLote vista = new RegistroLote(conexionActiva);
-
-        // ✅ Creamos el controlador con la misma conexión
-        ControladorRegistroLote controlador = new ControladorRegistroLote(vista, conexionActiva);
-
-        // ✅ Mostramos la ventana
-        vista.setVisible(true);
-    });
-}
+   
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField TxtArea;
-    private javax.swing.JTextField TxtNombre;
-    private javax.swing.JButton btnRegistrar;
+    private javax.swing.JTextField TxtEditarArea;
+    private javax.swing.JTextField TxtEditarNombre;
+    private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnRegresar;
-    private javax.swing.JComboBox<String> comboCultivo;
-    private javax.swing.JComboBox<String> comboLugar;
+    private javax.swing.JComboBox<String> comboEditarCultivo;
+    private javax.swing.JComboBox<String> comboEditarLugar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -252,5 +203,4 @@ public void limpiarCampos() {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     // End of variables declaration//GEN-END:variables
-
 }

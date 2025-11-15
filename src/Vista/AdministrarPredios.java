@@ -1,9 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package Vista;
 
+import java.sql.Connection;
 import javax.swing.JButton;
 import javax.swing.JTable;
 
@@ -18,6 +15,16 @@ public class AdministrarPredios extends javax.swing.JFrame {
     /**
      * Creates new form GestionPredios
      */
+    private Connection conexion;
+private int idUsuario;  // 👉 Guardamos el ID del propietario/productor
+
+public AdministrarPredios(Connection conexion, int idUsuario) {
+    this.conexion = conexion;
+    this.idUsuario = idUsuario;
+    initComponents();
+}
+
+
     public AdministrarPredios() {
         initComponents();
     }
@@ -200,12 +207,7 @@ public class AdministrarPredios extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void BtnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnVolverActionPerformed
-        MenuPropietario menu = new MenuPropietario();
-        //new ControladorMenuPropietario(menu);
-        menu.setVisible(true);
-        menu.setLocationRelativeTo(null);
-        // Cierra **todas las ventanas antiguas si es necesario**
-        this.dispose();
+ 
     }//GEN-LAST:event_BtnVolverActionPerformed
 
     private void BtnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnEliminarActionPerformed
@@ -223,6 +225,9 @@ public class AdministrarPredios extends javax.swing.JFrame {
     private void BtnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnActualizarActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_BtnActualizarActionPerformed
+public int getIdUsuario() {
+    return idUsuario;
+}
 
     public JButton getBtnActualizar() { return BtnActualizar; }
     public JButton getBtnAgregar() { return BtnAgregar; }

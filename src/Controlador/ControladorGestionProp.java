@@ -1,5 +1,6 @@
 package Controlador;
 
+import Modelado.EliminarDAO;
 import Modelado.Propietario;
 import Modelado.PropietarioDAO;
 import Vista.Registroprop;
@@ -88,9 +89,51 @@ public class ControladorGestionProp implements ActionListener {
         }
 
         // ➖ BOTÓN ELIMINAR
-        else if (source == vista.getBtnEliminar()) {
-            System.out.println("Función eliminar aún no implementada");
-        }
+else if (source == vista.getBtnEliminar()) {
+
+    int fila = vista.getTablaPropietarios().getSelectedRow();
+
+    if (fila == -1) {
+        javax.swing.JOptionPane.showMessageDialog(null,
+                "Selecciona un propietario para eliminar.",
+                "Aviso",
+                javax.swing.JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+
+    // Capturar documento de la tabla
+    int documento = Integer.parseInt(
+            vista.getTablaPropietarios().getValueAt(fila, 0).toString()
+    );
+
+    // Confirmación
+    int confirm = javax.swing.JOptionPane.showConfirmDialog(null,
+            "¿Seguro que deseas eliminar al propietario con documento: " + documento + "?",
+            "Confirmar eliminación",
+            javax.swing.JOptionPane.YES_NO_OPTION);
+
+    if (confirm != javax.swing.JOptionPane.YES_OPTION) return;
+
+    // Llamar al DAO
+    EliminarDAO dao = new EliminarDAO();
+    boolean eliminado = dao.eliminarPropietario(documento);
+
+    if (eliminado) {
+        javax.swing.JOptionPane.showMessageDialog(null,
+                "Propietario eliminado correctamente.",
+                "Éxito",
+                javax.swing.JOptionPane.INFORMATION_MESSAGE);
+
+        mostrarPropietarios(); // refrescar tabla
+
+    } else {
+        javax.swing.JOptionPane.showMessageDialog(null,
+                "No se pudo eliminar el propietario.",
+                "Error",
+                javax.swing.JOptionPane.ERROR_MESSAGE);
+    }
+}
+
 
         // 🔃 BOTÓN ACTUALIZAR
         else if (source == vista.getBtnActualizar()) {

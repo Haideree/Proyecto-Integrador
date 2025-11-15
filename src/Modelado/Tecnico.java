@@ -9,23 +9,30 @@ public class Tecnico {
     private String contrasena;
     private String tipoTecnico;
 
+    // Nuevos campos necesarios para ELIMINAR en cascada
+    private int idCorreo;
+    private int idTelefono;
+
     // 🔹 Constructor
-    public Tecnico(int identificacion, long tarjetapro, String nombre, String telefono, String correo, String contrasena, String tipoTecnico) {
-        this.identificacion = identificacion;
-        this.tarjetapro = tarjetapro;
-        this.nombre = nombre;
-        this.telefono = telefono;
-        this.correo = correo;
-        this.contrasena = contrasena;
-        this.tipoTecnico = tipoTecnico;
-    }
+    public Tecnico(int identificacion, long tarjetapro, String nombre, String telefono, String correo,
+               String contrasena, String tipoTecnico) {
+
+    this.identificacion = identificacion;
+    this.tarjetapro = tarjetapro;
+    this.nombre = nombre;
+    this.telefono = telefono;
+    this.correo = correo;
+    this.contrasena = contrasena;
+    this.tipoTecnico = tipoTecnico;
+}
+
 
     // 🔹 Getters y Setters
     public int getIdentificacion() { return identificacion; }
     public void setIdentificacion(int identificacion) { this.identificacion = identificacion; }
 
     public long getTarjetapro() { return tarjetapro; }
-    public void setTarjetapro(long tarjeApro) { this.tarjetapro = tarjetapro; }
+    public void setTarjetapro(long tarjetapro) { this.tarjetapro = tarjetapro; }
 
     public String getNombre() { return nombre; }
     public void setNombre(String nombre) { this.nombre = nombre; }
@@ -41,4 +48,11 @@ public class Tecnico {
 
     public String getTipoTecnico() { return tipoTecnico; }
     public void setTipoTecnico(String tipoTecnico) { this.tipoTecnico = tipoTecnico; }
+
+    // Nuevos Getters y Setters
+    public int getIdCorreo() { return idCorreo; }
+    public void setIdCorreo(int idCorreo) { this.idCorreo = idCorreo; }
+
+    public int getIdTelefono() { return idTelefono; }
+    public void setIdTelefono(int idTelefono) { this.idTelefono = idTelefono; }
 }

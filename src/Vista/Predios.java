@@ -14,11 +14,14 @@ public class Predios extends javax.swing.JFrame {
     private final Connection conexionActiva; // 🔹 guardamos la conexión activa del usuario
     private ControladorMostrarPredios controlador;
 
+    private int idProductor;
+
     public Predios(Connection conexionActiva) {
-        initComponents();
-        this.conexionActiva = conexionActiva;
-        controlador = new ControladorMostrarPredios(this, conexionActiva);
-    }
+    initComponents();
+    this.conexionActiva = conexionActiva;
+    controlador = new ControladorMostrarPredios(this, conexionActiva);
+}
+
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -30,7 +33,6 @@ public class Predios extends javax.swing.JFrame {
         Titulo = new javax.swing.JLabel();
         BtnConsultar = new javax.swing.JButton();
         BtnVolver = new javax.swing.JButton();
-        buttonRegistrarP = new javax.swing.JButton();
         buttonRegistrarLote = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tablaPredio = new javax.swing.JTable();
@@ -97,18 +99,6 @@ public class Predios extends javax.swing.JFrame {
         });
         fondo.add(BtnVolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 80, 20));
 
-        buttonRegistrarP.setBackground(new java.awt.Color(225, 225, 225));
-        buttonRegistrarP.setFont(new java.awt.Font("Roboto", 1, 14)); // NOI18N
-        buttonRegistrarP.setForeground(new java.awt.Color(0, 99, 17));
-        buttonRegistrarP.setText("Registrar un nuevo predio");
-        buttonRegistrarP.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(55, 165, 87), 1, true));
-        buttonRegistrarP.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonRegistrarPActionPerformed(evt);
-            }
-        });
-        fondo.add(buttonRegistrarP, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 370, 240, 30));
-
         buttonRegistrarLote.setBackground(new java.awt.Color(225, 225, 225));
         buttonRegistrarLote.setFont(new java.awt.Font("Roboto", 1, 14)); // NOI18N
         buttonRegistrarLote.setForeground(new java.awt.Color(0, 99, 17));
@@ -160,7 +150,7 @@ public class Predios extends javax.swing.JFrame {
                 buttonRegistrarLugarProduActionPerformed(evt);
             }
         });
-        fondo.add(buttonRegistrarLugarProdu, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 370, 240, 30));
+        fondo.add(buttonRegistrarLugarProdu, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 370, 240, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -190,12 +180,6 @@ public class Predios extends javax.swing.JFrame {
     login.setVisible(true);
     this.dispose();
     }//GEN-LAST:event_BtnVolverActionPerformed
-
-    private void buttonRegistrarPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRegistrarPActionPerformed
-    Vista.RegistroPredio vista = new Vista.RegistroPredio(conexionActiva);//eror en esta linea
-    Controlador.ControladorRegistroPredio controlador = new Controlador.ControladorRegistroPredio(vista, conexionActiva);
-    vista.setVisible(true);   
-        this.dispose();    }//GEN-LAST:event_buttonRegistrarPActionPerformed
 
     private void buttonRegistrarLoteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRegistrarLoteActionPerformed
       Vista.RegistroLote vista = new Vista.RegistroLote(conexionActiva);
@@ -251,7 +235,6 @@ Vista.RegistroLugarProdu vista = new Vista.RegistroLugarProdu(conexionActiva);
     private javax.swing.JLabel Titulo;
     private javax.swing.JButton buttonRegistrarLote;
     private javax.swing.JButton buttonRegistrarLugarProdu;
-    private javax.swing.JButton buttonRegistrarP;
     private javax.swing.JPanel fondo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;

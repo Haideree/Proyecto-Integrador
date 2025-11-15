@@ -8,28 +8,24 @@ import java.util.ArrayList;
 
 public class ProductorDAO {
 
-    // =========================================================
-    // 🔹 Atributo de conexión (puede ser de cualquier rol)
-    // =========================================================
     private Connection conexion;
 
-    // 🔹 Constructor que recibe una conexión (por ejemplo, del login)
     public ProductorDAO(Connection conexion) {
         this.conexion = conexion;
     }
 
-    // 🔹 Constructor por defecto (usa ADMINISTRADOR si no se pasa nada)
     public ProductorDAO() {
         this.conexion = CConexion.getConnection();
     }
 
     // =========================================================
-    // 🔹 Registrar Productor
+    // REGISTRAR PRODUCTOR
     // =========================================================
     public boolean registrarProductor(int documento, String nombre, String telefono, String correo, String contrasena) {
-        try (Connection conn = this.conexion) {
+        try {
+            Connection conn = this.conexion;
 
-            // 0️⃣ Verificar si el documento ya está registrado
+            // Verificar documento
             String sqlCheckDoc = "SELECT NUMERODOCUMENTO FROM PRODUCTOR WHERE NUMERODOCUMENTO = ?";
             try (PreparedStatement psCheckDoc = conn.prepareStatement(sqlCheckDoc)) {
                 psCheckDoc.setInt(1, documento);
@@ -40,15 +36,16 @@ public class ProductorDAO {
                 }
             }
 
-            // 1️⃣ Obtener o insertar ID de teléfono y correo
+            // Obtener id teléfono/correo
             int idTelef = obtenerIdOTelefonoNuevo(conn, telefono);
             int idCorreo = obtenerIdOCorreoNuevo(conn, correo);
 
-            // 2️⃣ Insertar productor
+            // Insertar Productor
             String sqlProd = """
                 INSERT INTO PRODUCTOR (NUMERODOCUMENTO, NOMBRE, IDTELEFONO, IDCORREO, CONTRASENA)
                 VALUES (?, ?, ?, ?, ?)
             """;
+
             try (PreparedStatement psProd = conn.prepareStatement(sqlProd)) {
                 psProd.setInt(1, documento);
                 psProd.setString(2, nombre);
@@ -68,21 +65,29 @@ public class ProductorDAO {
     }
 
     // =========================================================
-    // 🔹 Obtener todos los productores
+    // OBTENER LISTA DE PRODUCTORES
     // =========================================================
     public List<Productor> obtenerProductores() {
         List<Productor> lista = new ArrayList<>();
 
         String sql = """
-            SELECT p.NUMERODOCUMENTO, p.NOMBRE, t.TELEFONO, c.CORREO, p.CONTRASENA
+            SELECT 
+                p.NUMERODOCUMENTO,
+                p.NOMBRE,
+                t.TELEFONO,
+                c.CORREO,
+                p.CONTRASENA,
+                p.IDTELEFONO,
+                p.IDCORREO
             FROM PRODUCTOR p
             JOIN TELEFONO t ON p.IDTELEFONO = t.ID_TELEFONO
-            JOIN CORREO c ON p.IDCORREO = c.ID_CORREO
+            JOIN CORREO   c ON p.IDCORREO = c.ID_CORREO
         """;
 
-        try (Connection conn = this.conexion;
-             PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+        try {
+            Connection conn = this.conexion;
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
                 Productor p = new Productor(
@@ -90,7 +95,9 @@ public class ProductorDAO {
                     rs.getString("NOMBRE"),
                     rs.getString("TELEFONO"),
                     rs.getString("CORREO"),
-                    rs.getString("CONTRASENA")
+                    rs.getString("CONTRASENA"),
+                    rs.getInt("IDTELEFONO"),
+                    rs.getInt("IDCORREO")
                 );
                 lista.add(p);
             }
@@ -101,61 +108,92 @@ public class ProductorDAO {
 
         return lista;
     }
+    
+    public List<String> obtenerListaCedulas() {
+    List<String> lista = new ArrayList<>();
+
+    String sql = "SELECT NUMERODOCUMENTO FROM PRODUCTOR ORDER BY NUMERODOCUMENTO";
+
+    try (PreparedStatement ps = conexion.prepareStatement(sql);
+         ResultSet rs = ps.executeQuery()) {
+
+        while (rs.next()) {
+            lista.add(rs.getString("NUMERODOCUMENTO"));
+        }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+
+    return lista;
+}
+
 
     // =========================================================
-    // 🔹 Métodos auxiliares
+    // MÉTODOS AUXILIARES
     // =========================================================
     private int obtenerIdOTelefonoNuevo(Connection conn, String telefono) throws Exception {
         int idTelef = 0;
-        try (PreparedStatement psCheckTel = conn.prepareStatement("SELECT id_telefono FROM telefono WHERE telefono = ?")) {
-            psCheckTel.setString(1, telefono);
-            ResultSet rsTel = psCheckTel.executeQuery();
 
-            if (rsTel.next()) {
-                idTelef = rsTel.getInt(1);
-            } else {
-                try (PreparedStatement psTel = conn.prepareStatement(
-                        "INSERT INTO telefono (id_telefono, telefono) VALUES (seq_telefono.NEXTVAL, ?)")) {
-                    psTel.setString(1, telefono);
-                    psTel.executeUpdate();
-                }
+        try (PreparedStatement psCheck = conn.prepareStatement(
+                "SELECT ID_TELEFONO FROM TELEFONO WHERE TELEFONO = ?")) {
+            psCheck.setString(1, telefono);
+            ResultSet rs = psCheck.executeQuery();
 
-                try (PreparedStatement psGetTel = conn.prepareStatement("SELECT seq_telefono.CURRVAL FROM dual");
-                     ResultSet rsNewTel = psGetTel.executeQuery()) {
-                    if (rsNewTel.next()) {
-                        idTelef = rsNewTel.getInt(1);
-                    }
-                }
+            if (rs.next()) {
+                return rs.getInt(1);
             }
         }
+
+        // Insert
+        try (PreparedStatement psInsert = conn.prepareStatement(
+                "INSERT INTO TELEFONO (ID_TELEFONO, TELEFONO) VALUES (SEQ_TELEFONO.NEXTVAL, ?)")) {
+            psInsert.setString(1, telefono);
+            psInsert.executeUpdate();
+        }
+
+        // Obtener nuevo id
+        try (PreparedStatement psGet = conn.prepareStatement("SELECT SEQ_TELEFONO.CURRVAL FROM DUAL");
+             ResultSet rsNew = psGet.executeQuery()) {
+
+            if (rsNew.next()) {
+                idTelef = rsNew.getInt(1);
+            }
+        }
+
         return idTelef;
     }
 
     private int obtenerIdOCorreoNuevo(Connection conn, String correo) throws Exception {
         int idCorreo = 0;
-        try (PreparedStatement psCheckCorreo = conn.prepareStatement("SELECT id_correo FROM correo WHERE correo = ?")) {
-            psCheckCorreo.setString(1, correo);
-            ResultSet rsCorreo = psCheckCorreo.executeQuery();
 
-            if (rsCorreo.next()) {
-                idCorreo = rsCorreo.getInt(1);
-            } else {
-                try (PreparedStatement psCorreo = conn.prepareStatement(
-                        "INSERT INTO correo (id_correo, correo) VALUES (seq_correo.NEXTVAL, ?)")) {
-                    psCorreo.setString(1, correo);
-                    psCorreo.executeUpdate();
-                }
+        try (PreparedStatement psCheck = conn.prepareStatement(
+                "SELECT ID_CORREO FROM CORREO WHERE CORREO = ?")) {
+            psCheck.setString(1, correo);
+            ResultSet rs = psCheck.executeQuery();
 
-                try (PreparedStatement psGetCorreo = conn.prepareStatement("SELECT seq_correo.CURRVAL FROM dual");
-                     ResultSet rsNewCorreo = psGetCorreo.executeQuery()) {
-                    if (rsNewCorreo.next()) {
-                        idCorreo = rsNewCorreo.getInt(1);
-                    }
-                }
+            if (rs.next()) {
+                return rs.getInt(1);
             }
         }
+
+        try (PreparedStatement psInsert = conn.prepareStatement(
+                "INSERT INTO CORREO (ID_CORREO, CORREO) VALUES (SEQ_CORREO.NEXTVAL, ?)")) {
+            psInsert.setString(1, correo);
+            psInsert.executeUpdate();
+        }
+
+        try (PreparedStatement psGet = conn.prepareStatement("SELECT SEQ_CORREO.CURRVAL FROM DUAL");
+             ResultSet rsNew = psGet.executeQuery()) {
+
+            if (rsNew.next()) {
+                idCorreo = rsNew.getInt(1);
+            }
+        }
+
         return idCorreo;
     }
 }
+
 
 

@@ -46,9 +46,9 @@ public class PropietarioDAO {
     }  
     
     public List<Propietario> obtenerPropietarios(){
-        List<Propietario> lista = new ArrayList<>();
+    List<Propietario> lista = new ArrayList<>();
         
-        String sql = """
+    String sql = """
         SELECT 
             p.NUMERODOCUMENTO,
             p.NOMBRE,
@@ -56,25 +56,28 @@ public class PropietarioDAO {
             p.CORREO,
             p.CONTRASENA
         FROM PROPIETARIO p
-        """;
+    """;
         
-        try (Connection conn = this.conexion;
-             PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
-            while (rs.next()){
-                Propietario pro = new Propietario(
+    try (Connection conn = this.conexion;
+         PreparedStatement ps = conn.prepareStatement(sql);
+         ResultSet rs = ps.executeQuery()) {
+        
+        while (rs.next()){
+            Propietario pro = new Propietario(
                 rs.getInt("NUMERODOCUMENTO"),
                 rs.getString("NOMBRE"),
                 rs.getString("TELEFONO"),
                 rs.getString("CORREO"),
                 rs.getString("CONTRASENA")
-                );
-                lista.add(pro);
-            }
-        }catch (Exception e) {
-            e.printStackTrace();   
+            );
+            lista.add(pro);
+        }
+
+    }catch (Exception e) {
+        e.printStackTrace();   
     }
     return lista;
-    }
+}
+
 }
 

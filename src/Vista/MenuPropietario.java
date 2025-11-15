@@ -1,10 +1,11 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package Vista;
 
+import Controlador.ControladorLogin;
+import Vista.vistas;
+import java.sql.Connection;
 import javax.swing.JButton;
+import Controlador.ControladorAdministrarLotes;
+import Controlador.ControladorAdministrarPredio;
 
 /**
  *
@@ -17,9 +18,64 @@ public class MenuPropietario extends javax.swing.JFrame {
     /**
      * Creates new form MenuPropietario
      */
-    public MenuPropietario() {
+    private Connection conexion;
+    private int docPropietario;
+
+    // ========================================
+    // CONSTRUCTOR
+    // ========================================
+    public MenuPropietario(Connection conexion, int docPropietario) {
+        this.conexion = conexion;
+        this.docPropietario = docPropietario;
+
         initComponents();
+        inicializarEventos();
     }
+
+    // ========================================
+    // EVENTOS DE BOTONES
+    // ========================================
+    private void inicializarEventos() {
+        btnAdministrarLote.addActionListener(e -> abrirAdministrarLotes());
+        btnAdministrarPredio.addActionListener(e -> abrirAdministrarPredio());
+        btnCerrarSesion.addActionListener(e -> cerrarSesion());
+    }
+
+    // ========================================
+    // ABRIR ADMINISTRAR LOTES
+    // ========================================
+    private void abrirAdministrarLotes() {
+        AdministrarLotes vista = new AdministrarLotes(conexion, docPropietario);
+        ControladorAdministrarLotes controlador = new ControladorAdministrarLotes(vista, conexion);
+
+        vista.setVisible(true);
+        this.dispose();
+    }
+
+    // ========================================
+    // ABRIR ADMINISTRAR PREDIOS
+    // ========================================
+    private void abrirAdministrarPredio() {
+        AdministrarPredios vista = new AdministrarPredios(conexion,docPropietario);
+        ControladorAdministrarPredio controlador = new ControladorAdministrarPredio(vista, conexion, docPropietario);
+
+        vista.setVisible(true);
+        this.dispose();
+    }
+
+    // ========================================
+    // CERRAR SESIÓN
+    // ========================================
+    private void cerrarSesion() {
+        Vista.vistas login = new Vista.vistas();
+        new ControladorLogin(login);
+        login.setVisible(true);
+        this.dispose();
+    }
+
+
+
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -170,25 +226,7 @@ public class MenuPropietario extends javax.swing.JFrame {
     public JButton getBtnCerrarSesion() { return btnCerrarSesion; }
     
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new MenuPropietario().setVisible(true));
+    
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

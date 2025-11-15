@@ -9,24 +9,32 @@ import Modelado.CConexion;
 import Controlador.ControladorRegistroPredio;
 public class RegistroPredio extends javax.swing.JFrame{
     private Connection conexionActiva;
-    
+    private int idPropietario;
+
+public RegistroPredio(Connection conexionActiva, int idPropietario) {
+    initComponents(); // NO uses this();
+
+    this.conexionActiva = conexionActiva;
+    this.idPropietario = idPropietario;
+
+    cmbProductor.setVisible(true);
+    jLabel8.setVisible(true);
+
+}
+
+
     public RegistroPredio() {
         initComponents();
         cmbProductor.removeAllItems();
         cmbProductor.addItem("Seleccione un productor");
 
-        cmbPropietario.removeAllItems();
-        cmbPropietario.addItem("Seleccione un propietario"); 
+        
         
         cmbDepartamento.removeAllItems();
         cmbDepartamento.addItem("Seleccione un departamento");
         
         cmbMunicipio.removeAllItems();
         cmbMunicipio.addItem("Seleccione un municipio");
-    }
-    public RegistroPredio(Connection conexionActiva) {
-        this(); // llama al constructor por defecto para inicializar los componentes
-        this.conexionActiva = conexionActiva;
     }
 
     /**
@@ -48,14 +56,12 @@ public class RegistroPredio extends javax.swing.JFrame{
         txtNombre = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         txtVereda = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         cmbLugarProdu = new javax.swing.JComboBox<>();
         cmbProductor = new javax.swing.JComboBox<>();
-        cmbPropietario = new javax.swing.JComboBox<>();
         cmbDepartamento = new javax.swing.JComboBox<>();
         cmbMunicipio = new javax.swing.JComboBox<>();
 
@@ -136,13 +142,9 @@ public class RegistroPredio extends javax.swing.JFrame{
         jLabel5.setText("- Municipio (*): ");
         fondo.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 360, 360, -1));
 
-        jLabel6.setFont(new java.awt.Font("Roboto", 0, 13)); // NOI18N
-        jLabel6.setText("- Propietario (*):");
-        fondo.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 320, 360, -1));
-
         jLabel7.setFont(new java.awt.Font("Roboto", 0, 13)); // NOI18N
         jLabel7.setText("- Lugar de produccion (*): ");
-        fondo.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 400, 360, -1));
+        fondo.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 320, 360, -1));
 
         jLabel8.setFont(new java.awt.Font("Roboto", 0, 13)); // NOI18N
         jLabel8.setText("- Productor (*): ");
@@ -164,17 +166,12 @@ public class RegistroPredio extends javax.swing.JFrame{
         cmbLugarProdu.setBackground(new java.awt.Color(225, 237, 227));
         cmbLugarProdu.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
         cmbLugarProdu.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        fondo.add(cmbLugarProdu, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 420, 310, -1));
+        fondo.add(cmbLugarProdu, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 340, 310, -1));
 
         cmbProductor.setBackground(new java.awt.Color(225, 237, 227));
         cmbProductor.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
         cmbProductor.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         fondo.add(cmbProductor, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 240, 310, -1));
-
-        cmbPropietario.setBackground(new java.awt.Color(225, 237, 227));
-        cmbPropietario.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
-        cmbPropietario.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        fondo.add(cmbPropietario, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 340, 310, -1));
 
         cmbDepartamento.setBackground(new java.awt.Color(225, 237, 227));
         cmbDepartamento.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
@@ -222,26 +219,7 @@ public class RegistroPredio extends javax.swing.JFrame{
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-    try {
-        for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-            if ("Nimbus".equals(info.getName())) {
-                javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                break;
-            }
-        }
-    } catch (Exception ex) {
-        java.util.logging.Logger.getLogger(RegistroPredio.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-    }
-
-    java.awt.EventQueue.invokeLater(() -> {
-        // ✅ Conexión usando tu clase CConexion
-        Connection conexionActiva = Modelado.CConexion.getConnectionPorRol("administrador");
-
-        // Crear vista y controlador con la conexión activa
-        RegistroPredio vista = new RegistroPredio();
-        ControladorRegistroPredio controlador = new ControladorRegistroPredio(vista, conexionActiva);
-        vista.setVisible(true);
-    });
+        
 }
 
 
@@ -273,10 +251,7 @@ public javax.swing.JComboBox getCmbProductor() {
     return cmbProductor;
 }
 
-public javax.swing.JComboBox getCmbPropietario() {
-    return cmbPropietario;
-    
-}
+
 
 
 public javax.swing.JButton getBtnVolver(){
@@ -295,12 +270,10 @@ public javax.swing.JComboBox getCmbLugarProdu(){
     private javax.swing.JComboBox<String> cmbLugarProdu;
     private javax.swing.JComboBox<String> cmbMunicipio;
     private javax.swing.JComboBox<String> cmbProductor;
-    private javax.swing.JComboBox<String> cmbPropietario;
     private javax.swing.JPanel fondo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
