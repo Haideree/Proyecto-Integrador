@@ -63,18 +63,24 @@ public class ControladorRegistroTecnico {
         }
 
         // 4️⃣ Validaciones numéricas
-        if (!docStr.matches("\\d+")) {
-            JOptionPane.showMessageDialog(vista, "⚠ El documento debe ser numérico.");
-            return;
-        }
-        if (!telStr.matches("\\d+")) {
-            JOptionPane.showMessageDialog(vista, "⚠ El teléfono debe contener solo números.");
-            return;
-        }
-        if (esICA && !tarjStr.matches("\\d+")) {
-            JOptionPane.showMessageDialog(vista, "⚠ La tarjeta profesional debe ser numérica.");
-            return;
-        }
+if (!docStr.matches("\\d+")) {
+    JOptionPane.showMessageDialog(vista, "⚠ El documento debe ser numérico.");
+    return;
+}
+if (!telStr.matches("\\d+")) {
+    JOptionPane.showMessageDialog(vista, "⚠ El teléfono debe contener solo números.");
+    return;
+}
+// ✅ Validación de longitud del teléfono
+if (telStr.length() != 10) {
+    JOptionPane.showMessageDialog(vista, "⚠ El teléfono debe tener 10 dígitos.");
+    return;
+}
+
+if (esICA && !tarjStr.matches("\\d+")) {
+    JOptionPane.showMessageDialog(vista, "⚠ La tarjeta profesional debe ser numérica.");
+    return;
+}
 
         // 5️⃣ Validar correo electrónico
         if (!esCorreoValido(correo)) {
@@ -132,26 +138,6 @@ public class ControladorRegistroTecnico {
         String regex = "^(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*._-]).{8,}$";
         return Pattern.matches(regex, contrasena);
     }
-
-    // (Opcional) Método para encriptar la contraseña con SHA-256
-    /*
-    private String encriptarSHA256(String contrasena) {
-        try {
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
-            byte[] hash = md.digest(contrasena.getBytes());
-            StringBuilder hexString = new StringBuilder();
-            for (byte b : hash) {
-                String hex = Integer.toHexString(0xff & b);
-                if (hex.length() == 1) hexString.append('0');
-                hexString.append(hex);
-            }
-            return hexString.toString();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-            return contrasena; // si falla, se guarda tal cual (no ideal, pero evita crash)
-        }
-    }
-    */
 
     private void limpiarCampos() {
         vista.getText_numdoctec().setText("");

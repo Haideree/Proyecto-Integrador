@@ -7,19 +7,19 @@ package Vista;
 import java.sql.Connection;
 import Controlador.ControladorRegistroLugarProdu;
 import Controlador.ControladorRegistroLote;
-import Controlador.ControladorMostrarPredios;
+import Controlador.ControladorMostrarLugares;
 
-public class Predios extends javax.swing.JFrame {
+public class MenuProductor extends javax.swing.JFrame {
     
     private final Connection conexionActiva; // 🔹 guardamos la conexión activa del usuario
-    private ControladorMostrarPredios controlador;
+    private ControladorMostrarLugares controlador;
 
     private int idProductor;
 
-    public Predios(Connection conexionActiva) {
+    public MenuProductor(Connection conexionActiva) {
     initComponents();
     this.conexionActiva = conexionActiva;
-    controlador = new ControladorMostrarPredios(this, conexionActiva);
+    controlador = new ControladorMostrarLugares(this, conexionActiva);
 }
 
 
@@ -33,11 +33,12 @@ public class Predios extends javax.swing.JFrame {
         Titulo = new javax.swing.JLabel();
         BtnConsultar = new javax.swing.JButton();
         BtnVolver = new javax.swing.JButton();
-        buttonRegistrarLote = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tablaPredio = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         buttonRegistrarLugarProdu = new javax.swing.JButton();
+        buttonEliminarLugar = new javax.swing.JButton();
+        buttonEditarLugar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -79,14 +80,14 @@ public class Predios extends javax.swing.JFrame {
 
         BtnConsultar.setFont(new java.awt.Font("Roboto", 1, 14)); // NOI18N
         BtnConsultar.setForeground(new java.awt.Color(0, 99, 17));
-        BtnConsultar.setText("Consultar predios");
+        BtnConsultar.setText("Consultar Lugares de producción");
         BtnConsultar.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(55, 165, 87), 1, true));
         BtnConsultar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BtnConsultarActionPerformed(evt);
             }
         });
-        fondo.add(BtnConsultar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 160, 130, 30));
+        fondo.add(BtnConsultar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 160, 250, 30));
 
         BtnVolver.setBackground(new java.awt.Color(55, 165, 87));
         BtnVolver.setForeground(new java.awt.Color(255, 255, 255));
@@ -99,18 +100,6 @@ public class Predios extends javax.swing.JFrame {
         });
         fondo.add(BtnVolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 80, 20));
 
-        buttonRegistrarLote.setBackground(new java.awt.Color(225, 225, 225));
-        buttonRegistrarLote.setFont(new java.awt.Font("Roboto", 1, 14)); // NOI18N
-        buttonRegistrarLote.setForeground(new java.awt.Color(0, 99, 17));
-        buttonRegistrarLote.setText("Registrar un lote");
-        buttonRegistrarLote.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(55, 165, 87), 1, true));
-        buttonRegistrarLote.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonRegistrarLoteActionPerformed(evt);
-            }
-        });
-        fondo.add(buttonRegistrarLote, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 370, 220, 30));
-
         jScrollPane1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(55, 165, 87)));
 
         tablaPredio.setAutoCreateRowSorter(true);
@@ -119,17 +108,17 @@ public class Predios extends javax.swing.JFrame {
         tablaPredio.setFont(new java.awt.Font("Roboto", 1, 12)); // NOI18N
         tablaPredio.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null}
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
             },
             new String [] {
-                "N° Registro ICA", "Nombre Predio", "Departamento", "Municipio", "Vereda", "Productor", "Propietario", "Lugar Produccion"
+                "N° Registro ICA", "Nombre del Lugar", "Empresa responsable"
             }
         ));
         tablaPredio.setGridColor(new java.awt.Color(111, 165, 87));
@@ -150,7 +139,31 @@ public class Predios extends javax.swing.JFrame {
                 buttonRegistrarLugarProduActionPerformed(evt);
             }
         });
-        fondo.add(buttonRegistrarLugarProdu, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 370, 240, 30));
+        fondo.add(buttonRegistrarLugarProdu, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 380, 240, 30));
+
+        buttonEliminarLugar.setBackground(new java.awt.Color(225, 225, 225));
+        buttonEliminarLugar.setFont(new java.awt.Font("Roboto", 1, 14)); // NOI18N
+        buttonEliminarLugar.setForeground(new java.awt.Color(0, 99, 17));
+        buttonEliminarLugar.setText("Eliminar un lugar de producción");
+        buttonEliminarLugar.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(55, 165, 87), 1, true));
+        buttonEliminarLugar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonEliminarLugarActionPerformed(evt);
+            }
+        });
+        fondo.add(buttonEliminarLugar, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 380, 230, 30));
+
+        buttonEditarLugar.setBackground(new java.awt.Color(225, 225, 225));
+        buttonEditarLugar.setFont(new java.awt.Font("Roboto", 1, 14)); // NOI18N
+        buttonEditarLugar.setForeground(new java.awt.Color(0, 99, 17));
+        buttonEditarLugar.setText("Editar Lugar de producción");
+        buttonEditarLugar.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(55, 165, 87), 1, true));
+        buttonEditarLugar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonEditarLugarActionPerformed(evt);
+            }
+        });
+        fondo.add(buttonEditarLugar, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 380, 220, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -181,20 +194,20 @@ public class Predios extends javax.swing.JFrame {
     this.dispose();
     }//GEN-LAST:event_BtnVolverActionPerformed
 
-    private void buttonRegistrarLoteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRegistrarLoteActionPerformed
-      Vista.RegistroLote vista = new Vista.RegistroLote(conexionActiva);
-        Controlador.ControladorRegistroLote controlador = new Controlador.ControladorRegistroLote(vista, conexionActiva);
-     vista.setVisible(true);
-    this.dispose();
-
-    }//GEN-LAST:event_buttonRegistrarLoteActionPerformed
-
     private void buttonRegistrarLugarProduActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRegistrarLugarProduActionPerformed
 Vista.RegistroLugarProdu vista = new Vista.RegistroLugarProdu(conexionActiva);
     Controlador.ControladorRegistroLugarProdu controlador = new Controlador.ControladorRegistroLugarProdu(vista, conexionActiva);
     vista.setVisible(true);
     this.dispose();       
     }//GEN-LAST:event_buttonRegistrarLugarProduActionPerformed
+
+    private void buttonEliminarLugarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonEliminarLugarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_buttonEliminarLugarActionPerformed
+
+    private void buttonEditarLugarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonEditarLugarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_buttonEditarLugarActionPerformed
 
     public static void main(String args[]) {
     try {
@@ -205,7 +218,7 @@ Vista.RegistroLugarProdu vista = new Vista.RegistroLugarProdu(conexionActiva);
             }
         }
     } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-        java.util.logging.Logger.getLogger(Predios.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        java.util.logging.Logger.getLogger(MenuProductor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
     }
 
     java.awt.EventQueue.invokeLater(new Runnable() {
@@ -214,7 +227,7 @@ Vista.RegistroLugarProdu vista = new Vista.RegistroLugarProdu(conexionActiva);
             java.sql.Connection conexion = Modelado.CConexion.getConnectionPorRol("productor");
 
             // 💡 Pasa la conexión al formulario (si tu constructor la recibe)
-            new Vista.Predios(conexion).setVisible(true);
+            new Vista.MenuProductor(conexion).setVisible(true);
         }
     });
 }
@@ -227,13 +240,22 @@ Vista.RegistroLugarProdu vista = new Vista.RegistroLugarProdu(conexionActiva);
    }
     public javax.swing.JTable getTablaPredios() { 
         return tablaPredio; }
+    
+    public javax.swing.JButton getBtnEditar(){
+        return buttonEditarLugar;
+    }
+    
+    public javax.swing.JButton getBtnEliminar(){
+        return buttonEliminarLugar;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnConsultar;
     private javax.swing.JButton BtnVolver;
     private javax.swing.JLabel Icon;
     private javax.swing.JLabel Titulo;
-    private javax.swing.JButton buttonRegistrarLote;
+    private javax.swing.JButton buttonEditarLugar;
+    private javax.swing.JButton buttonEliminarLugar;
     private javax.swing.JButton buttonRegistrarLugarProdu;
     private javax.swing.JPanel fondo;
     private javax.swing.JLabel jLabel1;

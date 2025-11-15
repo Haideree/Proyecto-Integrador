@@ -73,7 +73,8 @@ public class LoginDAO {
 
         // 4) ADMINISTRADOR
         if (rol == null) {
-            String sqlAdm = "SELECT a.cedula FROM ADMINISTRADOR WHERE correo = ? AND contrasena = ?";
+            String sqlAdm = "SELECT a.cedula FROM administrador a WHERE LOWER(TRIM(a.correo)) = LOWER(TRIM(?)) AND TRIM(a.contrasena) = TRIM(?)";
+
             try (PreparedStatement ps = conn.prepareStatement(sqlAdm)) {
                 ps.setString(1, correo);
                 ps.setString(2, contrasena);

@@ -2,6 +2,7 @@ package Controlador;
 
 import Modelado.EliminarDAO;
 import Modelado.Propietario;
+import Modelado.EditarDAO;
 import Modelado.PropietarioDAO;
 import Vista.Registroprop;
 import Vista.AdminMenu;
@@ -83,10 +84,83 @@ public class ControladorGestionProp implements ActionListener {
             vista.dispose();
         }
 
-        // 📝 BOTÓN EDITAR
-        else if (source == vista.getBtnEditar()) {
-            System.out.println("Función editar aún no implementada");
+        // 📝 BOTÓN EDITAR PROPIETARIO
+else if (source == vista.getBtnEditar()) {
+    try {
+        int fila = vista.getTablaPropietarios().getSelectedRow();
+        if (fila == -1) {
+            javax.swing.JOptionPane.showMessageDialog(vista, "Seleccione un propietario para editar.");
+            return;
         }
+
+        DefaultTableModel modelo = (DefaultTableModel) vista.getTablaPropietarios().getModel();
+        int filaModelo = vista.getTablaPropietarios().convertRowIndexToModel(fila);
+
+        int idProp = Integer.parseInt(modelo.getValueAt(filaModelo, 0).toString());
+
+        // Pedimos los nuevos datos
+        String nuevoNombre = javax.swing.JOptionPane.showInputDialog(vista, "Nuevo nombre:",
+                modelo.getValueAt(filaModelo, 1).toString());
+        if (nuevoNombre == null || nuevoNombre.trim().isEmpty()) return;
+
+        String nuevaContrasena = javax.swing.JOptionPane.showInputDialog(vista, "Nueva contraseña:",
+                modelo.getValueAt(filaModelo, 4).toString());
+        if (nuevaContrasena == null || nuevaContrasena.trim().isEmpty()) return;
+
+        // 🔹 Validar contraseña segura
+        if (!nuevaContrasena.matches("^(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*._-]).{8,}$")) {
+            javax.swing.JOptionPane.showMessageDialog(vista, """
+                ⚠️ Contraseña insegura.
+                Debe tener al menos:
+                • 8 caracteres
+                • 1 mayúscula
+                • 1 número
+                • 1 carácter especial (!@#$%^&*._-)
+                """);
+            return;
+        }
+
+        String nuevoCorreo = javax.swing.JOptionPane.showInputDialog(vista, "Nuevo correo:",
+                modelo.getValueAt(filaModelo, 2).toString());
+        if (nuevoCorreo == null || nuevoCorreo.trim().isEmpty()) return;
+
+        // 🔹 Validar correo
+        if (!nuevoCorreo.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
+            javax.swing.JOptionPane.showMessageDialog(vista, "⚠ Correo electrónico no válido.");
+            return;
+        }
+
+        String nuevoTelefono = javax.swing.JOptionPane.showInputDialog(vista, "Nuevo teléfono (10 dígitos):",
+                modelo.getValueAt(filaModelo, 3).toString());
+        if (nuevoTelefono == null || nuevoTelefono.trim().isEmpty()) return;
+
+        // 🔹 Validar teléfono
+        if (!nuevoTelefono.matches("\\d{10}")) {
+            javax.swing.JOptionPane.showMessageDialog(vista, "⚠ El teléfono debe contener exactamente 10 números.");
+            return;
+        }
+
+        // Ejecutamos el DAO
+        EditarDAO editarDAO = new EditarDAO();
+        boolean exito = editarDAO.editarPropietario(idProp, nuevoNombre, nuevaContrasena,
+                nuevoCorreo, nuevoTelefono);
+
+        javax.swing.JOptionPane.showMessageDialog(vista, exito ? "Propietario editado ✅" : "Error al editar ❌");
+
+        // Actualizamos tabla
+        if (exito) {
+            mostrarPropietarios();
+        }
+
+    } catch (NumberFormatException ex) {
+        javax.swing.JOptionPane.showMessageDialog(vista, "⚠️ Error: número de documento inválido");
+    } catch (Exception ex) {
+        javax.swing.JOptionPane.showMessageDialog(vista, "💥 Error: " + ex.getMessage());
+        ex.printStackTrace();
+    }
+}
+
+
 
         // ➖ BOTÓN ELIMINAR
 else if (source == vista.getBtnEliminar()) {

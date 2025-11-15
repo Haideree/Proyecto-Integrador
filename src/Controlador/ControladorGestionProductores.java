@@ -6,6 +6,8 @@ import Modelado.EliminarDAO;
 import Vista.GestionProductores;
 import Vista.Registroprod;
 import Vista.AdminMenu;
+import javax.swing.JOptionPane;
+import Modelado.EditarDAO;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -94,10 +96,60 @@ public class ControladorGestionProductores implements ActionListener {
             vista.dispose();
         }
 
-        // 📝 Editar — (no implementado aún)
-        else if (source == vista.getBtnEditar()) {
-            System.out.println("Función editar aún no implementada");
+       // 📝 Editar Productor
+else if (source == vista.getBtnEditar()) {
+    try {
+        // Seleccionamos el productor desde la tabla
+        int fila = vista.getTablaProd().getSelectedRow();
+        if (fila == -1) {
+            JOptionPane.showMessageDialog(vista, "Seleccione un productor para editar.");
+            return;
         }
+
+        int idProd = Integer.parseInt(vista.getTablaProd().getValueAt(fila, 0).toString());
+        int idCorreo = Integer.parseInt(vista.getTablaProd().getValueAt(fila, 5).toString());
+        int idTelefono = Integer.parseInt(vista.getTablaProd().getValueAt(fila, 6).toString());
+
+        // Pedimos los nuevos datos
+        String nuevoNombre = JOptionPane.showInputDialog(vista, "Nuevo nombre:",
+                vista.getTablaProd().getValueAt(fila, 1).toString());
+        if (nuevoNombre == null || nuevoNombre.trim().isEmpty()) return;
+
+        String nuevaContrasena = JOptionPane.showInputDialog(vista, "Nueva contraseña:",
+                vista.getTablaProd().getValueAt(fila, 4).toString());
+        if (nuevaContrasena == null || nuevaContrasena.trim().isEmpty()) return;
+
+        String nuevoCorreo = JOptionPane.showInputDialog(vista, "Nuevo correo:",
+                vista.getTablaProd().getValueAt(fila, 3).toString());
+        if (nuevoCorreo == null || nuevoCorreo.trim().isEmpty()) return;
+
+        String nuevoTelefono = JOptionPane.showInputDialog(vista, "Nuevo teléfono:",
+                vista.getTablaProd().getValueAt(fila, 2).toString());
+        if (nuevoTelefono == null || nuevoTelefono.trim().isEmpty()) return;
+
+        // Ejecutamos el DAO con los IDs
+        EditarDAO editarDAO = new EditarDAO();
+        boolean exito = editarDAO.editarProductor(idProd, nuevoNombre, nuevaContrasena,
+                nuevoCorreo, nuevoTelefono, idCorreo, idTelefono);
+
+        JOptionPane.showMessageDialog(vista, exito ? "Productor editado ✅" : "Error al editar ❌");
+
+        // Actualizamos tabla
+        if (exito) {
+            mostrarProductores();
+        }
+
+    } catch (NumberFormatException ex) {
+        JOptionPane.showMessageDialog(vista, "⚠️ Error: número de documento inválido");
+    } catch (Exception ex) {
+        JOptionPane.showMessageDialog(vista, "💥 Error: " + ex.getMessage());
+        ex.printStackTrace();
+    }
+}
+
+
+
+
 
         // ❌ Eliminar productor
         else if (source == vista.getBtnEliminar()) {

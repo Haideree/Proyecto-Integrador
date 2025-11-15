@@ -1,4 +1,4 @@
-/*package Modelado;
+package Modelado;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -6,80 +6,138 @@ import java.sql.SQLException;
 
 public class EditarDAO {
 
-    // ============================
-    // 🔹 EDITAR TÉCNICO
-    // ============================
-    public boolean editarTecnico(Tecnico t) {
-        String sql = "UPDATE TECNICOS SET TARJETAPRO = ?, NOMBRE = ?, CORREO = ?, TELEFONO = ?, CONTRASENA = ?, TIPOTECNICO = ? "
-                   + "WHERE IDENTIFICACION = ?";
+    // ===========================================================
+    // ✏️ EDITAR TÉCNICO
+    // ===========================================================
+    public boolean editarTecnico(int idTecnico, String nombre, String contrasena, String tipoTecnico,
+                                 int idCorreo, String nuevoCorreo, int idTelefono, String nuevoTelefono) {
+        String sqlUpdateTec    = "UPDATE TECNICO SET NOMBRE = ?, CONTRASENA = ?, TIPO_TECNICO = ? WHERE IDENTIFICACION = ?";
+        String sqlUpdateCorreo = "UPDATE CORREO SET CORREO = ? WHERE ID_CORREO = ?";
+        String sqlUpdateTel    = "UPDATE TELEFONO SET TELEFONO = ? WHERE ID_TELEFONO = ?";
 
-        try (Connection con = CConexion.getConnectionPorRol("administrador");
-             PreparedStatement ps = con.prepareStatement(sql)) {
+        try (Connection conn = CConexion.getConnectionPorUsuario("ADMINISTRADOR", "ADMINISTRADOR")) {
+            conn.setAutoCommit(false);
 
-            ps.setString(1, t.getTarjetapro());
-            ps.setString(2, t.getNombre());
-            ps.setString(3, t.getCorreo());
-            ps.setString(4, t.getTelefono());
-            ps.setString(5, t.getContrasena());
-            ps.setString(6, t.getTipoTecnico());
-            ps.setString(7, t.getIdentificacion());
+            try (PreparedStatement psTec = conn.prepareStatement(sqlUpdateTec)) {
+                psTec.setString(1, nombre);
+                psTec.setString(2, contrasena);
+                psTec.setString(3, tipoTecnico);
+                psTec.setInt(4, idTecnico);
+                psTec.executeUpdate();
+            }
 
-            return ps.executeUpdate() > 0;
+            try (PreparedStatement psCorreo = conn.prepareStatement(sqlUpdateCorreo)) {
+                psCorreo.setString(1, nuevoCorreo);
+                psCorreo.setInt(2, idCorreo);
+                psCorreo.executeUpdate();
+            }
 
+            try (PreparedStatement psTel = conn.prepareStatement(sqlUpdateTel)) {
+                psTel.setString(1, nuevoTelefono);
+                psTel.setInt(2, idTelefono);
+                psTel.executeUpdate();
+            }
+
+            conn.commit();
+            return true;
         } catch (SQLException e) {
-            System.out.println("❌ Error al editar técnico: " + e.getMessage());
+            e.printStackTrace();
             return false;
         }
     }
 
-    // ============================
-    // 🔹 EDITAR PROPIETARIO
-    // ============================
-    public boolean editarPropietario(Propietario p) {
-        String sql = "UPDATE PROPIETARIOS SET NOMBRE = ?, CORREO = ?, TELEFONO = ?, CONTRASENA = ? "
-                   + "WHERE IDENTIFICACION = ?";
+    // ===========================================================
+    // ✏️ EDITAR PRODUCTOR
+    // ===========================================================
+    public boolean editarProductor(int idProductor, String nombre, String contrasena,
+                                   String nuevoCorreo, String nuevoTelefono,
+                                   int idCorreo, int idTelefono) {
 
-        try (Connection con = CConexion.getConnectionPorRol("administrador");
-             PreparedStatement ps = con.prepareStatement(sql)) {
+        String sqlUpdateProd   = "UPDATE PRODUCTOR SET NOMBRE = ?, CONTRASENA = ? WHERE NUMERODOCUMENTO = ?";
+        String sqlUpdateCorreo = "UPDATE CORREO SET CORREO = ? WHERE ID_CORREO = ?";
+        String sqlUpdateTel    = "UPDATE TELEFONO SET TELEFONO = ? WHERE ID_TELEFONO = ?";
 
-            ps.setString(1, p.getNombre());
-            ps.setString(2, p.getCorreo());
-            ps.setString(3, p.getTelefono());
-            ps.setString(4, p.getContrasena());
-            ps.setString(5, p.getIdentificacion());
+        try (Connection conn = CConexion.getConnectionPorUsuario("ADMINISTRADOR", "ADMINISTRADOR")) {
+            conn.setAutoCommit(false); // inicio transacción
 
-            return ps.executeUpdate() > 0;
+            // 1️⃣ Actualizar PRODUCTOR
+            try (PreparedStatement psProd = conn.prepareStatement(sqlUpdateProd)) {
+                psProd.setString(1, nombre);
+                psProd.setString(2, contrasena);
+                psProd.setInt(3, idProductor);
+                psProd.executeUpdate();
+            }
+
+            // 2️⃣ Actualizar CORREO si hay ID y valor
+            if (idCorreo > 0 && nuevoCorreo != null && !nuevoCorreo.trim().isEmpty()) {
+                try (PreparedStatement psCorreo = conn.prepareStatement(sqlUpdateCorreo)) {
+                    psCorreo.setString(1, nuevoCorreo);
+                    psCorreo.setInt(2, idCorreo);
+                    psCorreo.executeUpdate();
+                }
+            }
+
+            // 3️⃣ Actualizar TELEFONO si hay ID y valor
+            if (idTelefono > 0 && nuevoTelefono != null && !nuevoTelefono.trim().isEmpty()) {
+                try (PreparedStatement psTel = conn.prepareStatement(sqlUpdateTel)) {
+                    psTel.setString(1, nuevoTelefono);
+                    psTel.setInt(2, idTelefono);
+                    psTel.executeUpdate();
+                }
+            }
+
+            conn.commit(); // confirmar cambios
+            return true;
 
         } catch (SQLException e) {
-            System.out.println("❌ Error al editar propietario: " + e.getMessage());
+            e.printStackTrace();
             return false;
         }
     }
 
-    // ============================
-    // 🔹 EDITAR PRODUCTOR
-    // ============================
-    public boolean editarProductor(Productor pr) {
-        String sql = "UPDATE PRODUCTORES SET NOMBRE = ?, CORREO = ?, TELEFONO = ?, CONTRASENA = ?, FINCA = ? "
-                   + "WHERE IDENTIFICACION = ?";
 
-        try (Connection con = CConexion.getConnectionPorRol("administrador");
-             PreparedStatement ps = con.prepareStatement(sql)) {
 
-            ps.setString(1, pr.getNombre());
-            ps.setString(2, pr.getCorreo());
-            ps.setString(3, pr.getTelefono());
-            ps.setString(4, pr.getContrasena());
-            ps.setString(5, pr.getFinca());
-            ps.setString(6, pr.getIdentificacion());
+    // ===========================================================
+// ✏️ EDITAR PROPIETARIO
+// ===========================================================
+public boolean editarPropietario(int idPropietario, String nombre, String contrasena,
+                                 String correo, String telefono) {
 
-            return ps.executeUpdate() > 0;
+    // SQL para actualizar propietario
+    String sqlUpdateProp = "UPDATE PROPIETARIO SET NOMBRE = ?, CONTRASENA = ?, CORREO = ?, TELEFONO = ? WHERE NUMERODOCUMENTO = ?";
+
+    try (Connection conn = CConexion.getConnectionPorUsuario("ADMINISTRADOR", "ADMINISTRADOR")) {
+
+        // Empezamos transacción
+        conn.setAutoCommit(false);
+
+        try (PreparedStatement ps = conn.prepareStatement(sqlUpdateProp)) {
+
+            // Asignamos parámetros
+            ps.setString(1, nombre);
+            ps.setString(2, contrasena);
+            ps.setString(3, correo);
+            ps.setString(4, telefono);
+            ps.setInt(5, idPropietario);
+
+            int filas = ps.executeUpdate();
+
+            // Confirmamos transacción si todo salió bien
+            conn.commit();
+
+            return filas > 0;
 
         } catch (SQLException e) {
-            System.out.println("❌ Error al editar productor: " + e.getMessage());
+            // Revertimos transacción si falla
+            conn.rollback();
+            e.printStackTrace();
             return false;
         }
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+        return false;
     }
 }
-*/
 
+}

@@ -1,6 +1,6 @@
 package Vista;
 
-import Controlador.ControladorMostrarPredios;
+import Controlador.ControladorMostrarLugares;
 import Vista.AdministrarLotes;
 import java.sql.Connection;
 import Modelado.CConexion;

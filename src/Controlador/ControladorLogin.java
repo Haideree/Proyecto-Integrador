@@ -58,32 +58,32 @@ public class ControladorLogin implements ActionListener {
             switch (rol.toLowerCase()) {
 
                 case "propietario": {
-    JOptionPane.showMessageDialog(vista, "Bienvenido al sistema Propietario 👷‍♂️");
+                JOptionPane.showMessageDialog(vista, "Bienvenido al sistema Propietario 👷‍♂️");
 
-    int idPropietario = modelo.getIdUsuario();   // ⭐ Aquí obtienes el numerodocprop
+                int idPropietario = modelo.getIdUsuario();   // ⭐ Aquí obtienes el numerodocprop
 
-    // ⭐⭐ GUARDAR ID EN EL DAO ⭐⭐
-    PredioDAO.setIdPropietarioLogueado(idPropietario);
+                    // ⭐⭐ GUARDAR ID EN EL DAO ⭐⭐
+                    PredioDAO.setIdPropietarioLogueado(idPropietario);
 
-    MenuPropietario menu = new MenuPropietario(conexionActiva, idPropietario);
+                    MenuPropietario menu = new MenuPropietario(conexionActiva, idPropietario);
 
-    menu.setVisible(true);
-    menu.setLocationRelativeTo(null);
-    vista.dispose();
-    break;
-}
+                    menu.setVisible(true);
+                    menu.setLocationRelativeTo(null);
+                    vista.dispose();
+                    break;
+                }
 
 
                 case "productor": {
-    JOptionPane.showMessageDialog(vista, "Bienvenido al sistema Productor 🌱");
+                JOptionPane.showMessageDialog(vista, "Bienvenido al sistema Productor 🌱");
 
-    Vista.Predios menu = new Vista.Predios(conexionActiva);
+                Vista.MenuProductor menu = new Vista.MenuProductor(conexionActiva);
 
-    menu.setVisible(true);
-    menu.setLocationRelativeTo(null);
-    vista.dispose();
-    break;
-}
+                menu.setVisible(true);
+                menu.setLocationRelativeTo(null);
+                vista.dispose();
+                break;
+            }
 
 
 
@@ -95,7 +95,6 @@ public class ControladorLogin implements ActionListener {
 
                 case "administrador": {
                     JOptionPane.showMessageDialog(vista, "Bienvenido al sistema Admin 👑");
-
                     AdminMenu menu = new AdminMenu();
                     new ControladorMenuAdministrador(menu);
 

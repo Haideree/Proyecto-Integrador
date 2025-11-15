@@ -2,7 +2,7 @@ package Controlador;
 
 import Modelado.LugarProduccionDAO;
 import Vista.RegistroLugarProdu;
-import Vista.Predios;
+import Vista.MenuProductor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
@@ -52,8 +52,8 @@ public class ControladorRegistroLugarProdu implements ActionListener {
                 vista.getTextEmpresaResp().setText("");
 
                 vista.dispose();
-                Predios ventanaPredios = new Predios(conexionActiva);
-                new ControladorMostrarPredios(ventanaPredios, conexionActiva);
+                MenuProductor ventanaPredios = new MenuProductor(conexionActiva);
+                new ControladorMostrarLugares(ventanaPredios, conexionActiva);
                 ventanaPredios.setVisible(true);
 
             } catch (Exception ex) {
@@ -67,8 +67,8 @@ public class ControladorRegistroLugarProdu implements ActionListener {
 
         if (e.getSource() == vista.getBtnVolver()) {
             vista.dispose();
-            Predios ventanaPredios = new Predios(conexionActiva);
-            new ControladorMostrarPredios(ventanaPredios, conexionActiva);
+            MenuProductor ventanaPredios = new MenuProductor(conexionActiva);
+            new ControladorMostrarLugares(ventanaPredios, conexionActiva);
             ventanaPredios.setVisible(true);
         }
     }

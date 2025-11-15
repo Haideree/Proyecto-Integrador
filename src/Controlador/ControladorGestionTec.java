@@ -1,6 +1,7 @@
 package Controlador;
 
 import Modelado.EliminarDAO;
+import Modelado.EditarDAO;
 import Modelado.RegistrotecDAO;
 import Modelado.Tecnico;
 import Vista.Registrotec;
@@ -97,10 +98,7 @@ public class ControladorGestionTec implements ActionListener {
             vista.dispose();
         }
 
-        // 📝 EDITAR
-        else if (source == vista.getBtnEditar()) {
-            System.out.println("Función editar aún no implementada");
-        }
+      
 
         // ❌ ELIMINAR
         else if (source == vista.getBtnEliminar()) {
@@ -143,47 +141,98 @@ public class ControladorGestionTec implements ActionListener {
         else if (source == vista.getBtnActualizar()) {
             mostrarTecnicos();
         }
-    }
-}
-
-
-
- /*       // 📝 BOTÓN EDITAR
+        // 📝 EDITAR TÉCNICO
 else if (source == vista.getBtnEditar()) {
-    int filaSeleccionada = vista.getTablaTecnicos().getSelectedRow();
+    try {
+        // Seleccionamos el técnico desde la tabla
+        int fila = vista.getTablaTecnicos().getSelectedRow();
+        if (fila == -1) {
+            javax.swing.JOptionPane.showMessageDialog(vista, "Seleccione un técnico para editar.");
+            return;
+        }
 
-    if (filaSeleccionada == -1) {
-        javax.swing.JOptionPane.showMessageDialog(null, "Seleccione un técnico para editar.");
-    } else {
-        // Obtener datos de la fila
-        String documento = vista.getTablaTecnicos().getValueAt(filaSeleccionada, 0).toString();
-        String tarjeta = vista.getTablaTecnicos().getValueAt(filaSeleccionada, 1).toString();
-        String nombre = vista.getTablaTecnicos().getValueAt(filaSeleccionada, 2).toString();
-        String correo = vista.getTablaTecnicos().getValueAt(filaSeleccionada, 3).toString();
-        String telefono = vista.getTablaTecnicos().getValueAt(filaSeleccionada, 4).toString();
-        String contrasena = vista.getTablaTecnicos().getValueAt(filaSeleccionada, 5).toString();
-        String tipo = vista.getTablaTecnicos().getValueAt(filaSeleccionada, 6).toString();
+        int idTec = Integer.parseInt(vista.getTablaTecnicos().getValueAt(fila, 0).toString());
+        int idCorreo = Integer.parseInt(vista.getTablaTecnicos().getValueAt(fila, 7).toString());
+        int idTelefono = Integer.parseInt(vista.getTablaTecnicos().getValueAt(fila, 8).toString());
 
-        // Abre la ventana de registro con los datos precargados
-        Registrotec regTec = new Registrotec();
-        regTec.getTxtDocumento().setText(documento);
-        regTec.getTxtTarjetaPro().setText(tarjeta);
-        regTec.getTxtNombre().setText(nombre);
-        regTec.getTxtCorreo().setText(correo);
-        regTec.getTxtTelefono().setText(telefono);
-        regTec.getTxtContrasena().setText(contrasena);
-        regTec.getComboTipoTec().setSelectedItem(tipo);
+        // Pedimos los nuevos datos
+        String nuevoNombre = javax.swing.JOptionPane.showInputDialog(vista, "Nuevo nombre:",
+                vista.getTablaTecnicos().getValueAt(fila, 2).toString());
+        if (nuevoNombre == null || nuevoNombre.trim().isEmpty()) return;
 
-        // Bloquear campo de documento para evitar modificarlo
-        regTec.getTxtDocumento().setEnabled(false);
+        String nuevaContrasena = javax.swing.JOptionPane.showInputDialog(vista, "Nueva contraseña:",
+                vista.getTablaTecnicos().getValueAt(fila, 5).toString());
+        if (nuevaContrasena == null || nuevaContrasena.trim().isEmpty()) return;
 
-        new ControladorRegistroTecnico(regTec);
-        regTec.setVisible(true);
-        regTec.setLocationRelativeTo(null);
-        vista.dispose();
+        // 🔹 Validar contraseña
+        if (!nuevaContrasena.matches("^(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*._-]).{8,}$")) {
+            javax.swing.JOptionPane.showMessageDialog(vista, """
+                ⚠️ Contraseña insegura.
+                Debe tener al menos:
+                • 8 caracteres
+                • 1 mayúscula
+                • 1 número
+                • 1 carácter especial (!@#$%^&*._-)
+                """);
+            return;
+        }
+
+        String nuevoTipo = javax.swing.JOptionPane.showInputDialog(vista, "Nuevo tipo de técnico (ICA o Particular):",
+                vista.getTablaTecnicos().getValueAt(fila, 6).toString());
+        if (nuevoTipo == null || nuevoTipo.trim().isEmpty()) return;
+
+        // 🔹 Validar tipo de técnico
+        nuevoTipo = nuevoTipo.trim();
+        if (!nuevoTipo.equalsIgnoreCase("ICA") && !nuevoTipo.equalsIgnoreCase("Particular")) {
+            javax.swing.JOptionPane.showMessageDialog(vista, "⚠ Tipo de técnico inválido. Debe ser 'ICA' o 'Particular'.");
+            return;
+        }
+        nuevoTipo = nuevoTipo.equalsIgnoreCase("ICA") ? "ICA" : "Particular";
+
+        String nuevoCorreo = javax.swing.JOptionPane.showInputDialog(vista, "Nuevo correo:",
+                vista.getTablaTecnicos().getValueAt(fila, 3).toString());
+        if (nuevoCorreo == null || nuevoCorreo.trim().isEmpty()) return;
+
+        // 🔹 Validar correo
+        if (!nuevoCorreo.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
+            javax.swing.JOptionPane.showMessageDialog(vista, "⚠ Correo electrónico no válido.");
+            return;
+        }
+
+        String nuevoTelefono = javax.swing.JOptionPane.showInputDialog(vista, "Nuevo teléfono (10 dígitos):",
+                vista.getTablaTecnicos().getValueAt(fila, 4).toString());
+        if (nuevoTelefono == null || nuevoTelefono.trim().isEmpty()) return;
+
+        // 🔹 Validar teléfono
+        if (!nuevoTelefono.matches("\\d{10}")) {
+            javax.swing.JOptionPane.showMessageDialog(vista, "⚠ El teléfono debe contener exactamente 10 números.");
+            return;
+        }
+
+        // Ejecutamos el DAO
+        EditarDAO editarDAO = new EditarDAO();
+        boolean exito = editarDAO.editarTecnico(idTec, nuevoNombre, nuevaContrasena, nuevoTipo,
+                idCorreo, nuevoCorreo, idTelefono, nuevoTelefono);
+
+        javax.swing.JOptionPane.showMessageDialog(vista, exito ? "Técnico editado ✅" : "Error al editar ❌");
+
+        // Actualizamos tabla
+        if (exito) {
+            mostrarTecnicos();
+        }
+
+    } catch (NumberFormatException ex) {
+        javax.swing.JOptionPane.showMessageDialog(vista, "⚠️ Error: número de documento inválido");
+    } catch (Exception ex) {
+        javax.swing.JOptionPane.showMessageDialog(vista, "💥 Error: " + ex.getMessage());
+        ex.printStackTrace();
     }
 }
-*/
+
+
+    }
+
+}
     
 
 

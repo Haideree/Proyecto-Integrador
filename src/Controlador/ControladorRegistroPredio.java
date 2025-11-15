@@ -2,7 +2,7 @@ package Controlador;
 
 import Modelado.PredioDAO;
 import Vista.AdministrarPredios;
-import Vista.Predios;
+import Vista.MenuProductor;
 import Vista.RegistroPredio;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
