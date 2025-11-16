@@ -123,20 +123,29 @@ public class ControladorRegistroPredio implements ActionListener {
             return;
         }
 
-        // 🔤 Validar vereda (solo letras, números y espacios)
-        if (!vereda.matches("^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9 ]+$")) {
-            JOptionPane.showMessageDialog(null,
-                "❌ La vereda solo puede contener letras, números y espacios.",
-                "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+        // 🔥 Validar vereda (solo letras, números y espacios)
+if (!vereda.matches("^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9 ]+$")) {
+    JOptionPane.showMessageDialog(null,
+            "❌ La vereda solo puede contener letras, números y espacios.",
+            "Error", JOptionPane.ERROR_MESSAGE);
+    return;
+}
 
-        if (vereda.length() < 3) {
-            JOptionPane.showMessageDialog(null,
-                "❌ La vereda debe tener mínimo 3 caracteres.",
-                "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+// ❌ Vereda no puede ser solo números
+if (vereda.matches("^\\d+$")) {
+    JOptionPane.showMessageDialog(null,
+            "❌ La vereda no puede ser únicamente numérica.",
+            "Error", JOptionPane.ERROR_MESSAGE);
+    return;
+}
+
+// 🔠 Longitud mínima
+if (vereda.length() < 3) {
+    JOptionPane.showMessageDialog(null,
+            "❌ La vereda debe tener mínimo 3 caracteres.",
+            "Error", JOptionPane.ERROR_MESSAGE);
+    return;
+}
 
         // ============================
         // 🔹 Extraer IDs reales

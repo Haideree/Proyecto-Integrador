@@ -23,14 +23,14 @@ public class RealizarInspeccionSanitaria extends javax.swing.JFrame {
     initComponents();
 
     txtIdSolicitud.setText(String.valueOf(idSolicitud));
+    txtIdSolicitud.setEditable(false);
 
-    // Cargar combo desde aquí o desde controlador
+    txtFecha.setText(java.time.LocalDate.now().toString());
+    txtFecha.setEditable(false);
+
     comboResultado.removeAllItems();
     comboResultado.addItem("APROBADO");
     comboResultado.addItem("RECHAZADO");
-
-    // Cargar fecha actual automáticamente
-    txtFecha.setText(java.time.LocalDate.now().toString());
 }
 
 

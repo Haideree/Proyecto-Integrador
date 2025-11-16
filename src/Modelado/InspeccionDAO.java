@@ -32,15 +32,16 @@ public class InspeccionDAO {
 
         // Ajusta ESTADO y columna según tu BD
         String actualizarLote = """
-            UPDATE LOTE
-            SET ESTADO = CASE 
-                            WHEN ? = 'Aprobado' THEN 'APROBADO'
-                            ELSE 'SIN APROBAR'
-                         END
-            WHERE NUM_LOTE = (
-                SELECT NUM_LOTE FROM SOLICITUD_INSPECCION WHERE ID_SOLICITUD = ?
-            )
-        """;
+    UPDATE LOTE
+    SET ESTADO = CASE 
+                    WHEN UPPER(?) = 'APROBADO' THEN 'APROBADO'
+                    ELSE 'SIN APROBAR'
+                 END
+    WHERE NUM_LOTE = (
+        SELECT NUM_LOTE FROM  SOLICITUD_INSPECCION WHERE ID_SOLICITUD = ?
+    )
+""";
+
 
         try {
             conexion.setAutoCommit(false);
