@@ -7,15 +7,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.sql.Connection;
 
 public class ControladorRegistroProductor implements ActionListener {
 
     private Registroprod vista;
     private ProductorDAO dao;
+    private Connection conexion;
 
-    public ControladorRegistroProductor(Registroprod vista) {
+    public ControladorRegistroProductor(Registroprod vista,Connection conexion) {
         this.vista = vista;
         this.dao = new ProductorDAO();
+        this.conexion=conexion;
 
         // Escuchar botones
         this.vista.getBtnSiguiente().addActionListener(this);
@@ -27,8 +30,8 @@ public class ControladorRegistroProductor implements ActionListener {
         if (e.getSource() == vista.getBtnSiguiente()) {
             registrarProductor();
         } else if (e.getSource() == vista.getBtnVolver()) {
-            AdminMenu reg = new AdminMenu();
-            new ControladorMenuAdministrador(reg);
+            AdminMenu reg = new AdminMenu(conexion);
+            new ControladorMenuAdministrador(reg,conexion);
             reg.setVisible(true);
             vista.dispose(); // O abrir otra ventana si aplica
         }
@@ -117,8 +120,8 @@ public class ControladorRegistroProductor implements ActionListener {
         vista.getTxtContrasena().setText("");
     }
       private void volverARegistro() {
-        AdminMenu ventanaRegistro = new AdminMenu();
-        new ControladorMenuAdministrador(ventanaRegistro);
+        AdminMenu ventanaRegistro = new AdminMenu(conexion);
+        new ControladorMenuAdministrador(ventanaRegistro,conexion);
         ventanaRegistro.setVisible(true);
         vista.dispose();
     }

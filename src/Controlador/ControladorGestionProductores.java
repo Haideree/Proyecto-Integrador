@@ -12,14 +12,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
-
+import java.sql.Connection;
 public class ControladorGestionProductores implements ActionListener {
-
+    
+    private Connection conexion;
     private final GestionProductores vista;
 
-    public ControladorGestionProductores(GestionProductores vista) {
+    public ControladorGestionProductores(GestionProductores vista,Connection conexion) {
         this.vista = vista;
-
+        this.conexion=conexion;
         this.vista.getBtnAgregar().addActionListener(this);
         this.vista.getBtnVolver().addActionListener(this);
         this.vista.getBtnEditar().addActionListener(this);
@@ -81,7 +82,7 @@ public class ControladorGestionProductores implements ActionListener {
         // ➕ Agregar productor
         if (source == vista.getBtnAgregar()) {
             Registroprod reg = new Registroprod();
-            new ControladorRegistroProductor(reg);
+            new ControladorRegistroProductor(reg,conexion);
             reg.setVisible(true);
             reg.setLocationRelativeTo(null);
             vista.dispose();
@@ -89,8 +90,8 @@ public class ControladorGestionProductores implements ActionListener {
 
         // ⮜ Volver
         else if (source == vista.getBtnVolver()) {
-            AdminMenu menu = new AdminMenu();
-            new ControladorMenuAdministrador(menu);
+            AdminMenu menu = new AdminMenu(conexion);
+            new ControladorMenuAdministrador(menu,conexion);
             menu.setVisible(true);
             menu.setLocationRelativeTo(null);
             vista.dispose();
@@ -99,33 +100,60 @@ public class ControladorGestionProductores implements ActionListener {
        // 📝 Editar Productor
 else if (source == vista.getBtnEditar()) {
     try {
-        // Seleccionamos el productor desde la tabla
         int fila = vista.getTablaProd().getSelectedRow();
         if (fila == -1) {
             JOptionPane.showMessageDialog(vista, "Seleccione un productor para editar.");
             return;
         }
 
-        int idProd = Integer.parseInt(vista.getTablaProd().getValueAt(fila, 0).toString());
-        int idCorreo = Integer.parseInt(vista.getTablaProd().getValueAt(fila, 5).toString());
-        int idTelefono = Integer.parseInt(vista.getTablaProd().getValueAt(fila, 6).toString());
+        DefaultTableModel modelo = (DefaultTableModel) vista.getTablaProd().getModel();
+        int filaModelo = vista.getTablaProd().convertRowIndexToModel(fila);
+
+        int idProd = Integer.parseInt(modelo.getValueAt(filaModelo, 0).toString());
+        int idCorreo = Integer.parseInt(modelo.getValueAt(filaModelo, 5).toString());
+        int idTelefono = Integer.parseInt(modelo.getValueAt(filaModelo, 6).toString());
 
         // Pedimos los nuevos datos
         String nuevoNombre = JOptionPane.showInputDialog(vista, "Nuevo nombre:",
-                vista.getTablaProd().getValueAt(fila, 1).toString());
+                modelo.getValueAt(filaModelo, 1).toString());
         if (nuevoNombre == null || nuevoNombre.trim().isEmpty()) return;
 
         String nuevaContrasena = JOptionPane.showInputDialog(vista, "Nueva contraseña:",
-                vista.getTablaProd().getValueAt(fila, 4).toString());
+                modelo.getValueAt(filaModelo, 4).toString());
         if (nuevaContrasena == null || nuevaContrasena.trim().isEmpty()) return;
 
+        // 🔹 Validar contraseña segura
+        if (!nuevaContrasena.matches("^(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*._-]).{8,}$")) {
+            JOptionPane.showMessageDialog(vista, """
+                ⚠️ Contraseña insegura.
+                Debe tener al menos:
+                • 8 caracteres
+                • 1 mayúscula
+                • 1 número
+                • 1 carácter especial (!@#$%^&*._-)
+                """);
+            return;
+        }
+
         String nuevoCorreo = JOptionPane.showInputDialog(vista, "Nuevo correo:",
-                vista.getTablaProd().getValueAt(fila, 3).toString());
+                modelo.getValueAt(filaModelo, 3).toString());
         if (nuevoCorreo == null || nuevoCorreo.trim().isEmpty()) return;
 
-        String nuevoTelefono = JOptionPane.showInputDialog(vista, "Nuevo teléfono:",
-                vista.getTablaProd().getValueAt(fila, 2).toString());
+        // 🔹 Validar correo
+        if (!nuevoCorreo.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
+            JOptionPane.showMessageDialog(vista, "⚠ Correo electrónico no válido.");
+            return;
+        }
+
+        String nuevoTelefono = JOptionPane.showInputDialog(vista, "Nuevo teléfono (10 dígitos):",
+                modelo.getValueAt(filaModelo, 2).toString());
         if (nuevoTelefono == null || nuevoTelefono.trim().isEmpty()) return;
+
+        // 🔹 Validar teléfono
+        if (!nuevoTelefono.matches("\\d{10}")) {
+            JOptionPane.showMessageDialog(vista, "⚠ El teléfono debe contener exactamente 10 números.");
+            return;
+        }
 
         // Ejecutamos el DAO con los IDs
         EditarDAO editarDAO = new EditarDAO();
@@ -146,6 +174,7 @@ else if (source == vista.getBtnEditar()) {
         ex.printStackTrace();
     }
 }
+
 
 
 

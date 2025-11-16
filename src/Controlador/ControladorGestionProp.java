@@ -12,19 +12,21 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
-
+import java.sql.Connection;
 /**
  *
  * @author Haider
  */
 
 public class ControladorGestionProp implements ActionListener {
-
+    
+    private Connection conexion;
+            
     private final GestionPropietario vista;
 
-    public ControladorGestionProp(GestionPropietario vista) {
+    public ControladorGestionProp(GestionPropietario vista,Connection conexion) {
         this.vista = vista;
-
+        this.conexion=conexion;
         // Asignar escuchas a los botones
         this.vista.getBtnAgregar().addActionListener(this);
         this.vista.getBtnVolver().addActionListener(this);
@@ -68,7 +70,7 @@ public class ControladorGestionProp implements ActionListener {
         // ➕ BOTÓN AGREGAR: abrir la ventana de registro
         if (source == vista.getBtnAgregar()) {
             Registroprop regProp = new Registroprop();
-            new ControladorRegistroPropietario (regProp);
+            new ControladorRegistroPropietario (regProp,conexion);
             regProp.setVisible(true);
             regProp.setLocationRelativeTo(null); // Centra la nueva ventana
             vista.dispose(); // Cierra la ventana actual (opcional)
@@ -77,8 +79,8 @@ public class ControladorGestionProp implements ActionListener {
         // ⮜ BOTÓN VOLVER (si tienes un menú anterior)
         else if (source == vista.getBtnVolver()) {
             
-            AdminMenu menu = new AdminMenu();
-            new ControladorMenuAdministrador(menu);
+            AdminMenu menu = new AdminMenu(conexion);
+            new ControladorMenuAdministrador(menu,conexion);
             menu.setVisible(true);
             menu.setLocationRelativeTo(null);
             vista.dispose();

@@ -1,5 +1,7 @@
 package Vista;
 
+import Modelado.CConexion;
+import java.sql.Connection;
 import javax.swing.JButton;
 
 /**
@@ -9,13 +11,14 @@ import javax.swing.JButton;
 public class AdminMenu extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(AdminMenu.class.getName());
+    
+   private Connection conexion;
 
-    /**
-     * Creates new form AdminMenu
-     */
-    public AdminMenu() {
-        initComponents();
-    }
+    public AdminMenu(Connection conexion) {
+    this.conexion = conexion;
+    initComponents();
+}
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -26,171 +29,157 @@ public class AdminMenu extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        fondo3 = new javax.swing.JPanel();
-        jPanel4 = new javax.swing.JPanel();
-        Titulo3 = new javax.swing.JLabel();
-        Icon3 = new javax.swing.JLabel();
-        jPanel5 = new javax.swing.JPanel();
-        btnReportes = new javax.swing.JButton();
+        fondo = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
+        Titulo = new javax.swing.JLabel();
+        Icon = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
         btnProductores = new javax.swing.JButton();
         btnTecnicos = new javax.swing.JButton();
         btnPropietarios = new javax.swing.JButton();
-        Icono1 = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
+        btnReportes = new javax.swing.JButton();
+        btnAsignarInspeccion = new javax.swing.JButton();
         btnCerrarSesion = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        fondo3.setBackground(new java.awt.Color(255, 255, 255));
-        fondo3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        fondo.setBackground(new java.awt.Color(255, 255, 255));
+        fondo.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel4.setBackground(new java.awt.Color(0, 99, 17));
-        jPanel4.setForeground(new java.awt.Color(0, 99, 17));
+        jPanel1.setBackground(new java.awt.Color(0, 99, 17));
+        jPanel1.setForeground(new java.awt.Color(0, 99, 17));
 
-        Titulo3.setFont(new java.awt.Font("Roboto", 1, 48)); // NOI18N
-        Titulo3.setForeground(new java.awt.Color(255, 255, 255));
-        Titulo3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        Titulo3.setText("Panel del Administrador");
+        Titulo.setFont(new java.awt.Font("Roboto", 1, 50)); // NOI18N
+        Titulo.setForeground(new java.awt.Color(255, 255, 255));
+        Titulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        Titulo.setText("Panel del Administrador");
 
-        Icon3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Vista/Logo109.png"))); // NOI18N
+        Icon.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        Icon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Vista/ICA logo 109.png"))); // NOI18N
 
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addComponent(Titulo3, javax.swing.GroupLayout.DEFAULT_SIZE, 609, Short.MAX_VALUE)
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(Titulo, javax.swing.GroupLayout.PREFERRED_SIZE, 633, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(Icon3, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(Icon, javax.swing.GroupLayout.DEFAULT_SIZE, 111, Short.MAX_VALUE))
         );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(Titulo3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(Icon3, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(Icon, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(Titulo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
-        fondo3.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 730, 110));
+        fondo.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 750, 130));
 
-        jPanel5.setBackground(new java.awt.Color(204, 204, 204));
-        jPanel5.setForeground(new java.awt.Color(125, 163, 130));
-
-        btnReportes.setBackground(new java.awt.Color(125, 163, 130));
-        btnReportes.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
-        btnReportes.setForeground(new java.awt.Color(255, 255, 255));
-        btnReportes.setText("📊 Generar Reportes");
-        btnReportes.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        btnReportes.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnReportesActionPerformed(evt);
-            }
-        });
+        jPanel2.setBackground(new java.awt.Color(204, 204, 204));
+        jPanel2.setForeground(new java.awt.Color(204, 255, 204));
 
         btnProductores.setBackground(new java.awt.Color(125, 163, 130));
         btnProductores.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
         btnProductores.setForeground(new java.awt.Color(255, 255, 255));
-        btnProductores.setText("🌱 Gestionar Productores");
-        btnProductores.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        btnProductores.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnProductoresActionPerformed(evt);
-            }
-        });
+        btnProductores.setText("🌱Gestionar Productores");
 
         btnTecnicos.setBackground(new java.awt.Color(125, 163, 130));
         btnTecnicos.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
         btnTecnicos.setForeground(new java.awt.Color(255, 255, 255));
-        btnTecnicos.setText("🔧 Gestionar Tecnicos");
-        btnTecnicos.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        btnTecnicos.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnTecnicosActionPerformed(evt);
-            }
-        });
+        btnTecnicos.setText("🛠️Gestionar tecnicos");
 
         btnPropietarios.setBackground(new java.awt.Color(125, 163, 130));
         btnPropietarios.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
         btnPropietarios.setForeground(new java.awt.Color(255, 255, 255));
-        btnPropietarios.setText("👷‍ Gestionar Propietarios");
-        btnPropietarios.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        btnPropietarios.setText("👷 Gestionar Propietarios");
         btnPropietarios.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnPropietariosActionPerformed(evt);
             }
         });
 
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
+        btnReportes.setBackground(new java.awt.Color(125, 163, 130));
+        btnReportes.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+        btnReportes.setForeground(new java.awt.Color(255, 255, 255));
+        btnReportes.setText("📊 Generar Reportes");
+
+        btnAsignarInspeccion.setBackground(new java.awt.Color(125, 163, 130));
+        btnAsignarInspeccion.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+        btnAsignarInspeccion.setForeground(new java.awt.Color(255, 255, 255));
+        btnAsignarInspeccion.setText("Asignar Inspeccion");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnReportes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnProductores, javax.swing.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE)
-                    .addComponent(btnTecnicos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnPropietarios, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnProductores, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnReportes, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnPropietarios, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnAsignarInspeccion, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnTecnicos, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                .addGap(37, 37, 37)
-                .addComponent(btnProductores, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnTecnicos, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
-                .addComponent(btnPropietarios, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnReportes, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap(52, Short.MAX_VALUE)
+                .addComponent(btnProductores, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(27, 27, 27)
+                .addComponent(btnTecnicos, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26)
+                .addComponent(btnPropietarios, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(27, 27, 27)
+                .addComponent(btnAsignarInspeccion, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26)
+                .addComponent(btnReportes, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(32, 32, 32))
         );
 
-        fondo3.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 80, 190, 350));
-
-        Icono1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        Icono1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Vista/icono.png"))); // NOI18N
-        fondo3.add(Icono1, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 310, -1, 110));
-
-        jLabel1.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(56, 126, 63));
-        jLabel1.setText("👋¡Bienvenido al panel de administrador!");
-        fondo3.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 120, 530, 40));
+        fondo.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 100, 210, 390));
 
         btnCerrarSesion.setBackground(new java.awt.Color(204, 204, 204));
-        btnCerrarSesion.setFont(new java.awt.Font("Roboto", 1, 14)); // NOI18N
-        btnCerrarSesion.setForeground(new java.awt.Color(29, 87, 46));
-        btnCerrarSesion.setText("Cerrar sesion");
-        btnCerrarSesion.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(29, 87, 46), 1, true));
-        btnCerrarSesion.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCerrarSesionActionPerformed(evt);
-            }
-        });
-        fondo3.add(btnCerrarSesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 370, 200, 30));
+        btnCerrarSesion.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
+        btnCerrarSesion.setForeground(new java.awt.Color(0, 99, 17));
+        btnCerrarSesion.setText("Cerrar Sesion");
+        btnCerrarSesion.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 99, 17), 1, true));
+        fondo.add(btnCerrarSesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 410, 270, 30));
 
-        jLabel2.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(51, 51, 51));
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel2.setText("Aquí puede administrar la información de productores, técnicos y propietarios, y consultar");
-        fondo3.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 180, 520, -1));
+        jLabel1.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(0, 99, 17));
+        jLabel1.setText("👋¡Bienvenido al panel del Administrador!");
+        fondo.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 170, -1, -1));
 
-        jLabel3.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(51, 51, 51));
-        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel2.setForeground(new java.awt.Color(102, 102, 102));
+        jLabel2.setText("Aqui puede administrar la informacion de productores, tecnicos y propietarios, y consultar");
+        fondo.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 220, 490, -1));
+
+        jLabel3.setForeground(new java.awt.Color(102, 102, 102));
         jLabel3.setText("los reportes del sistema.");
-        fondo3.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(211, 200, 520, -1));
+        fondo.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 240, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(fondo3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(fondo, javax.swing.GroupLayout.PREFERRED_SIZE, 750, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(fondo3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(fondo, javax.swing.GroupLayout.PREFERRED_SIZE, 484, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
@@ -221,6 +210,7 @@ public class AdminMenu extends javax.swing.JFrame {
     public JButton getBtnPropietarios() { return btnPropietarios; }
     public JButton getBtnReportes() { return btnReportes; }
     public JButton getBtnCerrarSesion() { return btnCerrarSesion; }
+    public JButton getBtnAsignarInspeccion(){return btnAsignarInspeccion;}
     
     public static void main(String args[]) {
     try {
@@ -235,40 +225,32 @@ public class AdminMenu extends javax.swing.JFrame {
     }
 
     java.awt.EventQueue.invokeLater(() -> {
-        AdminMenu vista = new AdminMenu();
-        new Controlador.ControladorMenuAdministrador(vista);
-        vista.setVisible(true);
-    });
+    Connection conexionActiva = CConexion.getConnection(); // usa tu clase real aquí
+
+    AdminMenu vista = new AdminMenu(conexionActiva);
+    new Controlador.ControladorMenuAdministrador(vista, conexionActiva);
+
+    vista.setVisible(true);
+});
+
 }
 
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Icon;
-    private javax.swing.JLabel Icon1;
-    private javax.swing.JLabel Icon2;
-    private javax.swing.JLabel Icon3;
-    private javax.swing.JLabel Icono1;
     private javax.swing.JLabel Titulo;
-    private javax.swing.JLabel Titulo1;
-    private javax.swing.JLabel Titulo2;
-    private javax.swing.JLabel Titulo3;
+    private javax.swing.JButton btnAsignarInspeccion;
     private javax.swing.JButton btnCerrarSesion;
     private javax.swing.JButton btnProductores;
     private javax.swing.JButton btnPropietarios;
     private javax.swing.JButton btnReportes;
     private javax.swing.JButton btnTecnicos;
     private javax.swing.JPanel fondo;
-    private javax.swing.JPanel fondo1;
-    private javax.swing.JPanel fondo2;
-    private javax.swing.JPanel fondo3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
     // End of variables declaration//GEN-END:variables
 }

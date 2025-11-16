@@ -7,10 +7,10 @@ package Vista;
 import Modelado.LoginDAO;
 import javax.swing.JOptionPane;
 import Controlador.ControladorLogin;
-public class vistas extends javax.swing.JFrame {
+public class Login extends javax.swing.JFrame {
     
     
-    public vistas() {
+    public Login() {
         initComponents();
     }
 
@@ -148,7 +148,7 @@ public class vistas extends javax.swing.JFrame {
      */
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(() -> {
-            vistas login = new vistas();
+            Login login = new Login();
             new Controlador.ControladorLogin(login);
             login.setVisible(true);
         });

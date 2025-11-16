@@ -220,13 +220,7 @@ public class Registroprod extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(this, mensaje);
     }
     public static void main(String args[]) {
-    java.awt.EventQueue.invokeLater(new Runnable() {
-        public void run() {
-            Registroprod vista = new Registroprod();
-            new Controlador.ControladorRegistroProductor(vista); // 🔥 Aquí enlazamos el controlador
-            vista.setVisible(true);
-        }
-    });
+
 }
 
     

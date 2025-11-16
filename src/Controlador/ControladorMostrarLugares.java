@@ -1,10 +1,13 @@
 package Controlador;
 
+import Modelado.InformeDAO;
 import java.sql.Connection;
 import Modelado.MostrarLugaresDAO;
 import Vista.MenuProductor;
 import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.table.DefaultTableModel;
 
 public class ControladorMostrarLugares {
@@ -17,7 +20,8 @@ public class ControladorMostrarLugares {
         this.vista = vista;
         this.conexion = conexionRol;
         this.dao = new MostrarLugaresDAO(conexionRol);
-
+        
+        this.vista.getBtnInforme().addActionListener(e -> generarInforme() );
         this.vista.getBtnConsultar().addActionListener(e -> mostrarLugares());
         this.vista.getBtnEliminar().addActionListener(e -> eliminarLugar());
         this.vista.getBtnEditar().addActionListener(e -> editarLugar());
@@ -96,4 +100,37 @@ public class ControladorMostrarLugares {
             }
         }
     }
+    
+    // Generar Informe
+private void generarInforme() {
+
+    try {
+        // Crear DAO usando la conexión activa
+        InformeDAO dao = new InformeDAO(conexion);
+
+        // Obtener el texto del informe
+        String informe = dao.informeProductor();
+
+        // Mostrarlo en un JTextArea dentro de un JScrollPane
+        JTextArea area = new JTextArea(20, 50);
+        area.setEditable(false);
+        area.setText(informe);
+
+        JScrollPane scroll = new JScrollPane(area);
+
+        JOptionPane.showMessageDialog(
+                vista,
+                scroll,
+                "Informe de Producción",
+                JOptionPane.INFORMATION_MESSAGE
+        );
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(vista,
+                "Error al generar el informe: " + e.getMessage());
+    }
+}
+
+
 }

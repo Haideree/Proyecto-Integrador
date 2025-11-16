@@ -1,7 +1,7 @@
 package Vista;
 
 import Controlador.ControladorLogin;
-import Vista.vistas;
+import Vista.Login;
 import java.sql.Connection;
 import javax.swing.JButton;
 import Controlador.ControladorAdministrarLotes;
@@ -67,7 +67,7 @@ public class MenuPropietario extends javax.swing.JFrame {
     // CERRAR SESIÓN
     // ========================================
     private void cerrarSesion() {
-        Vista.vistas login = new Vista.vistas();
+        Vista.Login login = new Vista.Login();
         new ControladorLogin(login);
         login.setVisible(true);
         this.dispose();

@@ -39,6 +39,7 @@ public class MenuProductor extends javax.swing.JFrame {
         buttonRegistrarLugarProdu = new javax.swing.JButton();
         buttonEliminarLugar = new javax.swing.JButton();
         buttonEditarLugar = new javax.swing.JButton();
+        BtnInforme = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -90,15 +91,16 @@ public class MenuProductor extends javax.swing.JFrame {
         fondo.add(BtnConsultar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 160, 250, 30));
 
         BtnVolver.setBackground(new java.awt.Color(55, 165, 87));
+        BtnVolver.setFont(new java.awt.Font("Berlin Sans FB", 0, 18)); // NOI18N
         BtnVolver.setForeground(new java.awt.Color(255, 255, 255));
-        BtnVolver.setText("⮜ REGRESAR");
+        BtnVolver.setText("Cerrar sesión");
         BtnVolver.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
         BtnVolver.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BtnVolverActionPerformed(evt);
             }
         });
-        fondo.add(BtnVolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 80, 20));
+        fondo.add(BtnVolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 120, -1));
 
         jScrollPane1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(55, 165, 87)));
 
@@ -165,6 +167,17 @@ public class MenuProductor extends javax.swing.JFrame {
         });
         fondo.add(buttonEditarLugar, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 380, 220, 30));
 
+        BtnInforme.setFont(new java.awt.Font("Roboto", 1, 14)); // NOI18N
+        BtnInforme.setForeground(new java.awt.Color(0, 99, 17));
+        BtnInforme.setText("Generar informe");
+        BtnInforme.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(55, 165, 87), 1, true));
+        BtnInforme.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnInformeActionPerformed(evt);
+            }
+        });
+        fondo.add(BtnInforme, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 160, 150, 30));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -188,7 +201,7 @@ public class MenuProductor extends javax.swing.JFrame {
     }//GEN-LAST:event_BtnConsultarActionPerformed
 
     private void BtnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnVolverActionPerformed
-    Vista.vistas login = new Vista.vistas();
+    Vista.Login login = new Vista.Login();
     Controlador.ControladorLogin controlador = new Controlador.ControladorLogin(login);
     login.setVisible(true);
     this.dispose();
@@ -208,6 +221,10 @@ Vista.RegistroLugarProdu vista = new Vista.RegistroLugarProdu(conexionActiva);
     private void buttonEditarLugarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonEditarLugarActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_buttonEditarLugarActionPerformed
+
+    private void BtnInformeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnInformeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_BtnInformeActionPerformed
 
     public static void main(String args[]) {
     try {
@@ -234,7 +251,9 @@ Vista.RegistroLugarProdu vista = new Vista.RegistroLugarProdu(conexionActiva);
 
 
     
-  
+   public javax.swing.JButton getBtnInforme(){
+       return BtnInforme;
+}
    public javax.swing.JButton getBtnConsultar() { 
        return BtnConsultar;
    }
@@ -251,6 +270,7 @@ Vista.RegistroLugarProdu vista = new Vista.RegistroLugarProdu(conexionActiva);
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnConsultar;
+    private javax.swing.JButton BtnInforme;
     private javax.swing.JButton BtnVolver;
     private javax.swing.JLabel Icon;
     private javax.swing.JLabel Titulo;

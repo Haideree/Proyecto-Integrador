@@ -2,11 +2,12 @@ package Controlador;
 
 import Vista.MenuPropietario;
 import Modelado.PredioDAO;
+import Vista.MenuTecnico;
 import Vista.AdministrarPredios;
 import Modelado.LoginDAO;
 import Modelado.CConexion;
 import Vista.AdminMenu;
-import Vista.vistas;
+import Vista.Login;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
@@ -14,13 +15,13 @@ import javax.swing.JOptionPane;
 
 public class ControladorLogin implements ActionListener {
 
-    private final vistas vista;
+    private final Login vista;
     private final LoginDAO modelo;
 
     // 🔹 Conexión activa del usuario logueado
     private Connection conexionActiva;
-
-    public ControladorLogin(vistas vista) {
+    private int idTecnico;
+    public ControladorLogin(Login vista) {
         this.vista = vista;
         this.modelo = new LoginDAO();
 
@@ -84,19 +85,25 @@ public class ControladorLogin implements ActionListener {
                 vista.dispose();
                 break;
             }
-
-
-
                 case "tecnico": {
-                    JOptionPane.showMessageDialog(vista, "Bienvenido al sistema Técnico 🔧");
+                    JOptionPane.showMessageDialog(vista, "Bienvenido al sistema Técnico 🛠️");
+
+                    // Obtener el ID del técnico desde LoginDAO
+                    idTecnico = modelo.getIdUsuario();  
+
+                    MenuTecnico menu = new MenuTecnico(conexionActiva, idTecnico);
+
+                    menu.setVisible(true);
+                    menu.setLocationRelativeTo(null);
                     vista.dispose();
                     break;
                 }
 
+
                 case "administrador": {
                     JOptionPane.showMessageDialog(vista, "Bienvenido al sistema Admin 👑");
-                    AdminMenu menu = new AdminMenu();
-                    new ControladorMenuAdministrador(menu);
+                    AdminMenu menu = new AdminMenu(conexionActiva);
+                    new ControladorMenuAdministrador(menu,conexionActiva);
 
                     menu.setVisible(true);
                     vista.dispose();

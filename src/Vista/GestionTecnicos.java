@@ -1,7 +1,12 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ */
 package Vista;
 
+import Controlador.ControladorMenuAdministrador;
 import javax.swing.JButton;
-import javax.swing.JTable;
+
 /**
  *
  * @author Usuario
@@ -11,7 +16,7 @@ public class GestionTecnicos extends javax.swing.JFrame {
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(GestionTecnicos.class.getName());
 
     /**
-     * Creates new form GestionTecnios
+     * Creates new form GestionTecnico
      */
     public GestionTecnicos() {
         initComponents();
@@ -27,37 +32,29 @@ public class GestionTecnicos extends javax.swing.JFrame {
     private void initComponents() {
 
         fondo = new javax.swing.JPanel();
-        BtnVolver = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         TablaTec = new javax.swing.JTable();
-        TxtBuscar = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
         BtnActualizar = new javax.swing.JButton();
-        BtnAgregar = new javax.swing.JButton();
-        BtnEditar = new javax.swing.JButton();
         BtnEliminar = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
+        BtnEditar = new javax.swing.JButton();
+        BtnAgregar = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        BtnVolver = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         fondo.setBackground(new java.awt.Color(255, 255, 255));
         fondo.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        BtnVolver.setBackground(new java.awt.Color(55, 165, 87));
-        BtnVolver.setForeground(new java.awt.Color(255, 255, 255));
-        BtnVolver.setText("⮜ REGRESAR");
-        BtnVolver.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
-        fondo.add(BtnVolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 80, 20));
-
-        jLabel1.setFont(new java.awt.Font("Roboto", 1, 36)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(34, 103, 54));
+        jLabel1.setFont(new java.awt.Font("Roboto", 1, 48)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(0, 99, 17));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Gestión de Tecnicos");
-        fondo.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 740, 70));
+        fondo.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 20, 600, 90));
 
-        jPanel1.setBackground(new java.awt.Color(75, 133, 82));
+        jPanel1.setBackground(new java.awt.Color(0, 99, 17));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -67,109 +64,141 @@ public class GestionTecnicos extends javax.swing.JFrame {
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 420, Short.MAX_VALUE)
+            .addGap(0, 490, Short.MAX_VALUE)
         );
 
-        fondo.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 0, 20, 420));
+        fondo.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 0, 20, 490));
 
-        jScrollPane1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(55, 165, 87)));
+        jScrollPane1.setBackground(new java.awt.Color(51, 51, 0));
+        jScrollPane1.setViewportBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        TablaTec.setBackground(new java.awt.Color(224, 224, 224));
-        TablaTec.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(55, 165, 87)));
-        TablaTec.setFont(new java.awt.Font("Roboto", 1, 12)); // NOI18N
-        TablaTec.setForeground(new java.awt.Color(55, 165, 87));
+        TablaTec.setBackground(new java.awt.Color(235, 255, 235));
+        TablaTec.setForeground(new java.awt.Color(0, 99, 17));
         TablaTec.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null}
             },
             new String [] {
-                "N° Documento", "Tarjeta Profesional", "Nombre", "Correo", "Telefono", "Contraseña", "Tipo de Tecnico"
+                "N° Documento", "Tarjeta Profesional", "Nombre", "Correo", "Telefono", "Contraseña", "Tipo Tecnico"
             }
         ));
-        TablaTec.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_NEXT_COLUMN);
-        TablaTec.setGridColor(new java.awt.Color(255, 255, 255));
+        TablaTec.setGridColor(new java.awt.Color(0, 99, 17));
+        TablaTec.setRowHeight(30);
+        TablaTec.setSelectionBackground(new java.awt.Color(153, 204, 255));
         jScrollPane1.setViewportView(TablaTec);
 
-        fondo.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 720, 230));
-
-        TxtBuscar.setForeground(new java.awt.Color(76, 107, 80));
-        TxtBuscar.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(125, 163, 130), 1, true));
-        TxtBuscar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                TxtBuscarActionPerformed(evt);
-            }
-        });
-        fondo.add(TxtBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 360, 190, 30));
-
-        jLabel3.setFont(new java.awt.Font("Roboto", 1, 14)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(34, 103, 54));
-        jLabel3.setText("Buscar:");
-        fondo.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 370, -1, -1));
+        fondo.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, 710, 230));
 
         BtnActualizar.setBackground(new java.awt.Color(212, 240, 221));
         BtnActualizar.setForeground(new java.awt.Color(34, 103, 54));
-        BtnActualizar.setText("🔃 Actualizar");
-        BtnActualizar.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(125, 163, 130), 1, true));
-        fondo.add(BtnActualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 360, 100, 30));
-
-        BtnAgregar.setBackground(new java.awt.Color(212, 240, 221));
-        BtnAgregar.setForeground(new java.awt.Color(34, 103, 54));
-        BtnAgregar.setText("➕ Agregar");
-        BtnAgregar.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(125, 163, 130), 1, true));
-        fondo.add(BtnAgregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 360, 100, 30));
-
-        BtnEditar.setBackground(new java.awt.Color(212, 240, 221));
-        BtnEditar.setForeground(new java.awt.Color(34, 103, 54));
-        BtnEditar.setText("📝 Editar");
-        BtnEditar.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(125, 163, 130), 1, true));
-        fondo.add(BtnEditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 360, 100, 30));
+        BtnActualizar.setText("🔄 Actualizar");
+        BtnActualizar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(125, 163, 130)));
+        BtnActualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnActualizarActionPerformed(evt);
+            }
+        });
+        fondo.add(BtnActualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 370, 100, 30));
 
         BtnEliminar.setBackground(new java.awt.Color(212, 240, 221));
         BtnEliminar.setForeground(new java.awt.Color(34, 103, 54));
         BtnEliminar.setText("➖ Eliminar");
-        BtnEliminar.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(125, 163, 130), 1, true));
-        fondo.add(BtnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 360, 100, 30));
+        BtnEliminar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(125, 163, 130)));
+        BtnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnEliminarActionPerformed(evt);
+            }
+        });
+        fondo.add(BtnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 370, 100, 30));
 
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Vista/icono100.png"))); // NOI18N
-        fondo.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 0, -1, -1));
+        BtnEditar.setBackground(new java.awt.Color(212, 240, 221));
+        BtnEditar.setForeground(new java.awt.Color(34, 103, 54));
+        BtnEditar.setText("📝 Editar");
+        BtnEditar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(125, 163, 130)));
+        BtnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnEditarActionPerformed(evt);
+            }
+        });
+        fondo.add(BtnEditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 370, 100, 30));
+
+        BtnAgregar.setBackground(new java.awt.Color(212, 240, 221));
+        BtnAgregar.setForeground(new java.awt.Color(34, 103, 54));
+        BtnAgregar.setText("➕ Agregar");
+        BtnAgregar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(125, 163, 130)));
+        BtnAgregar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnAgregarActionPerformed(evt);
+            }
+        });
+        fondo.add(BtnAgregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 370, 100, 30));
+
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Vista/icono100.png"))); // NOI18N
+        jLabel3.setToolTipText("");
+        fondo.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 10, -1, -1));
+
+        BtnVolver.setBackground(new java.awt.Color(55, 165, 87));
+        BtnVolver.setForeground(new java.awt.Color(255, 255, 255));
+        BtnVolver.setText("⮜ REGRESAR");
+        BtnVolver.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
+        BtnVolver.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnVolverActionPerformed(evt);
+            }
+        });
+        fondo.add(BtnVolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 100, 20));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 778, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                    .addContainerGap(16, Short.MAX_VALUE)
-                    .addComponent(fondo, javax.swing.GroupLayout.PREFERRED_SIZE, 745, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(17, Short.MAX_VALUE)))
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(fondo, javax.swing.GroupLayout.PREFERRED_SIZE, 750, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 423, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(fondo, javax.swing.GroupLayout.PREFERRED_SIZE, 411, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+            .addComponent(fondo, javax.swing.GroupLayout.PREFERRED_SIZE, 457, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void TxtBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TxtBuscarActionPerformed
+    private void BtnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnActualizarActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_TxtBuscarActionPerformed
+    }//GEN-LAST:event_BtnActualizarActionPerformed
+
+    private void BtnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnEliminarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_BtnEliminarActionPerformed
+
+    private void BtnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnEditarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_BtnEditarActionPerformed
+
+    private void BtnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAgregarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_BtnAgregarActionPerformed
+
+    private void BtnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnVolverActionPerformed
+
+    }//GEN-LAST:event_BtnVolverActionPerformed
 
     public JButton getBtnActualizar() { return BtnActualizar; }
     public JButton getBtnAgregar() { return BtnAgregar; }
     public JButton getBtnEditar() { return BtnEditar; }
     public JButton getBtnEliminar() { return BtnEliminar; }
     public JButton getBtnVolver() { return BtnVolver; }
-    public JTable getTablaTecnicos() { return TablaTec;}
+    public javax.swing.JTable getTablaTecnicos() { return TablaTec;}
+
+    
     public static void main(String args[]) {
            /* Configurar el estilo visual Nimbus */
     try {
@@ -184,14 +213,8 @@ public class GestionTecnicos extends javax.swing.JFrame {
     }
 
     /* Crear y mostrar la vista con su controlador */
-    java.awt.EventQueue.invokeLater(() -> {
-        GestionTecnicos vista = new GestionTecnicos();
-        new Controlador.ControladorGestionTec(vista); // 🔹 Conexión vista-controlador
-        vista.setLocationRelativeTo(null); // Centra la ventana
-        vista.setVisible(true);
-    });
-    }
 
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnActualizar;
     private javax.swing.JButton BtnAgregar;
@@ -199,10 +222,8 @@ public class GestionTecnicos extends javax.swing.JFrame {
     private javax.swing.JButton BtnEliminar;
     private javax.swing.JButton BtnVolver;
     private javax.swing.JTable TablaTec;
-    private javax.swing.JTextField TxtBuscar;
     private javax.swing.JPanel fondo;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;

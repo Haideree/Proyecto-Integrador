@@ -5,22 +5,24 @@ package Controlador;
  * @author Haider
  */
 
+import java.sql.Connection;
 import Vista.Registrotec;
 import Modelado.RegistrotecDAO;
 import Vista.AdminMenu;
 import javax.swing.JOptionPane;
-import Vista.vistas;
+import Vista.Login;
 import java.util.regex.Pattern;
 // import java.security.MessageDigest;  // ← Descomenta si quieres encriptar contraseña
 // import java.security.NoSuchAlgorithmException;
 
 public class ControladorRegistroTecnico {
-
+    
+    private Connection conexion;
     private final Registrotec vista;
 
-    public ControladorRegistroTecnico(Registrotec vista) {
+    public ControladorRegistroTecnico(Registrotec vista,Connection conexion) {
         this.vista = vista;
-
+        this.conexion=conexion;
         // Eventos de botones
         this.vista.getButton_siguiente().addActionListener(e -> registrarTecnico());
         this.vista.getBtnVolver().addActionListener(e -> volverARegistro());
@@ -149,15 +151,15 @@ if (esICA && !tarjStr.matches("\\d+")) {
     }
 
     private void volverARegistro() {
-       AdminMenu menu = new AdminMenu();
-            new ControladorMenuAdministrador(menu);
+       AdminMenu menu = new AdminMenu(conexion);
+            new ControladorMenuAdministrador(menu,conexion);
             menu.setVisible(true);
             menu.setLocationRelativeTo(null);
             vista.dispose();
     }
 
     private void volverALogin() {
-        vistas login = new vistas();
+        Login login = new Login();
         new ControladorLogin(login);
         login.setVisible(true);
         vista.dispose();

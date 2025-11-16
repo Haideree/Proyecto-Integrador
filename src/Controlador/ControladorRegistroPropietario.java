@@ -5,20 +5,23 @@ package Controlador;
  * @author Haider
  */
 import Vista.AdminMenu;
-import Vista.vistas;
+import Vista.Login;
 import Vista.Registroprop;
 import Modelado.PropietarioDAO;
+import java.sql.Connection;
 import javax.swing.JOptionPane;
 import java.util.regex.Pattern;
 
 public class ControladorRegistroPropietario {
-
+    private Connection conexion;
     private Registroprop vista;
 
-    public ControladorRegistroPropietario(Registroprop vista) {
-        this.vista = vista;
-        inicializarEventos();
-    }
+    public ControladorRegistroPropietario(Registroprop vista, Connection conexion) {
+    this.conexion = conexion;     // ahora sí funciona
+    this.vista = vista;
+    inicializarEventos();
+}
+
 
     private void inicializarEventos() {
         vista.getButtonSiguiente().addActionListener(e -> registrarPropietario());
@@ -108,15 +111,15 @@ public class ControladorRegistroPropietario {
     }
 
  private void volverALogin() {
-        vistas login = new vistas();
+        Login login = new Login();
         new ControladorLogin(login);
         login.setVisible(true);
         vista.dispose();
     }
  
   private void volverARegistro() {
-       AdminMenu menu = new AdminMenu();
-            new ControladorMenuAdministrador(menu);
+       AdminMenu menu = new AdminMenu(conexion);
+            new ControladorMenuAdministrador(menu,conexion);
             menu.setVisible(true);
             menu.setLocationRelativeTo(null);
             vista.dispose();

@@ -27,7 +27,7 @@ public class LoteDAO {
             }
 
             String sql = "INSERT INTO LOTE (NUM_LOTE, NOMBRE_LOTE, AREA, IDCULTIVO, ID_LUGARPROD, ESTADO) "
-                       + "VALUES (PROYECTO.SEQ_NUM_LOTE.NEXTVAL, ?, ?, ?, ?, 'ACTIVO')";
+                       + "VALUES (PROYECTO.SEQ_NUM_LOTE.NEXTVAL, ?, ?, ?, ?, 'SIN APROBAR')";
 
             PreparedStatement ps = conexion.prepareStatement(sql);
             ps.setString(1, nombreLote);

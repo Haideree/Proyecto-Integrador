@@ -11,14 +11,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
-
+import java.sql.Connection;
 public class ControladorGestionTec implements ActionListener {
-
+    
+    private Connection conexion;
     private final GestionTecnicos vista;
 
-    public ControladorGestionTec(GestionTecnicos vista) {
+    public ControladorGestionTec(GestionTecnicos vista,Connection conexion) {
         this.vista = vista;
-
+        this.conexion=conexion;
         this.vista.getBtnAgregar().addActionListener(this);
         this.vista.getBtnVolver().addActionListener(this);
         this.vista.getBtnEditar().addActionListener(this);
@@ -83,7 +84,7 @@ public class ControladorGestionTec implements ActionListener {
         // ➕ ABRIR REGISTRO
         if (source == vista.getBtnAgregar()) {
             Registrotec regTec = new Registrotec();
-            new ControladorRegistroTecnico(regTec);
+            new ControladorRegistroTecnico(regTec,conexion);
             regTec.setVisible(true);
             regTec.setLocationRelativeTo(null);
             vista.dispose();
@@ -91,8 +92,8 @@ public class ControladorGestionTec implements ActionListener {
 
         // ⮜ VOLVER AL MENÚ
         else if (source == vista.getBtnVolver()) {
-            AdminMenu menu = new AdminMenu();
-            new ControladorMenuAdministrador(menu);
+            AdminMenu menu = new AdminMenu(conexion);
+            new ControladorMenuAdministrador(menu,conexion);
             menu.setVisible(true);
             menu.setLocationRelativeTo(null);
             vista.dispose();
