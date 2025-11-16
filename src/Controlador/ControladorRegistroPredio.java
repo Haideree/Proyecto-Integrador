@@ -84,30 +84,56 @@ public class ControladorRegistroPredio implements ActionListener {
         // ============================
         // 🔹 Validación de ComboBoxes
         // ============================
-        
-        
         if (vista.getCmbDepartamento().getSelectedItem() == null ||
-    vista.getCmbMunicipio().getSelectedItem() == null ||
-    vista.getCmbProductor().getSelectedItem() == null ||
-    vista.getCmbLugarProdu().getSelectedItem() == null) {
+            vista.getCmbMunicipio().getSelectedItem() == null ||
+            vista.getCmbProductor().getSelectedItem() == null ||
+            vista.getCmbLugarProdu().getSelectedItem() == null) {
 
-    JOptionPane.showMessageDialog(null,
-        "Debe seleccionar todos los campos de la lista.",
-        "Error", JOptionPane.ERROR_MESSAGE);
-    return;
-}
+            JOptionPane.showMessageDialog(null,
+                "⚠️ Debe seleccionar todos los campos de la lista.",
+                "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
         // ============================
         // 🔹 Validación de campos texto
         // ============================
         String nombre = vista.getTxtNombre().getText().trim();
         String vereda = vista.getTxtVereda().getText().trim();
-        System.out.println("Nombre: '" + nombre + "'");
-        System.out.println("Vereda: '" + vereda + "'");
 
         if (nombre.isEmpty() || vereda.isEmpty()) {
             JOptionPane.showMessageDialog(null,
-                "Por favor complete todos los campos.",
+                "⚠️ Por favor complete todos los campos.",
+                "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // 🔤 Validar nombre de predio (letras, números y espacios)
+        if (!nombre.matches("^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9 ]+$")) {
+            JOptionPane.showMessageDialog(null,
+                "❌ El nombre del predio solo puede contener letras, números y espacios.",
+                "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (nombre.length() < 3) {
+            JOptionPane.showMessageDialog(null,
+                "❌ El nombre del predio debe tener mínimo 3 caracteres.",
+                "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // 🔤 Validar vereda (solo letras, números y espacios)
+        if (!vereda.matches("^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9 ]+$")) {
+            JOptionPane.showMessageDialog(null,
+                "❌ La vereda solo puede contener letras, números y espacios.",
+                "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (vereda.length() < 3) {
+            JOptionPane.showMessageDialog(null,
+                "❌ La vereda debe tener mínimo 3 caracteres.",
                 "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
@@ -147,10 +173,11 @@ public class ControladorRegistroPredio implements ActionListener {
     } catch (Exception ex) {
         ex.printStackTrace();
         JOptionPane.showMessageDialog(null,
-            "Ocurrió un error inesperado al registrar el predio.",
+            "❌ Ocurrió un error inesperado al registrar el predio.",
             "Error", JOptionPane.ERROR_MESSAGE);
     }
 }
+
 
 
 private void limpiarCampos() {

@@ -38,59 +38,98 @@ public class ControladorRegistroProductor implements ActionListener {
     }
 
     private void registrarProductor() {
-        try {
-            // Capturar datos desde la vista
-            String docText = vista.getTxtDocumento().getText().trim();
-            String nombre = vista.getTxtNombre().getText().trim();
-            String telefono = vista.getTxtTelefono().getText().trim();
-            String correo = vista.getTxtCorreo().getText().trim();
-            String contrasena = vista.getTxtContrasena().getText().trim();
+    try {
+        String docText = vista.getTxtDocumento().getText().trim();
+        String nombre = vista.getTxtNombre().getText().trim();
+        String telefono = vista.getTxtTelefono().getText().trim();
+        String correo = vista.getTxtCorreo().getText().trim();
+        String contrasena = vista.getTxtContrasena().getText().trim();
 
-            // 🔹 Validaciones generales
-            if (docText.isEmpty() || nombre.isEmpty() || telefono.isEmpty() || correo.isEmpty() || contrasena.isEmpty()) {
-                vista.mostrarMensaje("⚠️ Todos los campos son obligatorios.");
-                return;
-            }
-
-            // 🔹 Validar documento numérico
-            int documento;
-            try {
-                documento = Integer.parseInt(docText);
-            } catch (NumberFormatException ex) {
-                vista.mostrarMensaje("❌ El número de documento debe contener solo números.");
-                return;
-            }
-
-            // 🔹 Validar correo electrónico
-            if (!correo.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
-                vista.mostrarMensaje("📧 Correo inválido. Ejemplo válido: usuario@dominio.com");
-                return;
-            }
-
-            // 🔹 Validar teléfono
-            if (!telefono.matches("^\\d{7,10}$")) {
-                vista.mostrarMensaje("📱 El teléfono debe tener entre 7 y 10 dígitos numéricos.");
-                return;
-            }
-
-            // 🔹 Validar contraseña
-            String mensajeContrasena = validarContrasena(contrasena);
-            if (mensajeContrasena != null) {
-                vista.mostrarMensaje("🔒 " + mensajeContrasena);
-                return;
-            }
-
-            // 🔹 Si todo está bien, registrar
-            dao.registrarProductor(documento, nombre, telefono, correo, contrasena);
-            vista.mostrarMensaje("✅ Productor registrado exitosamente.");
-            limpiarCampos();
-            volverARegistro();
-
-        } catch (Exception ex) {
-            vista.mostrarMensaje("❌ Error al registrar el productor: " + ex.getMessage());
-            ex.printStackTrace();
+        // 🚫 Validar campos vacíos
+        if (docText.isEmpty() || nombre.isEmpty() || telefono.isEmpty() ||
+                correo.isEmpty() || contrasena.isEmpty()) {
+            vista.mostrarMensaje("⚠️ Todos los campos son obligatorios.");
+            return;
         }
+
+        // 🚫 Verificar espacios internos
+        if (docText.contains(" ") || nombre.contains(" ") || telefono.contains(" ")
+                || correo.contains(" ") || contrasena.contains(" ")) {
+            vista.mostrarMensaje("⚠️ Ningún campo debe contener espacios.");
+            return;
+        }
+
+        // 🆔 Documento: exactamente 10 dígitos
+        if (!docText.matches("^\\d{10}$")) {
+            vista.mostrarMensaje("🪪 El documento debe contener exactamente 10 dígitos numéricos.");
+            return;
+        }
+
+        int documento;
+        try {
+            documento = Integer.parseInt(docText);
+        } catch (Exception e) {
+            vista.mostrarMensaje("❌ El documento debe ser completamente numérico.");
+            return;
+        }
+
+        // 📝 Validar nombre (solo letras y espacios)
+        if (!nombre.matches("^[A-Za-zÁÉÍÓÚáéíóúÑñ ]+$")) {
+            vista.mostrarMensaje("📝 El nombre solo puede contener letras.");
+            return;
+        }
+
+        // 📝 Longitud mínima de nombre
+        if (nombre.length() < 3) {
+            vista.mostrarMensaje("📝 El nombre debe tener mínimo 3 caracteres.");
+            return;
+        }
+
+        // 📱 Teléfono: exactamente 10 dígitos
+        if (!telefono.matches("^\\d{10}$")) {
+            vista.mostrarMensaje("📱 El teléfono debe contener exactamente 10 dígitos.");
+            return;
+        }
+
+        // 📧 Validar correo
+        if (correo.length() > 40) {
+            vista.mostrarMensaje("📧 El correo es demasiado largo (máximo 40 caracteres).");
+            return;
+        }
+
+        if (!correo.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
+            vista.mostrarMensaje("📧 Correo inválido. Ejemplo: usuario@dominio.com");
+            return;
+        }
+
+        // 🔐 Validar contraseña avanzada
+        String mensajeContrasena = validarContrasena(contrasena);
+        if (mensajeContrasena != null) {
+            vista.mostrarMensaje("🔒 " + mensajeContrasena);
+            return;
+        }
+
+        // 🚫 Evitar contraseñas fáciles
+        if (contrasena.equalsIgnoreCase(nombre) ||
+            contrasena.equalsIgnoreCase(correo) ||
+            contrasena.equals(docText)) {
+            vista.mostrarMensaje("🔒 La contraseña no puede ser igual al nombre, correo o documento.");
+            return;
+        }
+
+        // 💾 Registrar si todo está ok
+        dao.registrarProductor(documento, nombre, telefono, correo, contrasena);
+        vista.mostrarMensaje("✅ Productor registrado exitosamente.");
+
+        limpiarCampos();
+        volverARegistro();
+
+    } catch (Exception ex) {
+        vista.mostrarMensaje("❌ Error al registrar el productor: " + ex.getMessage());
+        ex.printStackTrace();
     }
+}
+
 
     /**
      * Verifica que la contraseña cumpla con:

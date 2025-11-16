@@ -30,15 +30,66 @@ public class ControladorRegistroLugarProdu implements ActionListener {
 
         if (e.getSource() == vista.getButtonSiguiente()) {
             String nombreLugar = vista.getTextNombreLugar().getText().trim();
-            String empresa = vista.getTextEmpresaResp().getText().trim();
+String empresa = vista.getTextEmpresaResp().getText().trim();
 
-            if (nombreLugar.isEmpty() || empresa.isEmpty()) {
-                JOptionPane.showMessageDialog(vista,
-                        "⚠️ Todos los campos son obligatorios.",
-                        "Campos vacíos",
-                        JOptionPane.WARNING_MESSAGE);
-                return;
-            }
+// =============================
+// 🔹 Validación de campos vacíos
+// =============================
+if (nombreLugar.isEmpty() || empresa.isEmpty()) {
+    JOptionPane.showMessageDialog(vista,
+            "⚠️ Todos los campos son obligatorios.",
+            "Campos vacíos",
+            JOptionPane.WARNING_MESSAGE);
+    return;
+}
+
+// =============================
+// 🔹 Validación robusta de nombres
+// =============================
+
+// No permitir solo números
+if (nombreLugar.matches("\\d+")) {
+    JOptionPane.showMessageDialog(vista,
+            "❌ El nombre del lugar no puede ser únicamente numérico.",
+            "Dato inválido",
+            JOptionPane.ERROR_MESSAGE);
+    return;
+}
+
+if (empresa.matches("\\d+")) {
+    JOptionPane.showMessageDialog(vista,
+            "❌ El nombre de la empresa no puede ser únicamente numérico.",
+            "Dato inválido",
+            JOptionPane.ERROR_MESSAGE);
+    return;
+}
+
+// Deben tener por lo menos 2 letras reales
+if (!nombreLugar.matches(".*[A-Za-z].*")) {
+    JOptionPane.showMessageDialog(vista,
+            "❌ El nombre del lugar debe contener letras.",
+            "Dato inválido",
+            JOptionPane.ERROR_MESSAGE);
+    return;
+}
+
+if (!empresa.matches(".*[A-Za-z].*")) {
+    JOptionPane.showMessageDialog(vista,
+            "❌ La empresa responsable debe contener letras.",
+            "Dato inválido",
+            JOptionPane.ERROR_MESSAGE);
+    return;
+}
+
+// Evitar nombres de 1 solo carácter
+if (nombreLugar.length() < 2 || empresa.length() < 2) {
+    JOptionPane.showMessageDialog(vista,
+            "❌ Cada campo debe tener al menos 2 caracteres.",
+            "Dato inválido",
+            JOptionPane.ERROR_MESSAGE);
+    return;
+}
+
 
             try {
                 dao.registrarLugarProduccion(nombreLugar, empresa);

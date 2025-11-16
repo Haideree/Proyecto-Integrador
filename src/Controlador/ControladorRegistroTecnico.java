@@ -36,80 +36,81 @@ public class ControladorRegistroTecnico {
     }
 
     private void registrarTecnico() {
-        String docStr = vista.getText_numdoctec().getText().trim();
-        String tarjStr = vista.getText_numtarjtec().getText().trim();
-        String nombre = vista.getText_nombretec().getText().trim();
-        String telStr = vista.getText_telefonotec().getText().trim();
-        String correo = vista.getText_correotec().getText().trim();
-        String contrasena = vista.getTXT_contrasena().getText().trim();
+    String docStr = vista.getText_numdoctec().getText().trim();
+    String tarjStr = vista.getText_numtarjtec().getText().trim();
+    String nombre = vista.getText_nombretec().getText().trim();
+    String telStr = vista.getText_telefonotec().getText().trim();
+    String correo = vista.getText_correotec().getText().trim();
+    String contrasena = vista.getTXT_contrasena().getText().trim();
 
-        boolean esICA = vista.getRadioICA().isSelected();
-        boolean esParticular = vista.getRadioParticular().isSelected();
+    boolean esICA = vista.getRadioICA().isSelected();
+    boolean esParticular = vista.getRadioParticular().isSelected();
 
-        // 1️⃣ Validar selección de tipo
-        if (!esICA && !esParticular) {
-            JOptionPane.showMessageDialog(vista, "⚠ Debes seleccionar el tipo de técnico (ICA o Particular).");
-            return;
-        }
+    // 1️⃣ Tipo de técnico
+    if (!esICA && !esParticular) {
+        JOptionPane.showMessageDialog(vista, "⚠ Debes seleccionar si es técnico del ICA o Particular.");
+        return;
+    }
 
-        // 2️⃣ Validar campos obligatorios
-        if (docStr.isEmpty() || nombre.isEmpty() || telStr.isEmpty() || correo.isEmpty() || contrasena.isEmpty()) {
-            JOptionPane.showMessageDialog(vista, "⚠ Todos los campos obligatorios deben llenarse.");
-            return;
-        }
+    // 2️⃣ Campos obligatorios
+    if (docStr.isEmpty() || nombre.isEmpty() || telStr.isEmpty() || correo.isEmpty() || contrasena.isEmpty()) {
+        JOptionPane.showMessageDialog(vista, "⚠ Llena todos los campos obligatorios.");
+        return;
+    }
 
-        // 3️⃣ Validar tarjeta profesional (solo ICA)
-        if (esICA && tarjStr.isEmpty()) {
+    // 3️⃣ Documento: 10 dígitos exactos
+    if (!docStr.matches("\\d{10}")) {
+        JOptionPane.showMessageDialog(vista, "⚠ El documento debe tener exactamente 10 dígitos numéricos.");
+        return;
+    }
+
+    // 4️⃣ Nombre: solo letras y espacios
+    if (!nombre.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$")) {
+        JOptionPane.showMessageDialog(vista, "⚠ El nombre solo puede contener letras y espacios.");
+        return;
+    }
+
+    // 5️⃣ Teléfono: 10 dígitos
+    if (!telStr.matches("\\d{10}")) {
+        JOptionPane.showMessageDialog(vista, "⚠ El teléfono debe tener exactamente 10 dígitos numéricos.");
+        return;
+    }
+
+    // 6️⃣ Tarjeta profesional (solo ICA)
+    if (esICA) {
+        if (tarjStr.isEmpty()) {
             JOptionPane.showMessageDialog(vista, "⚠ La tarjeta profesional es obligatoria para técnicos del ICA.");
             return;
         }
-
-        // 4️⃣ Validaciones numéricas
-if (!docStr.matches("\\d+")) {
-    JOptionPane.showMessageDialog(vista, "⚠ El documento debe ser numérico.");
-    return;
-}
-if (!telStr.matches("\\d+")) {
-    JOptionPane.showMessageDialog(vista, "⚠ El teléfono debe contener solo números.");
-    return;
-}
-// ✅ Validación de longitud del teléfono
-if (telStr.length() != 10) {
-    JOptionPane.showMessageDialog(vista, "⚠ El teléfono debe tener 10 dígitos.");
-    return;
-}
-
-if (esICA && !tarjStr.matches("\\d+")) {
-    JOptionPane.showMessageDialog(vista, "⚠ La tarjeta profesional debe ser numérica.");
-    return;
-}
-
-        // 5️⃣ Validar correo electrónico
-        if (!esCorreoValido(correo)) {
-            JOptionPane.showMessageDialog(vista, "⚠ Correo electrónico no válido.");
+        if (!tarjStr.matches("\\d{6,}")) {
+            JOptionPane.showMessageDialog(vista, "⚠ La tarjeta profesional debe contener solo números y al menos 6 dígitos.");
             return;
         }
+    }
 
-        // 6️⃣ Validar seguridad de contraseña
-        if (!esContrasenaSegura(contrasena)) {
-            JOptionPane.showMessageDialog(vista, """
-                ⚠️ Contraseña insegura.
-                Debe tener al menos:
-                • 8 caracteres
-                • 1 mayúscula
-                • 1 número
-                • 1 carácter especial (!@#$%^&*._-)
-                """);
-            return;
-        }
+    // 7️⃣ Correo
+    if (!esCorreoValido(correo)) {
+        JOptionPane.showMessageDialog(vista, "⚠ Correo electrónico no válido.");
+        return;
+    }
 
-        // // 🔒 7️⃣ (Opcional) Encriptar contraseña antes de guardarla
-        // contrasena = encriptarSHA256(contrasena);
+    // 8️⃣ Seguridad de contraseña
+    if (!esContrasenaSegura(contrasena)) {
+        JOptionPane.showMessageDialog(vista, """
+            ⚠️ Contraseña débil.
+            Debe tener:
+            • Al menos 8 caracteres
+            • 1 mayúscula
+            • 1 número
+            • 1 carácter especial (!@#$%^&*._-)
+            """);
+        return;
+    }
 
-        // 8️⃣ Registrar en la base de datos
-        try {
-            RegistrotecDAO dao = new RegistrotecDAO();
-            dao.registrarTecnico(
+    // 9️⃣ Registrar técnico
+    try {
+        RegistrotecDAO dao = new RegistrotecDAO();
+        dao.registrarTecnico(
                 Integer.parseInt(docStr),
                 tarjStr.isEmpty() ? null : Long.parseLong(tarjStr),
                 nombre,
@@ -117,17 +118,18 @@ if (esICA && !tarjStr.matches("\\d+")) {
                 correo,
                 contrasena,
                 esICA ? "ICA" : "Particular"
-            );
+        );
 
-            JOptionPane.showMessageDialog(vista, "✅ Técnico registrado correctamente (" + (esICA ? "ICA" : "Particular") + ").");
-            limpiarCampos();
-            volverARegistro();
+        JOptionPane.showMessageDialog(vista, "✅ Técnico registrado correctamente.");
+        limpiarCampos();
+        volverARegistro();
 
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(vista, "❌ Error al registrar: " + e.getMessage());
-            e.printStackTrace();
-        }
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(vista, "❌ Error al registrar: " + e.getMessage());
+        e.printStackTrace();
     }
+}
+
 
     // ✅ Validar formato del correo
     private boolean esCorreoValido(String correo) {
