@@ -73,6 +73,7 @@ public void actionPerformed(ActionEvent e) {
 
     if (e.getSource() == vista.getBtnRegresar()) {
                MenuTecnico menu = new MenuTecnico(conexionActiva, idTecnico);
+               new ControladorMenuTecnico(menu, idTecnico, conexionActiva);
                 menu.setVisible(true);
                 menu.setLocationRelativeTo(null);
                 vista.dispose();

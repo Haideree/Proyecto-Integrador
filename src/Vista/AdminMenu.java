@@ -39,6 +39,7 @@ public class AdminMenu extends javax.swing.JFrame {
         btnPropietarios = new javax.swing.JButton();
         btnReportes = new javax.swing.JButton();
         btnAsignarInspeccion = new javax.swing.JButton();
+        btnReporteGlobal = new javax.swing.JButton();
         btnCerrarSesion = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -103,12 +104,27 @@ public class AdminMenu extends javax.swing.JFrame {
         btnReportes.setBackground(new java.awt.Color(125, 163, 130));
         btnReportes.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
         btnReportes.setForeground(new java.awt.Color(255, 255, 255));
-        btnReportes.setText("📊 Generar Reportes");
+        btnReportes.setText("📊 Generar Reporte Solicitud");
+        btnReportes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReportesActionPerformed(evt);
+            }
+        });
 
         btnAsignarInspeccion.setBackground(new java.awt.Color(125, 163, 130));
         btnAsignarInspeccion.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
         btnAsignarInspeccion.setForeground(new java.awt.Color(255, 255, 255));
         btnAsignarInspeccion.setText("Asignar Inspeccion");
+
+        btnReporteGlobal.setBackground(new java.awt.Color(125, 163, 130));
+        btnReporteGlobal.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+        btnReporteGlobal.setForeground(new java.awt.Color(255, 255, 255));
+        btnReporteGlobal.setText("📊 Generar Reporte Global");
+        btnReporteGlobal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReporteGlobalActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -116,36 +132,37 @@ public class AdminMenu extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnProductores, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnReportes, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnPropietarios, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnAsignarInspeccion, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(btnTecnicos, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnPropietarios, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
+                    .addComponent(btnAsignarInspeccion, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
+                    .addComponent(btnReporteGlobal, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
+                    .addComponent(btnTecnicos, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
+                    .addComponent(btnReportes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnProductores, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap(52, Short.MAX_VALUE)
+                .addGap(21, 21, 21)
                 .addComponent(btnProductores, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27)
+                .addGap(18, 18, 18)
                 .addComponent(btnTecnicos, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26)
+                .addGap(18, 18, 18)
                 .addComponent(btnPropietarios, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27)
+                .addGap(18, 18, 18)
                 .addComponent(btnAsignarInspeccion, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26)
+                .addGap(18, 18, 18)
                 .addComponent(btnReportes, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(32, 32, 32))
+                .addGap(18, 18, 18)
+                .addComponent(btnReporteGlobal, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(19, Short.MAX_VALUE))
         );
 
-        fondo.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 100, 210, 390));
+        fondo.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 120, 210, 370));
 
         btnCerrarSesion.setBackground(new java.awt.Color(204, 204, 204));
         btnCerrarSesion.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
@@ -205,12 +222,21 @@ public class AdminMenu extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnCerrarSesionActionPerformed
 
+    private void btnReporteGlobalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteGlobalActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnReporteGlobalActionPerformed
+    
+   
     public JButton getBtnProductores() { return btnProductores; }
     public JButton getBtnTecnicos() { return btnTecnicos; }
     public JButton getBtnPropietarios() { return btnPropietarios; }
     public JButton getBtnReportes() { return btnReportes; }
     public JButton getBtnCerrarSesion() { return btnCerrarSesion; }
     public JButton getBtnAsignarInspeccion(){return btnAsignarInspeccion;}
+    public JButton getBtnReporteGlobal(){return btnReporteGlobal;}
+    
+    
+    
     
     public static void main(String args[]) {
     try {
@@ -244,6 +270,7 @@ public class AdminMenu extends javax.swing.JFrame {
     private javax.swing.JButton btnCerrarSesion;
     private javax.swing.JButton btnProductores;
     private javax.swing.JButton btnPropietarios;
+    private javax.swing.JButton btnReporteGlobal;
     private javax.swing.JButton btnReportes;
     private javax.swing.JButton btnTecnicos;
     private javax.swing.JPanel fondo;

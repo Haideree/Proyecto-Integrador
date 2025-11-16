@@ -4,6 +4,7 @@ import Modelado.LoteDAO;
 import java.sql.Connection;
 import Modelado.CConexion;
 import Controlador.ControladorAdministrarLotes;
+import Controlador.ControladorMenuPropietario;
 import javax.swing.JButton;
 import javax.swing.JTable;
 
@@ -231,13 +232,7 @@ public AdministrarLotes(Connection conexionActiva, int idPropietario) {
     }// </editor-fold>//GEN-END:initComponents
 
     private void BtnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnVolverActionPerformed
-        MenuPropietario menu = new MenuPropietario(conexionActiva, idPropietario);
 
-        //new ControladorMenuPropietario(menu);
-        menu.setVisible(true);
-        menu.setLocationRelativeTo(null);
-        // Cierra **todas las ventanas antiguas si es necesario**
-        this.dispose();
     }//GEN-LAST:event_BtnVolverActionPerformed
 
     private void BtnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnEliminarActionPerformed
@@ -266,17 +261,7 @@ public AdministrarLotes(Connection conexionActiva, int idPropietario) {
     
         public static void main(String[] args) {
 
-    // Crear la vista
-    AdministrarLotes vista = new AdministrarLotes();
 
-    // Conectar a la BD con el usuario que quieras
-    Connection conexion = CConexion.getConnectionPorUsuario("ADMINISTRADOR", "ADMINISTRADOR");
-
-    // Iniciar controlador
-    new ControladorAdministrarLotes(vista, conexion);
-
-    // Mostrar ventana
-    vista.setVisible(true);
 }
 
     

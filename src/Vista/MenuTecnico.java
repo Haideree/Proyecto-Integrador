@@ -1,14 +1,10 @@
 package Vista;
 
-import Modelado.InformeDAO;
+import Controlador.ControladorMenuTecnico;
 import Controlador.ControladorInspeccion;
 import Controlador.ControladorLogin;
-import java.awt.Font;
 import javax.swing.JButton;
 import java.sql.Connection;
-import javax.swing.JOptionPane;
-import javax.swing.JTextArea;
-import javax.swing.JScrollPane;
 /**
  *
  * @author Usuario
@@ -27,6 +23,7 @@ public class MenuTecnico extends javax.swing.JFrame {
     this.conexionActiva = conexionActiva;
     this.idTecnico = idTecnico;
 }
+
 
 
     /**
@@ -172,53 +169,20 @@ public class MenuTecnico extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnInspPendientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInspPendientesActionPerformed
-                                          
-    VerInspeccion vista = new VerInspeccion();
 
-    // Crear el controlador, pasándole la vista y el idTecnico
-    new ControladorInspeccion(vista, idTecnico, conexionActiva);
-
-    vista.setVisible(true);
-    vista.setLocationRelativeTo(null);
-     this.dispose();
 
     }//GEN-LAST:event_btnInspPendientesActionPerformed
 
     private void btnGenerarInformeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarInformeActionPerformed
-                                                     
-    try {
-        InformeDAO dao = new InformeDAO(conexionActiva);
 
-        String informe = dao.informeEstadisticoTecnico(idTecnico);
-
-        JTextArea area = new JTextArea(informe, 20, 50);
-        area.setEditable(false);
-        area.setFont(new Font("Monospaced", Font.PLAIN, 14));
-
-        JOptionPane.showMessageDialog(
-                this,
-                new JScrollPane(area),
-                "Informe Estadístico del Técnico",
-                JOptionPane.INFORMATION_MESSAGE
-        );
-
-    } catch (Exception ex) {
-        ex.printStackTrace();
-        JOptionPane.showMessageDialog(
-                this,
-                "Error al generar el informe: " + ex.getMessage()
-        );
-    }
 
     }//GEN-LAST:event_btnGenerarInformeActionPerformed
 
     private void btnCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarSesionActionPerformed
-        Login login = new Login();
-        new ControladorLogin(login);// o Login si así se llama tu ventana
-        login.setVisible(true);
-        this.dispose();
+ 
     }//GEN-LAST:event_btnCerrarSesionActionPerformed
-
+    
+    public JButton getbtnCerrarSesion(){return btnCerrarSesion;}
     public JButton getbtnInspPendientes () { return btnInspPendientes; }
     public JButton getbtnGenerarInforme() { return btnGenerarInforme; }
     

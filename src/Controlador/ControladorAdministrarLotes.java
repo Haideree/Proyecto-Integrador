@@ -4,6 +4,7 @@ import Vista.EditarLote;
 import Modelado.LoteDAO;
 import Vista.RegistroLote;
 import Vista.AdministrarLotes;
+import Vista.MenuPropietario;
 import java.sql.Connection;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -13,9 +14,11 @@ public class ControladorAdministrarLotes {
     private AdministrarLotes vista;
     private LoteDAO dao;
     private Connection conexion;
+    private int idPropietario;
 
-    public ControladorAdministrarLotes(AdministrarLotes vista, Connection conexion) {
+    public ControladorAdministrarLotes(AdministrarLotes vista, Connection conexion, int idPropietario) {
         this.vista = vista;
+        this.idPropietario = idPropietario;
         this.conexion = conexion;
         this.dao = new LoteDAO(conexion);
 
@@ -24,6 +27,7 @@ public class ControladorAdministrarLotes {
         this.vista.getBtnEliminar().addActionListener(e -> eliminarLote());
         this.vista.getBtnAgregar().addActionListener(e -> abrirAgregar());
         this.vista.getBtnEditar().addActionListener(e -> abrirEditar());
+        this.vista.getBtnVolver().addActionListener(e -> volver());
    
 
 
@@ -68,35 +72,39 @@ public class ControladorAdministrarLotes {
     // 🔹 ELIMINAR LOTE
     // ========================================================
     private void eliminarLote() {
-        int fila = vista.getTablaLotes().getSelectedRow();
+    int fila = vista.getTablaLotes().getSelectedRow();
 
-        if (fila == -1) {
-            JOptionPane.showMessageDialog(vista, "Seleccione un lote para eliminar.");
-            return;
-        }
-
-        int numLote = Integer.parseInt(vista.getTablaLotes().getValueAt(fila, 0).toString());
-
-        int confirm = JOptionPane.showConfirmDialog(
-                vista,
-                "¿Está seguro de eliminar el lote #" + numLote + "?",
-                "Confirmar eliminación",
-                JOptionPane.YES_NO_OPTION
-        );
-
-        if (confirm == JOptionPane.NO_OPTION) return;
-
-        try (var ps = conexion.prepareStatement("DELETE FROM LOTE WHERE NUM_LOTE = ?")) {
-            ps.setInt(1, numLote);
-            ps.executeUpdate();
-
-            JOptionPane.showMessageDialog(vista, "Lote eliminado correctamente.");
-            cargarTabla();
-
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(vista, "No se pudo eliminar el lote:\n" + e.getMessage());
-        }
+    if (fila == -1) {
+        JOptionPane.showMessageDialog(vista, "Seleccione un lote para eliminar.");
+        return;
     }
+
+    int numLote = Integer.parseInt(
+            vista.getTablaLotes().getValueAt(fila, 0).toString()
+    );
+
+    int confirm = JOptionPane.showConfirmDialog(
+            vista,
+            "¿Seguro que desea eliminar el lote #" + numLote + "?\n" +
+            "Las solicitudes quedarán CANCELADAS y las inspecciones ANULADAS.",
+            "Confirmar eliminación",
+            JOptionPane.YES_NO_OPTION
+    );
+
+    if (confirm == JOptionPane.NO_OPTION) return;
+
+    if (dao.eliminarLoteSeguramente(numLote)) {
+        JOptionPane.showMessageDialog(vista,
+                "Lote eliminado correctamente.\n" +
+                "Las solicitudes fueron CANCELADAS y las inspecciones ANULADAS.");
+        cargarTabla();
+    } else {
+        JOptionPane.showMessageDialog(vista,
+                "No se pudo eliminar el lote. Revise la consola para más detalles.");
+    }
+}
+
+
 
     // ========================================================
     // 🔹 BOTÓN AGREGAR
@@ -104,11 +112,10 @@ public class ControladorAdministrarLotes {
    private void abrirAgregar() {
 
     // Crear la vista de RegistroLote con la misma conexión
-    RegistroLote vistaRegistro = new RegistroLote(conexion);
+    RegistroLote vistaRegistro = new RegistroLote(conexion,idPropietario);
 
     // Crear su controlador
-    ControladorRegistroLote controladorRegistro =
-            new ControladorRegistroLote(vistaRegistro, conexion);
+    ControladorRegistroLote controladorRegistro =new ControladorRegistroLote(vistaRegistro, conexion,idPropietario);
 
     // Mostrar la ventana
     vistaRegistro.setVisible(true);
@@ -133,10 +140,24 @@ public class ControladorAdministrarLotes {
 
     // Abrir vista EditarLote
     EditarLote vistaEditar = new EditarLote(conexion);
-    ControladorEditarLote ctrl = new ControladorEditarLote(vistaEditar, conexion, numLote);
+    ControladorEditarLote ctrl = new ControladorEditarLote(vistaEditar, conexion, numLote, idPropietario);
 
     vistaEditar.setVisible(true);
     vista.dispose();
+    
+    
+    
+}
+    //Boton volver
+    
+    private void volver() {
+        MenuPropietario menu = new MenuPropietario(conexion, idPropietario);
+        new ControladorMenuPropietario(menu, conexion, idPropietario);
+        //new ControladorMenuPropietario(menu);
+        menu.setVisible(true);
+        menu.setLocationRelativeTo(null);
+        vista.dispose();
+
 }
 }
 

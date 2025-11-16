@@ -1,9 +1,7 @@
 package Vista;
 
-import Controlador.ControladorMostrarLugares;
-import Vista.AdministrarLotes;
+
 import java.sql.Connection;
-import Modelado.CConexion;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
@@ -13,7 +11,7 @@ import javax.swing.JTextField;
  * @author Usuario
  */
 
-import Controlador.ControladorRegistroLote;
+
 
 public class RegistroLote extends javax.swing.JFrame {
      private int idPropietario;
@@ -28,7 +26,7 @@ public class RegistroLote extends javax.swing.JFrame {
     initComponents();
 }
 
-    public RegistroLote(Connection conexionActiva) {
+    public RegistroLote(Connection conexionActiva, int idPropietario) {
     initComponents();
     this.conexionActiva = conexionActiva;
     this.idPropietario = idPropietario;
@@ -168,14 +166,7 @@ public class RegistroLote extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
-    Vista.AdministrarLotes menu = new Vista.AdministrarLotes(conexionActiva,idPropietario);
-
-    // Crear controlador UNA sola vez
-    Controlador.ControladorAdministrarLotes controlador =
-            new Controlador.ControladorAdministrarLotes(menu, conexionActiva);
-
-    menu.setVisible(true);
-    this.dispose();
+  
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
@@ -190,9 +181,7 @@ public class RegistroLote extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_comboLugarActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
+ 
     
     public JButton getbtnRegistrar() { return btnRegistrar;}
     public JButton getbtnRegresar() { return btnRegresar;}
@@ -219,21 +208,7 @@ public void limpiarCampos() {
 
     
     public static void main(String args[]) {
-    java.awt.EventQueue.invokeLater(() -> {
-        // Crear conexión a la base de datos
-        CConexion conexion = new CConexion();
-        String rol = "productor";
-        Connection conexionActiva = CConexion.getConnectionPorRol(rol);
 
-        // ✅ Creamos la vista con conexión
-        RegistroLote vista = new RegistroLote(conexionActiva);
-
-        // ✅ Creamos el controlador con la misma conexión
-        ControladorRegistroLote controlador = new ControladorRegistroLote(vista, conexionActiva);
-
-        // ✅ Mostramos la ventana
-        vista.setVisible(true);
-    });
 }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

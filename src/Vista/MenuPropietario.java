@@ -1,11 +1,9 @@
 package Vista;
 
-import Controlador.ControladorLogin;
-import Vista.Login;
+
 import java.sql.Connection;
 import javax.swing.JButton;
-import Controlador.ControladorAdministrarLotes;
-import Controlador.ControladorAdministrarPredio;
+
 
 /**
  *
@@ -14,10 +12,6 @@ import Controlador.ControladorAdministrarPredio;
 public class MenuPropietario extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(MenuPropietario.class.getName());
-
-    /**
-     * Creates new form MenuPropietario
-     */
     private Connection conexion;
     private int docPropietario;
 
@@ -29,53 +23,8 @@ public class MenuPropietario extends javax.swing.JFrame {
         this.docPropietario = docPropietario;
 
         initComponents();
-        inicializarEventos();
+      
     }
-
-    // ========================================
-    // EVENTOS DE BOTONES
-    // ========================================
-    private void inicializarEventos() {
-        btnAdministrarLote.addActionListener(e -> abrirAdministrarLotes());
-        btnAdministrarPredio.addActionListener(e -> abrirAdministrarPredio());
-        btnCerrarSesion.addActionListener(e -> cerrarSesion());
-    }
-
-    // ========================================
-    // ABRIR ADMINISTRAR LOTES
-    // ========================================
-    private void abrirAdministrarLotes() {
-        AdministrarLotes vista = new AdministrarLotes(conexion, docPropietario);
-        ControladorAdministrarLotes controlador = new ControladorAdministrarLotes(vista, conexion);
-
-        vista.setVisible(true);
-        this.dispose();
-    }
-
-    // ========================================
-    // ABRIR ADMINISTRAR PREDIOS
-    // ========================================
-    private void abrirAdministrarPredio() {
-        AdministrarPredios vista = new AdministrarPredios(conexion,docPropietario);
-        ControladorAdministrarPredio controlador = new ControladorAdministrarPredio(vista, conexion, docPropietario);
-
-        vista.setVisible(true);
-        this.dispose();
-    }
-
-    // ========================================
-    // CERRAR SESIÓN
-    // ========================================
-    private void cerrarSesion() {
-        Vista.Login login = new Vista.Login();
-        new ControladorLogin(login);
-        login.setVisible(true);
-        this.dispose();
-    }
-
-
-
-
 
     /**
      * This method is called from within the constructor to initialize the form.

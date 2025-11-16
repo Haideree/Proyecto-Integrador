@@ -161,6 +161,57 @@ public DatosLote obtenerDatosLote(int numLote) throws SQLException {
     return null;
 }
 
+public boolean eliminarLoteSeguramente(int numLote) {
+    Connection conn = null;
+    PreparedStatement psDeleteLote = null;
+
+    try {
+        conn = CConexion.getConnection();
+        conn.setAutoCommit(false);
+
+        // 1. ELIMINAR EL LOTE
+        String sqlDelete =
+                "DELETE FROM lote WHERE num_lote = ?";
+
+        psDeleteLote = conn.prepareStatement(sqlDelete);
+        psDeleteLote.setInt(1, numLote);
+
+        int rows = psDeleteLote.executeUpdate();
+
+        if (rows == 0) {
+            System.out.println("No se encontró lote con ID: " + numLote);
+            conn.rollback();
+            return false;
+        }
+
+        conn.commit();
+        System.out.println("Lote eliminado correctamente. Las solicitudes quedaron con NUM_LOTE = NULL.");
+
+        return true;
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        try {
+            if (conn != null) conn.rollback();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return false;
+
+    } finally {
+        try {
+            if (psDeleteLote != null) psDeleteLote.close();
+            if (conn != null) conn.setAutoCommit(true);
+            if (conn != null) conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+
+
+
 }
 
 

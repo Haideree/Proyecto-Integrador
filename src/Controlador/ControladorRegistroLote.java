@@ -1,6 +1,6 @@
 package Controlador;
 
-import Modelado.CConexion;
+
 import Modelado.LoteDAO;
 import Vista.RegistroLote;
 import java.awt.event.ActionEvent;
@@ -12,14 +12,16 @@ public class ControladorRegistroLote {
     private final RegistroLote vista;
     private final LoteDAO dao;
     private final Connection conexion;
+    private int idPropietario;
 
-     public ControladorRegistroLote(RegistroLote vista, Connection conexionActiva) {
+     public ControladorRegistroLote(RegistroLote vista, Connection conexionActiva, int idPropietario) {
         this.vista = vista;
         this.conexion = conexionActiva;
         this.dao = new LoteDAO(conexionActiva);
+        this.idPropietario = idPropietario;
 
         cargarCombos();
-
+        this.vista.getbtnRegresar().addActionListener((ActionEvent e)-> regresar());
         this.vista.getbtnRegistrar().addActionListener((ActionEvent e) -> registrarLote());
     }
 
@@ -79,6 +81,13 @@ public class ControladorRegistroLote {
         vista.getTxtArea().setText("");
         vista.getcomboCultivo().setSelectedIndex(0);
         vista.getcomboLugar().setSelectedIndex(0);
+    }
+    
+    private void regresar(){
+        Vista.AdministrarLotes menu = new Vista.AdministrarLotes(conexion,idPropietario);
+        Controlador.ControladorAdministrarLotes controlador =new Controlador.ControladorAdministrarLotes(menu, conexion, idPropietario);
+        menu.setVisible(true);
+        vista.dispose();
     }
 }
 

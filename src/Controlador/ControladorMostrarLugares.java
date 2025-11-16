@@ -4,7 +4,13 @@ import Modelado.InformeDAO;
 import java.sql.Connection;
 import Modelado.MostrarLugaresDAO;
 import Vista.MenuProductor;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Insets;
 import java.util.List;
+import javax.swing.BorderFactory;
+import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -105,32 +111,45 @@ public class ControladorMostrarLugares {
 private void generarInforme() {
 
     try {
-        // Crear DAO usando la conexión activa
         InformeDAO dao = new InformeDAO(conexion);
-
-        // Obtener el texto del informe
         String informe = dao.informeProductor();
 
-        // Mostrarlo en un JTextArea dentro de un JScrollPane
-        JTextArea area = new JTextArea(20, 50);
+        // ===== ÁREA DE TEXTO ESTILIZADA =====
+        JTextArea area = new JTextArea();
         area.setEditable(false);
+        area.setFont(new Font("Monospaced", Font.PLAIN, 14));
         area.setText(informe);
+        area.setMargin(new Insets(18, 25, 18, 25));
+        area.setBackground(new Color(250, 250, 250));
+        area.setLineWrap(false);     // Mantiene alineación del informe
+        area.setWrapStyleWord(true);
 
+        // ===== SCROLL BONITO =====
         JScrollPane scroll = new JScrollPane(area);
+        scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scroll.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        JOptionPane.showMessageDialog(
-                vista,
-                scroll,
-                "Informe de Producción",
-                JOptionPane.INFORMATION_MESSAGE
-        );
+        // ===== DIÁLOGO PROFESIONAL =====
+        JDialog dialogo = new JDialog(vista, "Informe de Producción", true);
+        dialogo.setSize(750, 600);
+        dialogo.setLocationRelativeTo(vista);
+        dialogo.setLayout(new BorderLayout());
+        dialogo.setResizable(true);
+
+        dialogo.add(scroll, BorderLayout.CENTER);
+        dialogo.setVisible(true);
 
     } catch (Exception e) {
-        e.printStackTrace();
-        JOptionPane.showMessageDialog(vista,
-                "Error al generar el informe: " + e.getMessage());
+        JOptionPane.showMessageDialog(
+                vista,
+                "Error al generar el informe: " + e.getMessage(),
+                "Error",
+                JOptionPane.ERROR_MESSAGE
+        );
     }
 }
+
 
 
 }

@@ -15,7 +15,7 @@ public class ControladorEditarLote {
     private int numLote;
     private int idPropietario;
 
-    public ControladorEditarLote(EditarLote vista, Connection conexion, int numLote) {
+    public ControladorEditarLote(EditarLote vista, Connection conexion, int numLote, int idPropietario) {
         this.vista = vista;
         this.conexion = conexion;
         this.dao = new LoteDAO(conexion);
@@ -99,7 +99,7 @@ public class ControladorEditarLote {
     // -------------------------------------------------------------
     private void regresar() {
         AdministrarLotes ventana = new AdministrarLotes(conexion,idPropietario);
-        new ControladorAdministrarLotes(ventana, conexion);
+        new ControladorAdministrarLotes(ventana, conexion, idPropietario);
         ventana.setVisible(true);
         vista.dispose();
     }

@@ -4,11 +4,19 @@ import Modelado.InformeDAO;
 import Vista.GestionPropietario;
 import Vista.GestionTecnicos;
 import Vista.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
+import javax.swing.BorderFactory;
+import javax.swing.JDialog;
 import javax.swing.SwingUtilities;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 
 public class ControladorMenuAdministrador implements ActionListener {
 
@@ -26,6 +34,7 @@ public ControladorMenuAdministrador(AdminMenu vista, Connection conexion) {
     this.vista.getBtnReportes().addActionListener(this);
     this.vista.getBtnCerrarSesion().addActionListener(this);
     this.vista.getBtnAsignarInspeccion().addActionListener(this);
+    this.vista.getBtnReporteGlobal().addActionListener(this);
 }
 
     
@@ -39,25 +48,56 @@ public ControladorMenuAdministrador(AdminMenu vista, Connection conexion) {
                 "Error generando informe: " + e.getMessage());
     }
 }
+    //generar informe global
+    public void generarInformeEstadistico() {
+    try {
+        InformeDAO dao = new InformeDAO(conexion);
+        String reporte = dao.informeEstadistico(); // <<— tu nuevo informe global
+        mostrarInformeEnEmergente("Informe Estadístico General", reporte);
+    } catch (Exception e) {
+        javax.swing.JOptionPane.showMessageDialog(
+                vista,
+                "Error generando informe estadístico: " + e.getMessage(),
+                "Error",
+                javax.swing.JOptionPane.ERROR_MESSAGE
+        );
+    }
+}
 
     
     public void mostrarInformeEnEmergente(String titulo, String contenido) {
 
-    // Crear un JDialog emergente
-    javax.swing.JDialog dialogo = new javax.swing.JDialog(vista, titulo, true);
-    dialogo.setSize(600, 500);
+    // Crear JDialog
+    JDialog dialogo = new JDialog(vista, titulo, true);
+    dialogo.setSize(750, 600);
     dialogo.setLocationRelativeTo(vista);
+    dialogo.setLayout(new BorderLayout());
+    dialogo.setResizable(true);
 
-    // Crear un área de texto con scroll
-    javax.swing.JTextArea area = new javax.swing.JTextArea();
+    // Crear JTextArea
+    JTextArea area = new JTextArea();
     area.setEditable(false);
+    area.setFont(new Font("Monospaced", Font.PLAIN, 14));  // ✔ Se ve pro
     area.setText(contenido);
+    area.setMargin(new Insets(15, 20, 15, 20));            // ✔ Espaciado interno
+    area.setBackground(new Color(250, 250, 250));          // ✔ Fondo suave
+    area.setLineWrap(false);                               // ✔ Mantener alineación del informe
+    area.setWrapStyleWord(true);
 
-    javax.swing.JScrollPane scroll = new javax.swing.JScrollPane(area);
+    // ScrollPane
+    JScrollPane scroll = new JScrollPane(area);
+    scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+    scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
-    dialogo.add(scroll);
+    // Bordes bonitos en el scroll
+    scroll.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+    // Añadir al diálogo
+    dialogo.add(scroll, BorderLayout.CENTER);
+
     dialogo.setVisible(true);
 }
+
 
 
 
@@ -92,16 +132,19 @@ public ControladorMenuAdministrador(AdminMenu vista, Connection conexion) {
             vista.dispose();
         }
         else if (source == vista.getBtnReportes()) {
-    generarInformeInspecciones();
-}
+            generarInformeInspecciones();
+        }
 
-
+        else if (source == vista.getBtnReporteGlobal()) {
+            generarInformeEstadistico();
+        }
 
         else if (source == vista.getBtnCerrarSesion()) {
             Login login = new Login();
-            new ControladorLogin(login);// o Login si así se llama tu ventana
+            new ControladorLogin(login);
             login.setVisible(true);
             vista.dispose();
         }
+
     }
 }

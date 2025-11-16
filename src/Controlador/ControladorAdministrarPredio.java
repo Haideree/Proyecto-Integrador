@@ -70,6 +70,7 @@ public class ControladorAdministrarPredio {
 
     private void volver() {
         MenuPropietario menu = new MenuPropietario(conexion, docPropietario);
+        new ControladorMenuPropietario(menu, conexion, docPropietario);
         menu.setVisible(true);
         vista.dispose();
     }

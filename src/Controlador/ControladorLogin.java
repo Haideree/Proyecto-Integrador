@@ -67,6 +67,7 @@ public class ControladorLogin implements ActionListener {
                     PredioDAO.setIdPropietarioLogueado(idPropietario);
 
                     MenuPropietario menu = new MenuPropietario(conexionActiva, idPropietario);
+                    new ControladorMenuPropietario(menu, conexionActiva, idPropietario);
 
                     menu.setVisible(true);
                     menu.setLocationRelativeTo(null);
@@ -92,6 +93,7 @@ public class ControladorLogin implements ActionListener {
                     idTecnico = modelo.getIdUsuario();  
 
                     MenuTecnico menu = new MenuTecnico(conexionActiva, idTecnico);
+                    new ControladorMenuTecnico(menu, idTecnico, conexionActiva);
 
                     menu.setVisible(true);
                     menu.setLocationRelativeTo(null);
